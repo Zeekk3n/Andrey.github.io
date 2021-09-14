@@ -9,7 +9,7 @@ title_separator          : "|"
 name                     : "Shockz"
 description              : "Posts about cibersecurity, CTFs and ethical hacking"
 url                      : "https://jmlgomez73.github.io/shockz/" # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
-baseurl                  : "/shockz" # the subpath of your site, e.g. "/blog"
+baseurl                  :  # the subpath of your site, e.g. "/blog"
 repository               : "jmlgomez73/shockz" # GitHub username/repo-name e.g. "mmistakes/minimal-mistakes"
 logo                     : 
 teaser                   : # path of fallback teaser image, e.g. "/assets/images/500x300.png"
@@ -261,3 +261,4 @@ defaults:
       comments: false
       share: false
       related: true
+      read_time: true
