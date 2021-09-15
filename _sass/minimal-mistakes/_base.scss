@@ -131,7 +131,7 @@ a {
   }
 
   &:visited {
-    color: $link-color-visited;
+    color: #55bde2;
   }
 
   &:hover {
@@ -312,6 +312,7 @@ nav {
 
   a {
     text-decoration: none;
+    color: #55bde2;
   }
 
   /* override white-space for nested lists */
