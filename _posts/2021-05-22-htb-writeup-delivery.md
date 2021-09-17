@@ -298,8 +298,7 @@ C:\bin\hashcat>hashcat --help | findstr bcrypt
 
 My go-to rules is normally one of those two ruleset:
 
-- [https://github.com/NSAKEY/nsa-rules/blob/master/_NSAKEY.v2.dive.rule](https://github.com/NSAKEY/nsa-rules/blob/master/_NSAKEY.v2.dive.rule)
-- <https://github.com/NotSoSecure/password_cracking_rules/blob/master/OneRuleToRuleThemAll.rule>
+- <https://github.com/NSAKEY/nsa-rules/blob/master/_NSAKEY.v2.dive.rule>
 
 These will perform all sort of transformations on the wordlist and we can quickly crack the password: `PleaseSubscribe!21`
 
