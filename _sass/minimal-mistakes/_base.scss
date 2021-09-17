@@ -381,8 +381,8 @@ input[type="submit"],
   color:white;
   //font-size:25px;
   position:relative;
-  //width:400px;
   //margin:0 auto;
+  width: 184px;
 }
 @keyframes noise-anim{
   $steps:20;
@@ -396,13 +396,13 @@ input[type="submit"],
   content:attr(data-text);
   position:absolute;
   left:2px;
-  text-shadow:-1px 0 red;
+  text-shadow:-1.5px 0 red;
   top:0;
   color:white;
   background: #04101f;
   overflow:hidden;
   clip:rect(0,900px,0,0); 
-  animation:noise-anim 2s infinite linear alternate-reverse;
+  animation:noise-anim 3s infinite linear alternate-reverse;
 }
 
 @keyframes noise-anim-2{
@@ -416,14 +416,14 @@ input[type="submit"],
 .glitch:before{
   content:attr(data-text);
   position:absolute;
-  left:-2px;
-  text-shadow:1px 0 blue; 
+  left:-3px;
+  text-shadow:1.5px 0 blue; 
   top:0;
   color:white;
   background: #04101f;
   overflow:hidden;
   clip:rect(0,900px,0,0); 
-  animation:noise-anim-2 3s infinite linear alternate-reverse;
+  animation:noise-anim-2 2s infinite linear alternate-reverse;
 }
 
 
