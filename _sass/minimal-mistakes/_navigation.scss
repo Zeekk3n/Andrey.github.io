@@ -546,25 +546,37 @@
       text-decoration: none;
     }
   }
+  //** Edicion de toc menu icon**//
+  a:before {
+    content: "~#";
+    font-weight: bolder;
+    margin-right: .5rem;
+    color: #00ffff;
+    width: 1.3em; /* same as padding-left set on li */
+  }
+
+  a {
+    padding-left: 1.3em;
+  }
 
   li ul > li a {
-    padding-left: 1.25rem;
+    padding-left: 1.5rem;
     font-weight: normal;
   }
 
   li ul li ul > li a {
-    padding-left: 1.75rem;
+    padding-left: 2rem;
   }
 
   li ul li ul li ul > li a {
-    padding-left: 2.25rem;
+    padding-left: 2.5rem;
   }
 
   li ul li ul li ul li ul > li a {
-    padding-left: 2.75rem;
+    padding-left: 3rem;
   }
 
   li ul li ul li ul li ul li ul > li a {
-    padding-left: 3.25rem
+    padding-left: 3.5rem
   }
 }

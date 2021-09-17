@@ -3,7 +3,9 @@
    ========================================================================== */
 
 /* Colors */
-$background-color: #050d1a !default;
+//$background-color: #050d1a !default;
+$background-color: #04101f !default;
+//#151515
 $text-color: #eaeaea !default;
 $primary-color: #16c8d1 !default;
 $border-color: mix(#fff, $background-color, 20%) !default;
@@ -20,7 +22,8 @@ $navicon-link-color-hover: mix(#000, $background-color, 30%) !default;
 
 .author__urls.social-icons .svg-inline--fa,
 .page__footer-follow .social-icons .svg-inline--fa {
-  color: inherit;
+  //color: inherit;
+  color:#00ffff;
 }
 
 .ais-search-box .ais-search-box--input {
