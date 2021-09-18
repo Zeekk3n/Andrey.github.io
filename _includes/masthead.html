@@ -18,32 +18,22 @@
             {%- else -%}
               {%- assign url = link.url | relative_url -%}
             {%- endif -%}
-            <li class="masthead__menu-item">
-              <a href="{{ url }}" {% if link.description %}title="{{ link.description }}"{% endif %}>{{ link.title }}</a>
-              <!--Sublinks
-              {% if link.children != null %}
-              <ul>
-                {% for child in link.children %}
-                  {% comment %} internal/external URL check {% endcomment %}
-                  {% if child.url contains "://" %}
-                    {% assign child_url = child.url %}
-                  {% else %}
-                    {% assign child_url = child.url | relative_url %}
-                  {% endif %}
-
-                  {% comment %} set "active" class on current page {% endcomment %}
-                  {% if child.url == page.url %}
-                    {% assign active = "active" %}
-                  {% else %}
-                    {% assign active = "" %}
-                  {% endif %}
-
-                  <li><a href="{{ child_url }}" class="{{ active }}">{{ child.title }}</a></li>
-                {% endfor %}
-              </ul>
-              {% endif %}
-              <!--//Sublinks-->
+            {% if link.sublinks %}
+            <li class="dropdown {{ class }}">
+                <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ link.title }}    <i class="fa fa-caret-down fa-sm" aria-hidden="true"></i><span class="caret"></span></a>
+                <ul class="dropdown-content">
+                    {% for sublink in link.sublinks %}
+                        <li>
+                            <a href="{{ site.baseurl }}{{ sublink.url }}">    {{ sublink.title }}</a>
+                        </li>
+                    {% endfor %}
+                </ul>
             </li>
+            {% else %}
+                <li class="masthead__menu-item">
+                    <a href="{{ site.baseurl }}{{ link.url }}">{{ link.title }}</a>
+                </li>
+            {% endif %}
           {%- endfor -%}
         </ul>
         {% if site.search == true %}

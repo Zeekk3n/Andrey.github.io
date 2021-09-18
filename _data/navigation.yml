@@ -1,19 +1,15 @@
 main:
   - title: "Home"
     url: /
+  - title: "CTF's"
+    sublinks:
+      - title: Hack The Box
+        url:  /thing1.html
+      - title: Try Hack Me
+        url:  /thing1.html
   - title: "Categories and Tvgs"
     url: /categories_tags/
   - title: "Projects"
     url: 
   - title: "About_m3"
     url: /about/
-  - title: "xd"
-    subfolderitems:
-      - page: Thing 1
-        url: 
-  - title: "xd2"
-    children:
-      - title: Sub-item 1
-        url:  /thing1.html
-      - title: Sub-item 1
-        url:  /thing1.html
