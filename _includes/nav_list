@@ -17,7 +17,7 @@
 
           <a href="{{ nav_url }}"><span class="nav__sub-title">{{ nav.title }}</span></a>
         {% else %}
-          <span class="nav__sub-title">{{ nav.title }}</span>
+          <span class="nav__sub-title">{{ nav.title }}sss</span>
         {% endif %}
 
         {% if nav.children != null %}

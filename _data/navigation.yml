@@ -1,11 +1,19 @@
 main:
   - title: "Home"
     url: /
-  - title: "Posts"
-    url: /year-archive/
   - title: "Categories and Tvgs"
     url: /categories_tags/
   - title: "Projects"
     url: 
   - title: "About_m3"
     url: /about/
+  - title: "xd"
+    subfolderitems:
+      - page: Thing 1
+        url: 
+  - title: "xd2"
+    children:
+      - title: Sub-item 1
+        url:  /thing1.html
+      - title: Sub-item 1
+        url:  /thing1.html
