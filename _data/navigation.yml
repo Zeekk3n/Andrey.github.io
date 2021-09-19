@@ -11,5 +11,5 @@ main:
     url: /categories_tags/
   - title: "Projects"
     url: /projects
-  - title: "About_m3"
-    url: /about/
+  - title: "Whoami"
+    url: /whoami/
