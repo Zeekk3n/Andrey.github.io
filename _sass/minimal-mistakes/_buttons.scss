@@ -102,4 +102,9 @@
   background-color: transparent;
   color: white;
   border: 1px solid white;
+
+  &:hover{
+    background-color: #00ffff;
+    color:black;
+  }
 }
