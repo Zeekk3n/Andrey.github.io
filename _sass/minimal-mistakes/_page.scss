@@ -66,9 +66,26 @@
 }
 
 .page__content {
-  h2 {
+  h2, h3, h4, h5, h6 {
     padding-bottom: 0.5em;
     border-bottom: 1px solid $border-color;
+
+    &:before{
+      content: "</";
+      font-weight: bolder;
+      letter-spacing: 1pt;
+      margin-right: .1rem;
+      color: #00ffff;
+      width: 1.3em;
+    }
+
+    &:after{
+      content: ">";
+      font-weight: bolder;
+      margin-left: .1rem;
+      color: #00ffff;
+      width: 1.3em;
+    }
   }
 
   p,
@@ -354,7 +371,7 @@
       color: $link-color-hover;
       outline: 0;
     }
-    
+
   }
   
 }
