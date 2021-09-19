@@ -131,7 +131,7 @@ a {
   }
 
   &:visited {
-    color: #55bde2;
+    color: #55bde2; //visited text color
   }
 
   &:hover {
@@ -428,6 +428,21 @@ input[type="submit"],
     }
   }
 }
+
+//**colors for posts titles***///
+
+.hackthebox{
+  color:#9fef00;
+}
+
+.tryhackme{
+  color:#ffa236;
+}
+
+.projects{
+  color:#55bde2;
+}
+
 
 
 
