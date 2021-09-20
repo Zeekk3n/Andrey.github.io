@@ -18,6 +18,7 @@ tags:
 toc: true
 toc_label: "Content"
 toc_sticky: true
+show_time: true
 ---
 
 <a href="/assets/images/htb-writeup-delivery/delivery_logo.png">

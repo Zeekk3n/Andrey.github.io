@@ -38,7 +38,11 @@
       {% elsif post.date %}
         <i class="fa fa-fw fa-calendar" aria-hidden="true"></i> <time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: "%B %d, %Y " }}</time>&emsp;
       {% endif %}
-      {% if post.read_time %}<i class="fa fa-clock-o" aria-hidden="true"></i>&nbsp;{% include read-time.html %}{% endif %}
+      {% if post.read_time %}
+        {% if post.show_time == true %}
+          <i class="fa fa-clock-o" aria-hidden="true"></i>&nbsp;{% include read-time.html %}
+        {% endif %}
+      {% endif %}
     </p>
 
     {% if post.excerpt %}<p class="archive__item-excerpt" itemprop="description">{% if post.header.teaser_home_page %}<img src="{{ post.header.teaser }}" alt="" style="float: right;margin-right:10px; margin-left:20px; margin-bottom:10px; height:120px;">{% endif %}{{ post.excerpt | markdownify | strip_html | truncate: 1024 }}</p>{% endif %}
