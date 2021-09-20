@@ -8,8 +8,8 @@ main:
       - title: Try Hack Me
         url:  /tryhackme
   - title: "Categories and Tvgs"
-    url: /categories_tags/
+    url: /categories_tags
   - title: "Projects"
     url: /projects
   - title: "Whoami"
-    url: /whoami/
+    url: /whoami
