@@ -202,9 +202,9 @@ plugins:
   - jekyll-sitemap
   - jekyll-gist
   - jekyll-feed
-  - jemoji
   - jekyll-include-cache
   - jekyll-seo-tag
+  - jekyll-minifier
 
 # mimic GitHub Pages with --safe
 whitelist:
@@ -212,7 +212,6 @@ whitelist:
   - jekyll-sitemap
   - jekyll-gist
   - jekyll-feed
-  - jemoji
   - jekyll-include-cache
   - jekyll-seo-tag
 
@@ -229,10 +228,10 @@ whitelist:
 #  - <base_path/my-awesome-category/index.html ~> path: /
 category_archive:
   type: liquid
-  path: /categories/
+  path: /categories_tags/
 tag_archive:
   type: liquid
-  path: /tags/
+  path: /categories_tags/
 # https://github.com/jekyll/jekyll-archives
 # jekyll-archives:
 #   enabled:

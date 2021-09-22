@@ -36,7 +36,7 @@
         #mainDialog {
             max-width: 400px;
             margin: 5px;
-            border: solid #AAAAAA 1px;
+            border: solid white 1px;
             border-radius: 10px;
             box-shadow: 3px 3px 5px 3px black;
             margin-left: auto;
@@ -54,7 +54,6 @@
         }
         #pass {
             width: 100%;
-            height: 40px;
             font-size: 30px;
             color:white;
             background-color: transparent;
@@ -138,9 +137,19 @@
             <div id="mainDialog">
                 <div id="dialogText">This page is password protected.</div>
                 <div id="passArea">
-                    <p id="text">This challenge is active so you will need to provide the root flag</p>
-                    </br>
-                    <p id="passwordPrompt">Root Flag</p>
+                    {% if page.categories contains "challenge" %}
+                        <p id="text">This challenge is Currently Active so you will need to provide the flag</p>
+                        </br>
+                        <p id="passwordPrompt">Root Flag (Format: HTB{XXXX})</p>
+                    {% else %}
+                        <p id="text">This Machine is Currently Active</p>
+                        </br>
+                        <p id="text">Since HTB is using flag rotation</p>
+                        </br>
+                        <p id="text">Enter the root-password hash from the file /etc/shadow</p>
+                        </br>
+                        <p id="passwordPrompt">Hash</p>
+                    {% endif %}
                     <input id="pass" type="password" name="pass" autofocus>
                     <div>
                         <span id="messageWrapper">

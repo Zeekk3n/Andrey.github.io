@@ -69,6 +69,7 @@
   h2, h3, h4, h5, h6 {
     padding-bottom: 0.5em;
     border-bottom: 1px solid $border-color;
+    text-align: center;
 
     &:before{
       content: "</";
@@ -91,6 +92,8 @@
   img{
     border: 1.5px solid #00c7ff;
     border-radius: 12px 12px;
+    margin: auto;
+    display: block;
   }
 
   p,
@@ -159,6 +162,13 @@
   }
   code[class*="language-"], pre[class*="language-"] {
       font-size: 0.945em;
+  }
+}
+
+.doubleimg{
+  img{
+    margin-bottom: 10px;
+    display: inline;
   }
 }
 

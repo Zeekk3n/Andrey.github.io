@@ -1,0 +1,24 @@
+---
+layout: single
+title: '<span class="hackthebox">BlackHole - Hack The Box Challenge</span>'
+excerpt: "BlackHole it's a misc challenge from HackTheBox which contains a little bit of stenography and decoding of ciphers"
+date: 2021-04-25
+header:
+  teaser: /assets/images/htb-writeup-blackhole/icon.png
+  teaser_home_page: true
+  icon: /assets/images/hackthebox.webp
+categories:
+  - hackthebox
+  - challenge
+tags:  
+  - steganography
+  - cipher
+  - misc
+toc: true
+toc_label: "Content"
+toc_sticky: true
+show_time: false
+layout: encrypted/blackhole
+permalink: "/htb-writeup-blackhole-challenge"
+show_time: false
+---

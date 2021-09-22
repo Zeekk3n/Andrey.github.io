@@ -45,7 +45,10 @@ layout: whoami
     <script src="https://tryhackme.com/badge/438303"></script>
 
 * Hack The Box
-
-    [![](https://www.hackthebox.eu/badge/image/616242)](https://app.hackthebox.eu/profile/616242)
+    <div class="doubleimg">
+        <a href="https://app.hackthebox.eu/profile/616242">
+            <img src="https://www.hackthebox.eu/badge/image/616242">
+        </a>
+    </div>
 
 ## <a href="#" style="cursor: pointer;" onclick="get_matrix()">Enter the Matrix</a>
