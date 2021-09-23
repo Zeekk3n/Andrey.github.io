@@ -20,6 +20,6 @@ toc_label: "Content"
 toc_sticky: true
 show_time: false
 layout: encrypted/eternal-loop
-permalink: "/htb-writeup-eternal-loop-challenge"
+permalink: "/htb-writeup-eternal-loop-challenge/"
 show_time: false
 ---

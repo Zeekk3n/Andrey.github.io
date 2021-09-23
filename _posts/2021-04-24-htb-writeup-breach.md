@@ -17,6 +17,6 @@ toc_label: "Content"
 toc_sticky: true
 show_time: false
 layout: encrypted/breach
-permalink: "/htb-writeup-breach"
+permalink: "/htb-writeup-breach/"
 show_time: false
 ---

@@ -21,6 +21,6 @@ toc_label: "Content"
 toc_sticky: true
 show_time: false
 layout: encrypted/unprintable
-permalink: "/htb-writeup-unprintable"
+permalink: "/htb-writeup-unprintable/"
 show_time: false
 ---

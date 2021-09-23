@@ -18,6 +18,6 @@ toc_label: "Content"
 toc_sticky: true
 show_time: false
 layout: encrypted/forest
-permalink: "/htb-writeup-forest"
+permalink: "/htb-writeup-forest/"
 show_time: false
 ---

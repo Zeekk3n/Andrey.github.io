@@ -19,6 +19,6 @@ toc_label: "Content"
 toc_sticky: true
 show_time: false
 layout: encrypted/easy-phish
-permalink: "/htb-writeup-easy-phish"
+permalink: "/htb-writeup-easy-phish/"
 show_time: false
 ---

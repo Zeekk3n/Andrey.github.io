@@ -19,6 +19,6 @@ toc_label: "Content"
 toc_sticky: true
 show_time: false
 layout: encrypted/misdirection
-permalink: "/htb-writeup-misdirection"
+permalink: "/htb-writeup-misdirection/"
 show_time: false
 ---

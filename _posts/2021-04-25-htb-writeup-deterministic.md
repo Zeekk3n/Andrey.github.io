@@ -21,6 +21,6 @@ toc_label: "Content"
 toc_sticky: true
 show_time: false
 layout: encrypted/deterministic
-permalink: "/htb-writeup-deterministic-challenge"
+permalink: "/htb-writeup-deterministic-challenge/"
 show_time: false
 ---

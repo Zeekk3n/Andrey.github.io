@@ -19,6 +19,6 @@ toc_label: "Content"
 toc_sticky: true
 show_time: false
 layout: encrypted/m0rsarchive
-permalink: "/htb-writeup-m0rsarchive"
+permalink: "/htb-writeup-m0rsarchive/"
 show_time: false
 ---

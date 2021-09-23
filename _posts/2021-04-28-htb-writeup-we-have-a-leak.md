@@ -17,6 +17,6 @@ toc_label: "Content"
 toc_sticky: true
 show_time: false
 layout: encrypted/we-have-a-leak
-permalink: "/htb-writeup-we-have-a-leak"
+permalink: "/htb-writeup-we-have-a-leak/"
 show_time: false
 ---

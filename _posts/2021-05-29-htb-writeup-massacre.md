@@ -19,6 +19,6 @@ toc_label: "Content"
 toc_sticky: true
 show_time: false
 layout: encrypted/massacre
-permalink: "/htb-writeup-massacre"
+permalink: "/htb-writeup-massacre/"
 show_time: false
 ---

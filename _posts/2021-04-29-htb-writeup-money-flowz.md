@@ -17,6 +17,6 @@ toc_label: "Content"
 toc_sticky: true
 show_time: false
 layout: encrypted/money-flowz
-permalink: "/htb-writeup-money-flowz"
+permalink: "/htb-writeup-money-flowz/"
 show_time: false
 ---

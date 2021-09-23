@@ -17,6 +17,6 @@ toc_label: "Content"
 toc_sticky: true
 show_time: false
 layout: encrypted/retro
-permalink: "/htb-writeup-retro"
+permalink: "/htb-writeup-retro/"
 show_time: false
 ---

@@ -17,6 +17,6 @@ toc_label: "Content"
 toc_sticky: true
 show_time: false
 layout: encrypted/digital-cube
-permalink: "/htb-writeup-digital-cube"
+permalink: "/htb-writeup-digital-cube/"
 show_time: false
 ---

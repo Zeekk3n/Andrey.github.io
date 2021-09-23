@@ -19,6 +19,6 @@ toc_label: "Content"
 toc_sticky: true
 show_time: false
 layout: encrypted/blackhole
-permalink: "/htb-writeup-blackhole-challenge"
+permalink: "/htb-writeup-blackhole-challenge/"
 show_time: false
 ---

@@ -18,6 +18,6 @@ toc_label: "Content"
 toc_sticky: true
 show_time: false
 layout: encrypted/senseless-behaviour
-permalink: "/htb-writeup-senseless-behaviour"
+permalink: "/htb-writeup-senseless-behaviour/"
 show_time: false
 ---

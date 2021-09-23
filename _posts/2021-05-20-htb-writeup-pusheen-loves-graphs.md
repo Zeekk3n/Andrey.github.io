@@ -19,6 +19,6 @@ toc_label: "Content"
 toc_sticky: true
 show_time: false
 layout: encrypted/pusheen-loves-graphs
-permalink: "/htb-writeup-pusheen-loves-graphs"
+permalink: "/htb-writeup-pusheen-loves-graphs/"
 show_time: false
 ---

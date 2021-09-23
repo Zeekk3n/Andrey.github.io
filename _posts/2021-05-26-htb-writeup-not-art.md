@@ -19,6 +19,6 @@ toc_label: "Content"
 toc_sticky: true
 show_time: false
 layout: encrypted/not-art
-permalink: "/htb-writeup-not-art"
+permalink: "/htb-writeup-not-art/"
 show_time: false
 ---

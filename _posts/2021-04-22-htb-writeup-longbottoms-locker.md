@@ -19,6 +19,6 @@ toc_label: "Content"
 toc_sticky: true
 show_time: false
 layout: encrypted/longbottoms-locker
-permalink: "/htb-writeup-longbottoms-locker"
+permalink: "/htb-writeup-longbottoms-locker/"
 show_time: false
 ---

@@ -17,6 +17,6 @@ toc_label: "Content"
 toc_sticky: true
 show_time: false
 layout: encrypted/missing-in-action
-permalink: "/htb-writeup-missing-in-action"
+permalink: "/htb-writeup-missing-in-action/"
 show_time: false
 ---
