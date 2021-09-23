@@ -1,7 +1,7 @@
 ---
 layout: single
 title: '<span class="hackthebox">Money Flowz - Hack The Box Challenge</span>'
-excerpt: "Money Flowz it's a osint challenge from HackTheBox where we will have to find out information about very convincing phising emails"
+excerpt: "Money Flowz it's a osint challenge from HackTheBox where we will have to find out information about cryto transactions"
 date: 2021-04-26
 header:
   teaser: /assets/images/htb-writeup-money-flowz/icon.png

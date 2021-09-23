@@ -1,7 +1,7 @@
 ---
 layout: single
 title: '<span class="hackthebox">Missing In Action - Hack The Box Challenge</span>'
-excerpt: "Missing In Action it's a osint challenge from HackTheBox where we will have to find out information about very convincing phising emails"
+excerpt: "Missing In Action it's a osint challenge from HackTheBox where we will have to find out information about where it could be the missing person."
 date: 2021-04-27
 header:
   teaser: /assets/images/htb-writeup-missing-in-action/icon.png
