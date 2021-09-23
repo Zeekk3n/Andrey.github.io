@@ -1,7 +1,7 @@
 ---
 layout: single
 title: '<span class="tryhackme">Mr.Robot 2021 - Try Hack Me/VulnHub</span>'
-excerpt: "Mr. Robot it's a machine from Try Hack Me platform (Also available on VulnHub). I highly recommend you do this CTF not only because of the theme of the TV show but because it's a good practice machine and it is an OSCP Like machine. On this machine we will have to brute force, exploit a Wordpress CMS which will be shown several ways to do so valid for the machine, perform more brute force and finally perform a privilege escalation via suid explotation."
+excerpt: "Mr. Robot is a machine from Try Hack Me platform (Also available on VulnHub). I highly recommend you do this CTF not only because of the theme of the TV show but because it's a good practice machine and it is an OSCP Like machine. On this machine we will have to brute force, exploit a Wordpress CMS which will be shown several ways to do so valid for the machine, perform more brute force and finally perform a privilege escalation via suid explotation."
 date: 2021-09-05
 header:
   teaser: /assets/images/thm-writeup-mr-robot/icon.jpeg
@@ -32,7 +32,7 @@ show_time: true
     <img src="/assets/images/thm-writeup-mr-robot/wall.jpg" alt="Mr.Robot CTF">
 </a>
 
-Mr. Robot CTF it's a machine from Try Hack Me platform (Also available on VulnHub). I highly recommend you do this CTF not only because of the theme of the TV show but because it's a good practice machine and it is an OSCP Like machine. On this machine we will have to brute force, exploit a Wordpress CMS which will be shown several ways to do so valid for the machine, perform more brute force and finally perform a privilege escalation via suid explotation.
+Mr. Robot CTF is a machine from Try Hack Me platform (Also available on VulnHub). I highly recommend you do this CTF not only because of the theme of the TV show but because it's a good practice machine and it is an OSCP Like machine. On this machine we will have to brute force, exploit a Wordpress CMS which will be shown several ways to do so valid for the machine, perform more brute force and finally perform a privilege escalation via suid explotation.
 
 On this machine we will see two ways (among others) of exploiting a Wordpress service due to its outdatedness and insecurity, then we will escalate privileges thanks to an old version of nmap.
 

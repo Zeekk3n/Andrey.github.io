@@ -1,7 +1,7 @@
 ---
 layout: single
 title: '<span class="hackthebox">Breach - Hack The Box Challenge</span>'
-excerpt: "Breach it's a osint challenge from HackTheBox where we will have to find out information in some files coming from a company leak."
+excerpt: "Breach is a osint challenge from HackTheBox where we will have to find out information in some files coming from a company leak."
 date: 2021-04-24
 header:
   teaser: /assets/images/htb-writeup-breach/icon.png

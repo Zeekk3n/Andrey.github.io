@@ -1,7 +1,7 @@
 ---
 layout: single
 title: '<span class="hackthebox">M0rsarchive - Hack The Box Challenge</span>'
-excerpt: "M0rsarchive it's a misc challenge from HackTheBox which contains scripting and decoding morse code."
+excerpt: "M0rsarchive is a misc challenge from HackTheBox which contains scripting and decoding morse code."
 date: 2021-04-23
 header:
   teaser: /assets/images/htb-writeup-m0rsarchive/icon.png

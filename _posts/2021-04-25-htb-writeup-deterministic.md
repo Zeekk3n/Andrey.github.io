@@ -1,7 +1,7 @@
 ---
 layout: single
 title: '<span class="hackthebox">Deterministic - Hack The Box Challenge</span>'
-excerpt: "Deterministic it's a misc challenge from HackTheBox which we have to process up process up a lot of zips in a chaotic order based on a provided dictionary, and then we will find a XORed ciphertext."
+excerpt: "Deterministic is a misc challenge from HackTheBox which we have to process up process up a lot of zips in a chaotic order based on a provided dictionary, and then we will find a XORed ciphertext."
 date: 2021-04-25
 header:
   teaser: /assets/images/htb-writeup-deterministic/icon.png

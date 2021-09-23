@@ -1,7 +1,7 @@
 ---
 layout: single
 title: '<span class="hackthebox">Longbottoms Locker - Hack The Box Challenge</span>'
-excerpt: "Longbottoms Locker it's a misc challenge from HackTheBox which contains a lot of stenography and some scripting."
+excerpt: "Longbottoms Locker is a misc challenge from HackTheBox which contains a lot of stenography and some scripting."
 date: 2021-04-22
 header:
   teaser: /assets/images/htb-writeup-longbottoms-locker/icon.png

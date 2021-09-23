@@ -1,7 +1,7 @@
 ---
 layout: single
 title: '<span class="hackthebox">We Have A Leak - Hack The Box Challenge</span>'
-excerpt: "We Have A Leak it's a osint challenge from HackTheBox where we will have to find out information about a leak"
+excerpt: "We Have A Leak is a osint challenge from HackTheBox where we will have to find out information about a leak"
 date: 2021-04-26
 header:
   teaser: /assets/images/htb-writeup-we-have-a-leak/icon.png

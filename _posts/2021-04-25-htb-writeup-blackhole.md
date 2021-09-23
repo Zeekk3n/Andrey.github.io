@@ -1,7 +1,7 @@
 ---
 layout: single
 title: '<span class="hackthebox">BlackHole - Hack The Box Challenge</span>'
-excerpt: "BlackHole it's a misc challenge from HackTheBox which contains a little bit of stenography and decoding of ciphers"
+excerpt: "BlackHole is a misc challenge from HackTheBox which contains a little bit of stenography and decoding of ciphers"
 date: 2021-04-25
 header:
   teaser: /assets/images/htb-writeup-blackhole/icon.png
