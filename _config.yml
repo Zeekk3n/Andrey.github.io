@@ -7,7 +7,7 @@ locale                   : "en-US"
 title                    : "Shockz"
 title_separator          : "|"
 name                     : "Shockz"
-description              : "Posts about cibersecurity, CTFs and ethical hacking"
+description              : "Posts about Cibersecurity, CTF's, Ethical Hacking and other projects"
 url                      : "https://jmlgomez73.github.io/shockz/" # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
 baseurl                  :  # the subpath of your site, e.g. "/blog"
 repository               : "jmlgomez73/shockz" # GitHub username/repo-name e.g. "mmistakes/minimal-mistakes"
@@ -119,6 +119,8 @@ author:
   weibo            :
   xing             : 
   youtube          : # "https://youtube.com/c/MichaelRoseDesign"
+  hackthebox       :  "616242"
+  tryhackme        :  "Shockz"
 
 
 # Reading Files

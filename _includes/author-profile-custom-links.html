@@ -1,0 +1,15 @@
+{% if author.hackthebox %}
+<li>
+  <a href="https://app.hackthebox.eu/profile/{{ author.hackthebox }}" itemprop="sameAs" rel="nofollow noopener noreferrer">
+    <img class="icon_custom" src="/assets/images/hackthebox.webp" aria-hidden="true"></img> Hack The Box
+  </a>
+</li>
+{% endif %}
+
+{% if author.tryhackme %}
+<li>
+  <a href="https://tryhackme.com/p/{{ author.tryhackme }}" itemprop="sameAs" rel="nofollow noopener noreferrer">
+    <img class="icon_custom" src="/assets/images/tryhackme.png" aria-hidden="true"></img> Try Hack Me
+  </a>
+</li>
+{% endif %}

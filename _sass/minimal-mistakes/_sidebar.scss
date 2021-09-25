@@ -62,7 +62,7 @@
   }
 
   img {
-    width: 100%;
+    //width: 100%;
     
     &.emoji {
       width: 20px;
@@ -286,6 +286,11 @@
       text-decoration: underline;
     }
   }
+}
+
+.icon_custom{
+  width: auto;
+  height: 24px;
 }
 
 /*
