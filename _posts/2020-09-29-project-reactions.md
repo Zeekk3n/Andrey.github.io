@@ -3,6 +3,9 @@ layout: single
 title: '<span class="projects">Reactions - Project</span>'
 excerpt: "Reactions is an application with which you can test your reflexes and get in milliseconds or seconds your reaction speed. The application was made with the Flutter framework and programmed in Dart."
 date: 2020-09-29
+header:
+  teaser: /assets/images/project-reactions/icon.png
+  teaser_home_page: true
 categories:
   - projects
 tags:  
