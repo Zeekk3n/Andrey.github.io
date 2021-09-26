@@ -1,6 +1,6 @@
 ---
 layout: single
-title: '<span class="projects">Whatsapp Web Spammer - Project</span>'
+title: '<span class="projects">Burguer King Sandy Bot - Project</span>'
 excerpt: "This code allows you to automatically take the https://www.miexperienciabkespana.com surveys and get a code which you have to write on the front of a Burger King ticket. You will get a free MiniSandy or a free coffee. Only in Spain."
 date: 2020-08-15
 categories:
