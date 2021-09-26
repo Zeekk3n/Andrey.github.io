@@ -2,8 +2,6 @@
 
 {% include seo.html %}
 
-<script data-ad-client="ca-pub-1195032605806813" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-
 <link href="{% if site.atom_feed.path %}{{ site.atom_feed.path }}{% else %}{{ '/feed.xml' | relative_url }}{% endif %}" type="application/atom+xml" rel="alternate" title="{{ site.title }} Feed">
 
 <!-- https://t.co/dKP3o1e -->
@@ -27,3 +25,6 @@
     <script src="{{ script_path }}"></script>
   {% endfor %}
 {% endif %}
+
+<script data-ad-client="ca-pub-1195032605806813" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+{% include analytics.html %}
