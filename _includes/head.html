@@ -15,6 +15,8 @@
 <link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url }}">
 <link rel="stylesheet" href="{{ "/assets/css/prism.css" | prepend: site.baseurl }}">
 
+{% include /analytics-providers/google-gtag.html %}
+
 {% if site.head_scripts %}
   {% for script in site.head_scripts %}
     {% if script contains "://" %}
@@ -27,4 +29,3 @@
 {% endif %}
 
 <script data-ad-client="ca-pub-1195032605806813" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-{% include analytics.html %}
