@@ -11,5 +11,7 @@ main:
     url: /categories_tags
   - title: "Projects"
     url: /projects
+  - title: "My Hacking Notes"
+    url: /.hacking-notes
   - title: "Whoami"
     url: /whoami
