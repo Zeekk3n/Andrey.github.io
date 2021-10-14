@@ -30,7 +30,7 @@ layout: whoami
 |-------|--------|---------|---------|
 | Enumeration | Linux | Ansible | Python |
 | Vulnerability assessment | Virtualization | Docker | Shell Scripting |
-| Privilege Escalation | Automation |  | Java |
+| Privilege Escalation | Automation | Kubernetes | Java |
 | Metasploit | MySQL |  | C/C++/C# |
 | Wireless Hacking | Nginx |  |  |
 | Burp Suit | Apache |  |  |
