@@ -18,6 +18,7 @@ show_time: true
 toc: true
 toc_label: "Content"
 toc_sticky: true
+---
 
 Bad Usb is a type of hacking device that looks similar to a conventional USB memory stick and has a series of instructions and settings that allow them to take control of any system and, in addition, to take control of all the information included in it.
 
