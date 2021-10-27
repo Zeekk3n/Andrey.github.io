@@ -13,7 +13,7 @@ layout: whoami
         "Name": "Jorge",
         "Alias": "Shockz",
         "Age": 23,
-        "Education": "Software Engineer",
+        "Education": "Software Engineering",
         "Email": "am1sZ29tZXo3M0BnbWFpbC5jb20=",
         "Interests":[
             "Cybersecurity, DevOps, Ethical Hacking, Red Teaming",
@@ -31,9 +31,9 @@ layout: whoami
 | Enumeration | Linux | Ansible | Python |
 | Vulnerability assessment | Virtualization | Docker | Shell Scripting |
 | Privilege Escalation | Automation | Kubernetes | Java |
-| Metasploit | MySQL |  | C/C++/C# |
+| Metasploit | MySQL | AWS | C/C++/C# |
 | Wireless Hacking | Nginx |  |  |
-| Burp Suit | Apache |  |  |
+| Burp Suite | Apache |  |  |
 
 ## Certifications
 
