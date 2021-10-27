@@ -335,7 +335,7 @@ Por otro lado sí que podemos consultar la contraseña encriptada.
 
 Así que la copiamos a un archivo en nuestra máquina, en mi caso le llamaré ```hash```
 
-Para desencriptarla tendremos que realizar otro ataque de fuerza bruta, esta vez usaremos **John The Ripper** y el diccionario ````rockyou```
+Para desencriptarla tendremos que realizar otro ataque de fuerza bruta, esta vez usaremos **John The Ripper** y el diccionario ```rockyou```
 
 ```bash
 john --format=raw-MD5 --wordlist=/usr/share/wordlists/rockyou.txt hash
