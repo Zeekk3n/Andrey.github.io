@@ -39,6 +39,10 @@ layout: whoami
 
 * eJPT *eLearnSecurity Junior Penetration Tester*
 
+## Exploit Database Publications
+
+* [Google Haking Database Publications](https://www.exploit-db.com/google-hacking-database?author=11434)
+
 ## CTF Profiles
 
 * Try Hack Me
