@@ -1,6 +1,8 @@
 main:
   - title: "Home"
     url: /
+  - title: "Articles"
+    url: /articles
   - title: "CTF's"
     sublinks:
       - title: Hack The Box

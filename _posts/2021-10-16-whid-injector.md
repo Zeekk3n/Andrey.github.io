@@ -8,6 +8,7 @@ header:
   teaser_home_page: true
 categories:
   - post
+  - article
 tags:  
   - rubberducky
   - whid-injector
