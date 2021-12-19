@@ -6,6 +6,7 @@ date: 2021-06-05
 header:
   teaser: /assets/images/htb-writeup-unprintable/icon.png
   teaser_home_page: true
+  image_description: unprintable hack the box
   icon: /assets/images/hackthebox.webp
 categories:
   - hackthebox

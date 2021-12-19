@@ -6,6 +6,7 @@ date: 2021-04-26
 header:
   teaser: /assets/images/htb-writeup-money-flowz/icon.png
   teaser_home_page: true
+  image_description: money flowz hack the box
   icon: /assets/images/hackthebox.webp
 categories:
   - hackthebox

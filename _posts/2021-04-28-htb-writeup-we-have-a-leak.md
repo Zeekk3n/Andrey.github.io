@@ -6,6 +6,7 @@ date: 2021-04-26
 header:
   teaser: /assets/images/htb-writeup-we-have-a-leak/icon.png
   teaser_home_page: true
+  image_description: we have a leak hack the box
   icon: /assets/images/hackthebox.webp
 categories:
   - hackthebox

@@ -6,6 +6,7 @@ date: 2021-06-18
 header:
   teaser: /assets/images/htb-writeup-breaking-grad/icon.png
   teaser_home_page: true
+  image_description: breaking grad hack the box
   icon: /assets/images/hackthebox.webp
 categories:
   - hackthebox

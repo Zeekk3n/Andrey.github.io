@@ -6,6 +6,7 @@ date: 2021-05-26
 header:
   teaser: /assets/images/htb-writeup-not-art/icon.png
   teaser_home_page: true
+  image_description: not art hack the box
   icon: /assets/images/hackthebox.webp
 categories:
   - hackthebox

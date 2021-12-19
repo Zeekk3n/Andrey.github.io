@@ -6,6 +6,7 @@ date: 2021-04-25
 header:
   teaser: /assets/images/htb-writeup-deterministic/icon.png
   teaser_home_page: true
+  image_description: deterministic hack the box
   icon: /assets/images/hackthebox.webp
 categories:
   - hackthebox

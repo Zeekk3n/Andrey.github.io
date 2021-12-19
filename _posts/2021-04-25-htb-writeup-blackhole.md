@@ -6,6 +6,7 @@ date: 2021-04-25
 header:
   teaser: /assets/images/htb-writeup-blackhole/icon.png
   teaser_home_page: true
+  image_description: black hole hack the box
   icon: /assets/images/hackthebox.webp
 categories:
   - hackthebox

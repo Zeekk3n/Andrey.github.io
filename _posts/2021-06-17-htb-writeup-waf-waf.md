@@ -6,6 +6,7 @@ date: 2021-06-12
 header:
   teaser: /assets/images/htb-writeup-waf-waf/icon.jpg
   teaser_home_page: true
+  image_description: waf waf hack the box
   icon: /assets/images/hackthebox.webp
 categories:
   - hackthebox

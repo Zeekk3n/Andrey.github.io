@@ -6,6 +6,7 @@ date: 2021-04-26
 header:
   teaser: /assets/images/htb-writeup-easy-phish/icon.png
   teaser_home_page: true
+  image_description: easy phish hack the box
   icon: /assets/images/hackthebox.webp
 categories:
   - hackthebox

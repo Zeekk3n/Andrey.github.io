@@ -5,6 +5,7 @@ excerpt: "Reactions is an application with which you can test your reflexes and 
 date: 2020-09-29
 header:
   teaser: /assets/images/project-reactions/icon.png
+  image_description: reactions
   teaser_home_page: true
 categories:
   - projects

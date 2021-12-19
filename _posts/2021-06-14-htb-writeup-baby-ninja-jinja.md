@@ -6,6 +6,7 @@ date: 2021-06-14
 header:
   teaser: /assets/images/htb-writeup-baby-ninja-jinja/icon.png
   teaser_home_page: true
+  image_description: baby ninja jinja hack the box
   icon: /assets/images/hackthebox.webp
 categories:
   - hackthebox

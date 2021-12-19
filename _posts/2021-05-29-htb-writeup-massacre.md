@@ -6,6 +6,7 @@ date: 2021-05-29
 header:
   teaser: /assets/images/htb-writeup-massacre/icon.png
   teaser_home_page: true
+  image_description: massacre hack the box
   icon: /assets/images/hackthebox.webp
 categories:
   - hackthebox

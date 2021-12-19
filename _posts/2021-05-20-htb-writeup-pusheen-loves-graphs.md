@@ -6,6 +6,7 @@ date: 2021-05-20
 header:
   teaser: /assets/images/htb-writeup-pusheen-loves-graphs/icon.png
   teaser_home_page: true
+  image_description: pusheen loves graphs hack the box
   icon: /assets/images/hackthebox.webp
 categories:
   - hackthebox

@@ -6,6 +6,7 @@ date: 2021-06-20
 header:
   teaser: /assets/images/htb-writeup-emdee-five-for-life/icon.png
   teaser_home_page: true
+  image_description: emdee five for life hack the box
   icon: /assets/images/hackthebox.webp
 categories:
   - hackthebox

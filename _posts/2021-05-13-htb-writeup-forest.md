@@ -6,6 +6,7 @@ date: 2021-05-13
 header:
   teaser: /assets/images/htb-writeup-forest/icon.png
   teaser_home_page: true
+  image_description: forest hack the box
   icon: /assets/images/hackthebox.webp
 categories:
   - hackthebox

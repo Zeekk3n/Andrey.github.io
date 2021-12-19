@@ -6,6 +6,7 @@ date: 2021-04-24
 header:
   teaser: /assets/images/htb-writeup-breach/icon.png
   teaser_home_page: true
+  image_description: breach hack the box
   icon: /assets/images/hackthebox.webp
 categories:
   - hackthebox

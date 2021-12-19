@@ -6,6 +6,7 @@ date: 2021-05-22
 header:
   teaser: /assets/images/htb-writeup-retro/icon.png
   teaser_home_page: true
+  image_description: retro hack the box
   icon: /assets/images/hackthebox.webp
 categories:
   - hackthebox

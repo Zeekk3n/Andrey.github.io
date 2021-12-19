@@ -6,6 +6,7 @@ date: 2021-04-22
 header:
   teaser: /assets/images/htb-writeup-longbottoms-locker/icon.png
   teaser_home_page: true
+  image_description: longbottoms locker hack the box
   icon: /assets/images/hackthebox.webp
 categories:
   - hackthebox
