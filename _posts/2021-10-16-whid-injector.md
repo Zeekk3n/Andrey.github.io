@@ -6,6 +6,7 @@ date: 2021-10-16
 header:
   teaser: /assets/images/post-whid-injector/whid-jinja-logo.png
   teaser_home_page: true
+  image_description: whid-injector
 categories:
   - post
   - article

@@ -5,6 +5,7 @@ excerpt: "Phonebook is a web challenge where it is possible to take advantage of
 date: 2021-06-20
 header:
   teaser: /assets/images/htb-writeup-phonebook/icon.png
+  image_description: phonebook-hackthebox
   teaser_home_page: true
   icon: /assets/images/hackthebox.webp
 categories:

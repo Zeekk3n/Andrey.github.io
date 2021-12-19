@@ -6,6 +6,7 @@ date: 2021-09-05
 header:
   teaser: /assets/images/thm-writeup-mr-robot/icon.jpeg
   teaser_home_page: true
+  image_description: mr-robot
   icon: /assets/images/tryhackme.png
 categories:
   - tryhackme
