@@ -8,6 +8,7 @@ header:
   teaser_home_page: true
   image_description: mr-robot
   icon: /assets/images/tryhackme.png
+  icon_description: tryhackme
 categories:
   - tryhackme
   - vulnhub
