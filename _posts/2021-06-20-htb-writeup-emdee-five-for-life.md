@@ -8,6 +8,7 @@ header:
   teaser_home_page: true
   image_description: emdee five for life hack the box
   icon: /assets/images/hackthebox.webp
+  icon_description: hackthebox
 categories:
   - hackthebox
   - challenge

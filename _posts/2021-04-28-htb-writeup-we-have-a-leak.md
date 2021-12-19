@@ -8,6 +8,7 @@ header:
   teaser_home_page: true
   image_description: we have a leak hack the box
   icon: /assets/images/hackthebox.webp
+  icon_description: hackthebox
 categories:
   - hackthebox
   - challenge

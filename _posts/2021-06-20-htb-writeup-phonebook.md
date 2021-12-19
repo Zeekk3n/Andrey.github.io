@@ -8,6 +8,7 @@ header:
   image_description: phonebook-hackthebox
   teaser_home_page: true
   icon: /assets/images/hackthebox.webp
+  icon_description: hackthebox
 categories:
   - hackthebox
   - challenge

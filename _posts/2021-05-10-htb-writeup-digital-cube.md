@@ -8,6 +8,7 @@ header:
   teaser_home_page: true
   image_description: digital cube hack the box
   icon: /assets/images/hackthebox.webp
+  icon_description: hackthebox
 categories:
   - hackthebox
   - challenge
