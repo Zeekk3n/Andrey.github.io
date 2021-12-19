@@ -4,7 +4,7 @@ minimal_mistakes_skin    : "haxor" # "air", "aqua", "contrast", "dark", "dirt", 
 
 # Site Settings
 locale                   : "en-US"
-title                    : "Shockz"
+title                    : "Shockz | Posts about Cibersecurity, CTF's, Ethical Hacking and other projects"
 title_separator          : "|"
 name                     : "Shockz"
 description              : "Posts about Cibersecurity, CTF's, Ethical Hacking and other projects"
