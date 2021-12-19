@@ -62,7 +62,7 @@ git clone https://github.com/jmlgomez73/Shockz-MKE && cd Shockz-MKE && chmod +x 
 ## General view
 
 <a href="/assets/images/project-shockz-mke/1.png">
-    <img src="/assets/images/project-shockz-mke/1.png">
+    <img src="/assets/images/project-shockz-mke/1.png" alt="shockz mke">
 </a>
 
 ## Utilities:

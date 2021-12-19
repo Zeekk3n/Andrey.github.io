@@ -19,9 +19,9 @@ PD: This is my first Android App
 ## [Link to the Github repository](https://github.com/jmlgomez73/WallDown)
 
 <a href="/assets/images/project-walldown/1.gif">
-    <img src="/assets/images/project-walldown/1.gif">
+    <img src="/assets/images/project-walldown/1.gif" alt="Walldown">
 </a>
 
 <a href="/assets/images/project-walldown/2.gif">
-    <img src="/assets/images/project-walldown/2.gif">
+    <img src="/assets/images/project-walldown/2.gif" alt="Walldown">
 </a>

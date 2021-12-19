@@ -18,13 +18,13 @@ This script will recompile most of the information that is usually obtained from
 Preview
 
 <a href="/assets/images/project-forencics-recompiler-linux/1.png">
-    <img src="/assets/images/project-forencics-recompiler-linux/1.png">
+    <img src="/assets/images/project-forencics-recompiler-linux/1.png" alt="forencics recompiler linux">
 </a>
 
 Preview files tree
 
 <a href="/assets/images/project-forencics-recompiler-linux/2.png">
-    <img src="/assets/images/project-forencics-recompiler-linux/2.png">
+    <img src="/assets/images/project-forencics-recompiler-linux/2.png" alt="forencics recompiler linux">
 </a>
 
 ## Collection

@@ -29,7 +29,7 @@ show_time: true
 ---
 
 <a href="/assets/images/thm-writeup-mr-robot/wall.jpg">
-    <img src="/assets/images/thm-writeup-mr-robot/wall.jpg" alt="Mr.Robot CTF">
+    <img src="/assets/images/thm-writeup-mr-robot/wall.jpg" alt="Mr.Robot CTF" alt="mr robot thm writeup">
 </a>
 
 Mr. Robot CTF is a machine from Try Hack Me platform (Also available on VulnHub). I highly recommend you do this CTF not only because of the theme of the TV show but because it's a good practice machine and it is an OSCP Like machine. On this machine we will have to brute force, exploit a Wordpress CMS which will be shown several ways to do so valid for the machine, perform more brute force and finally perform a privilege escalation via suid explotation.
@@ -126,7 +126,7 @@ It doesn't seem to have given us much information...
 
 So let's visit the web... After an impressive and very hacker intro, we come across this menu.
 
-<a href="/assets/images/thm-writeup-mr-robot/1.png"><img src="/assets/images/thm-writeup-mr-robot/1.png"></a>
+<a href="/assets/images/thm-writeup-mr-robot/1.png"><img src="/assets/images/thm-writeup-mr-robot/1.png" alt="mr robot thm writeup"alt="mr robot thm writeup" ></a>
 
 After testing each of the commands and watching several videos, I did not find anything relevant, on the other hand looking at the source code of the page we can find in line 15 an IP that currently does not give us any additional information.
 
@@ -155,7 +155,7 @@ ffuf -u http://10.10.198.171/FUZZ -w /usr/share/seclists/Discovery/Web-Content/d
 
 The release of **Wfuzz** shows us several interesting things
 
-<a href="/assets/images/thm-writeup-mr-robot/2.png"><img src="/assets/images/thm-writeup-mr-robot/2.png"></a>
+<a href="/assets/images/thm-writeup-mr-robot/2.png"><img src="/assets/images/thm-writeup-mr-robot/2.png" alt="mr robot thm writeup" ></a>
 
 Now we know that we are dealing with a CMS (Content Management System), specifically Wordpress, since there are several paths belonging to Wordpress (wp-content, wp-login, wp-includes).
 
@@ -176,7 +176,7 @@ In this file we can no longer do anything so let's enumerate a little more and s
 
 There is also a strange path ```/0``` let's take a look at it....
 
-<a href="/assets/images/thm-writeup-mr-robot/3.png"><img src="/assets/images/thm-writeup-mr-robot/3.png"></a>
+<a href="/assets/images/thm-writeup-mr-robot/3.png"><img src="/assets/images/thm-writeup-mr-robot/3.png"alt="mr robot thm writeup" ></a>
 
 It seems to be a blog... I took the opportunity to consult **Wappalyzer**, revealing that it is a Wordpress 4.3.1 and that the site uses PHP 5.5.29.
 
@@ -184,7 +184,7 @@ It seems to be a blog... I took the opportunity to consult **Wappalyzer**, revea
 
 After investigating that there are no resources to exploit for SQL or XSS injections, we will continue with the dictionary we encountered earlier, so we will access the ```/wp-login``` path.
 
-<a href="/assets/images/thm-writeup-mr-robot/4.png"><img src="/assets/images/thm-writeup-mr-robot/4.png"></a>
+<a href="/assets/images/thm-writeup-mr-robot/4.png"><img src="/assets/images/thm-writeup-mr-robot/4.png"alt="mr robot thm writeup" ></a>
 
 On the one hand so far we have not found any potential user names... but by testing some credentials we can observe a vulnerability...
 
@@ -214,14 +214,14 @@ Located in the directory where we have our dictionary we execute:
 wpscan --url 10.10.198.171 --wp-content-dir wp-admin --usernames elliot --passwords fsocity-sorted.dic
 ```
 
-<a href="/assets/images/thm-writeup-mr-robot/7.png"><img src="/assets/images/thm-writeup-mr-robot/7.png"></a>
+<a href="/assets/images/thm-writeup-mr-robot/7.png"><img src="/assets/images/thm-writeup-mr-robot/7.png"alt="mr robot thm writeup" ></a>
 
 
 - *Referring to the username, it is worth mentioning that we could have obtained it by brute-forcing the username field, with Hydra, for example ```hydra -L fsocity.dic -p test 10.10.198.171 http-post-form "/wp-login/:log=^USER^&pwd=^PASS^wp-submit=Log+In:F=Invalid username"```*
 
 Now that we have the credentials, we log in.
 
-<a href="/assets/images/thm-writeup-mr-robot/8.png"><img src="/assets/images/thm-writeup-mr-robot/8.png"></a>
+<a href="/assets/images/thm-writeup-mr-robot/8.png"><img src="/assets/images/thm-writeup-mr-robot/8.png"alt="mr robot thm writeup" ></a>
 
 At this point, I will show 2 ways to exploit this Wordpress service (there are others...) and get a reverse shell.
 
@@ -244,7 +244,7 @@ We will edit the values ```$ip``` and ```$port``` of our payload, by our IP and 
 
 Now we will replace the content of the template 404 by the content of our payload, and we will save it.
 
-<a href="/assets/images/thm-writeup-mr-robot/9.png"><img src="/assets/images/thm-writeup-mr-robot/9.png"></a>
+<a href="/assets/images/thm-writeup-mr-robot/9.png"><img src="/assets/images/thm-writeup-mr-robot/9.png"alt="mr robot thm writeup" ></a>
 
 We will initiate a listener, as we expect a connection from our victim.
 
@@ -260,7 +260,7 @@ As soon as we log in, we will have already obtained a shell revese to the user *
 
 To do so, go to Plugins -> Add New -> Upload Plugin.
 
-<a href="/assets/images/thm-writeup-mr-robot/10.png"><img src="/assets/images/thm-writeup-mr-robot/10.png"></a>
+<a href="/assets/images/thm-writeup-mr-robot/10.png"><img src="/assets/images/thm-writeup-mr-robot/10.png"alt="mr robot thm writeup" ></a>
 
 
 We could use the payload mentioned in the previous section as is, but it will not comply with the format of a WordPress plugin... we will have to make our payload a valid plugin, to do this we will start by adding the following header to our payload.
@@ -301,11 +301,11 @@ nc -lvp 443
 
 Finally we will upload our payload ```reverse.zip```.
 
-<a href="/assets/images/thm-writeup-mr-robot/11.png"><img src="/assets/images/thm-writeup-mr-robot/11.png"></a>
+<a href="/assets/images/thm-writeup-mr-robot/11.png"><img src="/assets/images/thm-writeup-mr-robot/11.png"alt="mr robot thm writeup" ></a>
 
 But this is not enough, now we have to activate it, for this we go back to Plugins and click on "Activate".
 
-<a href="/assets/images/thm-writeup-mr-robot/12.png"><img src="/assets/images/thm-writeup-mr-robot/12.png"></a>
+<a href="/assets/images/thm-writeup-mr-robot/12.png"><img src="/assets/images/thm-writeup-mr-robot/12.png"alt="mr robot thm writeup" ></a>
 
 As soon as we activate it, we will have already obtained a shell revese to the user **daemon**.
 
@@ -314,7 +314,7 @@ As soon as we activate it, we will have already obtained a shell revese to the u
 
 Either by one or the other method we have obtained a shell (or something similar, since it is a rawshell).
 
-<a href="/assets/images/thm-writeup-mr-robot/13.png"><img src="/assets/images/thm-writeup-mr-robot/13.png"></a>
+<a href="/assets/images/thm-writeup-mr-robot/13.png"><img src="/assets/images/thm-writeup-mr-robot/13.png"alt="mr robot thm writeup" ></a>
 
 We are going to improve our shell and get a proper tty
 
@@ -324,13 +324,13 @@ python -c 'import pty; pty.spawn("/bin/bash")'
 
 At this point we can navigate through the file system, finding the user **robot** located in ```/home/robot```.
 
-<a href="/assets/images/thm-writeup-mr-robot/14.png"><img src="/assets/images/thm-writeup-mr-robot/14.png"></a>
+<a href="/assets/images/thm-writeup-mr-robot/14.png"><img src="/assets/images/thm-writeup-mr-robot/14.png"alt="mr robot thm writeup" ></a>
 
 In this directory we can find 2 files, the second flag and what by the name seems to be a password encrypted in MD5.
 
 If we try to see the key, we will not be able to, since the owner of this file is the user **robot** and only he can read the file and nothing else.
 
-<a href="/assets/images/thm-writeup-mr-robot/15.png"><img src="/assets/images/thm-writeup-mr-robot/15.png"></a>
+<a href="/assets/images/thm-writeup-mr-robot/15.png"><img src="/assets/images/thm-writeup-mr-robot/15.png"alt="mr robot thm writeup" ></a>
 
 On the other hand we can consult the encrypted password.
 
@@ -342,7 +342,7 @@ To decrypt it we will have to perform another brute force attack, this time we w
 john --format=raw-MD5 --wordlist=/usr/share/wordlists/rockyou.txt hash
 ```
 
-<a href="/assets/images/thm-writeup-mr-robot/16.png"><img src="/assets/images/thm-writeup-mr-robot/16.png"></a>
+<a href="/assets/images/thm-writeup-mr-robot/16.png"><img src="/assets/images/thm-writeup-mr-robot/16.png"alt="mr robot thm writeup" ></a>
 
 Getting the password for the user **robot**.
 
@@ -363,7 +363,7 @@ The first thing I tried was if I could execute some command with sudo (```sudo -
 find / -user root -perm -4000 -exec ls -ldb {} \; 2> /dev/null
 ```
 
-<a href="/assets/images/thm-writeup-mr-robot/17.png"><img src="/assets/images/thm-writeup-mr-robot/17.png"></a>
+<a href="/assets/images/thm-writeup-mr-robot/17.png"><img src="/assets/images/thm-writeup-mr-robot/17.png"alt="mr robot thm writeup" ></a>
 
 What stands out here is ```/usr/local/bin/nmap```.
 
@@ -371,7 +371,7 @@ We can consult in [GTFOBins](https://gtfobins.github.io) the way to abuse this *
 
 As our purpose is to obtain command execution as superuser, we find this method.
 
-<a href="/assets/images/thm-writeup-mr-robot/18.png"><img src="/assets/images/thm-writeup-mr-robot/18.png"></a>
+<a href="/assets/images/thm-writeup-mr-robot/18.png"><img src="/assets/images/thm-writeup-mr-robot/18.png"alt="mr robot thm writeup" ></a>
 
 where it appears that it is only available for nmap versions between 2.02 and 5.21, so we check our version.
 
@@ -383,8 +383,8 @@ nmap version 3.81 ( http://www.insecure.org/nmap/ )
 
 As it is valid, we proceed to abuse this SUID.
 
-<a href="/assets/images/thm-writeup-mr-robot/19.png"><img src="/assets/images/thm-writeup-mr-robot/19.png"></a>
+<a href="/assets/images/thm-writeup-mr-robot/19.png"><img src="/assets/images/thm-writeup-mr-robot/19.png"alt="mr robot thm writeup" ></a>
 
 Finally we get a rawshell as root, now we just need to display the last flag in ```/root/key-3-of-3.txt```
 
-<a href="/assets/images/thm-writeup-mr-robot/20.png"><img src="/assets/images/thm-writeup-mr-robot/20.jpg"></a>
+<a href="/assets/images/thm-writeup-mr-robot/20.png"><img src="/assets/images/thm-writeup-mr-robot/20.jpg"alt="mr robot thm writeup" ></a>

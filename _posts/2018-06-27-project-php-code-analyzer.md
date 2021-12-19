@@ -16,9 +16,9 @@ This program analyzes several files (programmed in PHP) that are specified in th
 ## [Link to the Github repository](https://github.com/jmlgomez73/Analizador-de-Codigo-PHP)
 
 <a href="/assets/images/project-php-code-analyzer/1.png">
-    <img src="/assets/images/project-php-code-analyzer/1.png">
+    <img src="/assets/images/project-php-code-analyzer/1.png"  alt="php code analyzer">
 </a>
 
 <a href="/assets/images/project-php-code-analyzer/2.png">
-    <img src="/assets/images/project-php-code-analyzer/2.png">
+    <img src="/assets/images/project-php-code-analyzer/2.png" alt="php code analyzer">
 </a>

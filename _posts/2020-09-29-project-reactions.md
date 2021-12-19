@@ -83,5 +83,5 @@ This framework powered by Google allows applications created in Flutter to be ta
 ## Demostration
 
 <a href="/assets/images/project-reactions/1.gif">
-    <img src="/assets/images/project-reactions/1.gif">
+    <img src="/assets/images/project-reactions/1.gif" alt="Reactions">
 </a>

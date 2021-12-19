@@ -28,7 +28,7 @@ There are several models of BadUSB devices, such as, for example, Bash Bunny, Ru
 In this post we will be talking about WHID Cactus which is a bad-usb as an alternative solution with the added feature of being controlled via WiFi through which we can execute instructions to get whatever we want from the device we are attacking or auditing, from exfiltrating passwords and data to a reverse shell to the device itself.
 
 <a href="/assets/images/post-whid-injector/whid.jpg">
-    <img src="/assets/images/post-whid-injector/whid.jpg">
+    <img src="/assets/images/post-whid-injector/whid.jpg" alt="whid injector">
 </a>
 
 ## Comparison
@@ -91,7 +91,7 @@ You can connect through any device with WiFi, there is also an android applicati
 When accessing we will see the following:
 
 <a href="/assets/images/post-whid-injector/portal.png">
-    <img src="/assets/images/post-whid-injector/portal.png">
+    <img src="/assets/images/post-whid-injector/portal.png" alt="whid injector">
 </a>
 
 We can write and execute instructions with *Live Payload Mode* or *Input Mode*, we can convert code written for Rubber Ducky to the syntax of our device with *Duckuino Mode*, and choose or upload payloads so we don't have to write them and execute them at will or in an automated way when plugging in the device.
@@ -99,7 +99,7 @@ We can write and execute instructions with *Live Payload Mode* or *Input Mode*, 
 In addition we can configure all the parameters for the services available in the section *Configure ESPloit*.
 
 <a href="/assets/images/post-whid-injector/configure.png">
-    <img src="/assets/images/post-whid-injector/configure.png">
+    <img src="/assets/images/post-whid-injector/configure.png" alt="whid injector">
 </a>
 
 Useful payloads to test in your controlled environment:
@@ -219,7 +219,7 @@ Press:176
 ```
 
 <a href="/assets/images/post-whid-injector/wifi-email.png">
-    <img src="/assets/images/post-whid-injector/wifi-email.png">
+    <img src="/assets/images/post-whid-injector/wifi-email.png" alt="whid injector">
 </a>
 
 #### Payload to steal Chrome passwords and exfiltrate them via email
@@ -329,7 +329,7 @@ The pin closer to USB-A is GND. The pins are:
 * VCC
 
 <a href="/assets/images/post-whid-injector/pinout.png">
-    <img src="/assets/images/post-whid-injector/pinout.png">
+    <img src="/assets/images/post-whid-injector/pinout.png" alt="whid injector">
 </a>
 
 If you need a usb hub to weaponize a usb gadget or mouse, I recommend using this: [NanoHub](https://www.tindie.com/products/mux/nanohub-tiny-usb-hub-for-hacking-projects/)
@@ -344,11 +344,11 @@ On the other hand, one of the options of this device is ESPortal Credentials Har
 Some examples of weaponized gadgets:
 
 <a href="/assets/images/post-whid-injector/weaponized-mouse.png">
-    <img src="/assets/images/post-whid-injector/weaponized-mouse.png">
+    <img src="/assets/images/post-whid-injector/weaponized-mouse.png" alt="whid injector"> 
 </a>
 
 <a href="/assets/images/post-whid-injector/weaponized_PlasmaBall.png">
-    <img src="/assets/images/post-whid-injector/weaponized_PlasmaBall.png">
+    <img src="/assets/images/post-whid-injector/weaponized_PlasmaBall.png" alt="whid injector">
 </a>
 
 I encourage you to take full advantage of this tool.

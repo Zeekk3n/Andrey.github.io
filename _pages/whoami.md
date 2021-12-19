@@ -51,7 +51,7 @@ layout: whoami
 * Hack The Box
     <div class="doubleimg">
         <a href="https://app.hackthebox.eu/profile/616242">
-            <img src="https://www.hackthebox.eu/badge/image/616242">
+            <img src="https://www.hackthebox.eu/badge/image/616242" alt="HackTheBox Shockz Profile">
         </a>
     </div>
 

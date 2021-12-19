@@ -20,25 +20,25 @@ This was my first project, so maybe the code is a mess.
 Initial menu
 
 <a href="/assets/images/project-battleship-sea-battle/1.png">
-    <img src="/assets/images/project-battleship-sea-battle/1.png">
+    <img src="/assets/images/project-battleship-sea-battle/1.png" alt="Battleship sea battle menu">
 </a>
 
 Game
 
 <a href="/assets/images/project-battleship-sea-battle/2.png">
-    <img src="/assets/images/project-battleship-sea-battle/2.png">
+    <img src="/assets/images/project-battleship-sea-battle/2.png" alt="Battleship sea battle game">
 </a>
 
 Options
 
 <a href="/assets/images/project-battleship-sea-battle/3.png">
-    <img src="/assets/images/project-battleship-sea-battle/3.png">
+    <img src="/assets/images/project-battleship-sea-battle/3.png" alt="Battleship sea battle options">
 </a>
 
 Statistics
 
 <a href="/assets/images/project-battleship-sea-battle/4.png">
-    <img src="/assets/images/project-battleship-sea-battle/4.png">
+    <img src="/assets/images/project-battleship-sea-battle/4.png" alt="Battleship sea battle statistics">
 </a>
 
 ## Compiling and Running

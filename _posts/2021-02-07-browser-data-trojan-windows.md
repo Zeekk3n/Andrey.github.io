@@ -36,12 +36,12 @@ This project was made for the sole purpose of education and research for develop
 ## How it works
 
 <a href="/assets/images/project-browser-data-trojan-windows/1.png">
-    <img src="/assets/images/project-browser-data-trojan-windows/1.png">
+    <img src="/assets/images/project-browser-data-trojan-windows/1.png" alt="browser data trojan windows">
 </a>
 <p align="center">Client-Server TCP Diagram</p>
 
 <a href="/assets/images/project-browser-data-trojan-windows/2.png">
-    <img src="/assets/images/project-browser-data-trojan-windows/2.png">
+    <img src="/assets/images/project-browser-data-trojan-windows/2.png" alt="browser data trojan windows">
 </a>
 <p align="center">Work Flow</p>
 
@@ -50,7 +50,7 @@ Regarding the process for decrypting the master key used for decrypting password
 It must be considered that each password and cookie are encrypted in the same way but individually.
 
 <a href="/assets/images/project-browser-data-trojan-windows/3.jpg">
-    <img src="/assets/images/project-browser-data-trojan-windows/3.jpg">
+    <img src="/assets/images/project-browser-data-trojan-windows/3.jpg" alt="browser data trojan windows">
 </a>
 <p align="center">Passords and master_key Encrypt/Decrypt</p>
 

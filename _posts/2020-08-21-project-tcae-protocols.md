@@ -17,9 +17,9 @@ T.C.A.E Protocols is an Android application that displays the various nursing as
 ## [Link to the Github repository](https://github.com/jmlgomez73/ProtocolosTCAE)
 
 <a href="/assets/images/project-tcae-protocols/1.gif">
-    <img src="/assets/images/project-tcae-protocols/1.gif">
+    <img src="/assets/images/project-tcae-protocols/1.gif" alt="tcae protocols">
 </a>
 
 <a href="/assets/images/project-tcae-protocols/2.gif">
-    <img src="/assets/images/project-tcae-protocols/2.gif">
+    <img src="/assets/images/project-tcae-protocols/2.gif" alt="tcae protocols">
 </a>
