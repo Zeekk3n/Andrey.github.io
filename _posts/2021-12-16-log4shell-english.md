@@ -103,7 +103,7 @@ Log4j 2.0 to 2.14.1
 
 # Mitigation
 
-Upgrade the library to `Log4j 2.16`.
+Upgrade the library to `Log4j 2.17`.
 
 - **CVE-2021-44228:**
     - The affected functionality has been completely removed.
