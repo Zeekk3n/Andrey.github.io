@@ -4,10 +4,10 @@ minimal_mistakes_skin    : "haxor" # "air", "aqua", "contrast", "dark", "dirt", 
 
 # Site Settings
 locale                   : "en-US"
-title                    : "Shockz | Cibersecurity, CTF's/Pentesting and Ethical Hacking"
+title                    : "Shockz | Cybersecurity, CTF's/Pentesting and Ethical Hacking"
 title_separator          : "|"
-name                     : "Shockz | Posts about Cibersecurity, CTF's and Ethical Hacking"
-description              : "Posts about Cibersecurity, Pentesting/CTF's, Ethical Hacking and other projects"
+name                     : "Shockz | Posts about Cybersecurity, CTF's and Ethical Hacking"
+description              : "Posts about Cybersecurity, Pentesting/CTF's, Ethical Hacking and other projects"
 url                      : "https://jmlgomez73.github.io" # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
 baseurl                  :  # the subpath of your site, e.g. "/blog"
 repository               : "jmlgomez73/jmlgomez73.github.io" # GitHub username/repo-name e.g. "mmistakes/minimal-mistakes"
