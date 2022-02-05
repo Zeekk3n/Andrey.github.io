@@ -37,6 +37,7 @@ layout: whoami
 
 ## Certifications
 
+* eCPPTv2 *eLearnSecurity Certified Profesional Penetration Tester v2*
 * eJPT *eLearnSecurity Junior Penetration Tester*
 
 ## Exploit Database Publications
