@@ -28,12 +28,13 @@ layout: whoami
 
 | Pentesting | Sysadmin | Devops |  Programming |
 |-------|--------|---------|---------|
-| Enumeration | Linux | Ansible | Python |
-| Vulnerability assessment | Virtualization | Docker | Shell Scripting |
-| Privilege Escalation | Automation | Kubernetes | Java |
-| Metasploit | MySQL | AWS | C/C++/C# |
+| Web Applications | Linux | Ansible | Python |
+| Networks | Virtualization | Docker | Shell Scripting |
+| Active Directory | Automation | Kubernetes | Java |
+| Pivoting | MySQL | AWS | C/C++/C# |
 | Wireless Hacking | Nginx |  |  |
-| Burp Suite | Apache |  |  |
+| Mobile Hacking | Apache |  |  |
+| Social Engineering |  |  |  |
 
 ## Certifications
 
