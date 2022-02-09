@@ -38,8 +38,18 @@ layout: whoami
 
 ## Certifications
 
+Ethical Hacking/Pentesting
+
 * eCPPTv2 *eLearnSecurity Certified Profesional Penetration Tester v2*
 * eJPT *eLearnSecurity Junior Penetration Tester*
+
+Vulnerability Management
+
+* *Qualys - Vulnerability Management*
+* *Qualys - Vulnerability Management Detection & Response*
+* *Qualys - Cybersecurity Asset Management*
+* *Qualys - Patch Management*
+* *Qualys - Scanning Strategies and Best Practices*
 
 ## Exploit Database Publications
 
