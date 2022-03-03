@@ -12,14 +12,13 @@ layout: whoami
     "Personal_Info":{
         "Name": "Jorge",
         "Alias": "Shockz",
-        "Age": 23,
+        "Age": 24,
         "Education": "Software Engineering",
+        "Position": "Vulnerability Analyst & Developer",
         "Email": "am1sZ29tZXo3M0BnbWFpbC5jb20=",
         "Interests":[
-            "Cybersecurity, DevOps, Ethical Hacking, Red Teaming",
-            "Staying up late, Driving, TV Series, Movies"
-        ],
-        "Current_Tasks": "Working on OSCP (Offensive Security Certified Professional)"
+            "Cybersecurity, DevOps, Ethical Hacking, Red Teaming"
+        ]
     }
 }
 ```
