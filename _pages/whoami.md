@@ -39,6 +39,7 @@ layout: whoami
 
 #### Ethical Hacking/Pentesting
 
+* eWPTXv2 *eLearnSecurity Web Application Penetration Tester eXtreme v2*
 * eCPPTv2 *eLearnSecurity Certified Profesional Penetration Tester v2*
 * eJPT *eLearnSecurity Junior Penetration Tester*
 
