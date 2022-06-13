@@ -14,10 +14,10 @@ layout: whoami
         "Alias": "Shockz",
         "Age": 24,
         "Education": "Software Engineering",
-        "Position": "Vulnerability Analyst & Developer",
+        "Position": "Offensive Security Engineer",
         "Email": "am1sZ29tZXo3M0BnbWFpbC5jb20=",
         "Interests":[
-            "Cybersecurity, DevOps, Ethical Hacking, Red Teaming"
+            "Cybersecurity, DevSecOps, Ethical Hacking, Red Teaming"
         ]
     }
 }
@@ -50,6 +50,14 @@ layout: whoami
 * *Qualys - Cybersecurity Asset Management*
 * *Qualys - Patch Management*
 * *Qualys - Scanning Strategies and Best Practices*
+* *Qualys - Reporting Strategies and Best Practices*
+* *Qualys - Web Application Scanning*
+* *Qualys - Qualys API Fundamentals*
+* *Qualys - Cloud Agent*
+
+* *Rapid7 - InsightVM Certified Administrator*
+* *Rapid7 - InsightIDR Certified Specialist*
+* *Rapid7 - InsightAppSec Certified Specialist*
 
 ## Exploit Database Publications
 

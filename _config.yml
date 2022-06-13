@@ -7,7 +7,7 @@ locale                   : "en-US"
 title                    : "Shockz | Cybersecurity, CTF's/Pentesting and Ethical Hacking"
 title_separator          : "|"
 name                     : "Shockz | Posts about Cybersecurity, CTF's and Ethical Hacking"
-description              : "Posts about Cybersecurity, Pentesting/CTF's, Ethical Hacking and other projects"
+description              : "Posts about Cybersecurity, Pentesting/CTF's, Ethical Hacking and other tech projects"
 url                      : "https://jmlgomez73.github.io" # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
 baseurl                  :  # the subpath of your site, e.g. "/blog"
 repository               : "jmlgomez73/jmlgomez73.github.io" # GitHub username/repo-name e.g. "mmistakes/minimal-mistakes"
@@ -91,7 +91,7 @@ analytics:
 author:
   name             : "Shockz"
   avatar           : "/assets/images/avatar.png"
-  bio              : "Vulnerability Analyst & Developer | Ethical Hacker | Software Engineer | HTB & THM Player"
+  bio              : "Offensive Security Engineer | Ethical Hacker | HTB & THM Player"
   location         : "Ourense, Spain"
   email            : "jmlgomez73@gmail.com"
   uri              :
