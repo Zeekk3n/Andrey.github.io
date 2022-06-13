@@ -85,7 +85,6 @@ from qiskit.tools.jupyter import *
 from qiskit.visualization import *
 import matplotlib
 
-#IBMQ.save_account('82fb4ba0c4faa9ebcb013da6a8c2e922cad8412490d7d09bfb4a1261e34d5bd232cfb694f2fc2342ad29ce8489e1b0a5f9393371c760c1713693e956252c8e21')
 IBMQ.save_account("INSERT_API_TOKEN")
 # Loading your IBM Q account(s)
 provider = IBMQ.load_account()
