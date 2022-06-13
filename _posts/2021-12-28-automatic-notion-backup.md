@@ -1,6 +1,6 @@
 ---
 layout: single
-title: '<span class="projects">Automatic Notion Backup- Project</span>'
+title: '<span class="projects">Automatic Notion Backup - Project</span>'
 excerpt: "A script to automate the process of downloading Markdown and CSV backups of Notion. In addition, the data is processed to remove the AWS identifier present in the files."
 date: 2021-12-28
 categories:
