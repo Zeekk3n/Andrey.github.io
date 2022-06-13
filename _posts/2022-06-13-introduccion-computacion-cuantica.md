@@ -92,6 +92,7 @@ provider = IBMQ.load_account()
 ```
 
 # Creación de un circuito cuántico que obtenga las probabilidades de que se obtenga 00 o 11
+## Versión en simulador
 
 Este código pone un qubit en superposición en un dispositivo real de computación cuántica.
 Para ello y por orden:
@@ -146,5 +147,76 @@ plot_histogram(counts)
 ## Demostración del circuito en el compositor de IBM
 
 ![2022-06-12 23_13_18-](https://user-images.githubusercontent.com/67438760/173253838-63761a02-5fa7-41ff-8212-a51c7fd2add1.png)
+
+
+## Versión en hardware real
+
+En este caso el provider va a ser "ibm-q" y el sistema que usaré será "ibmq_santiago"
+
+```python
+from qiskit import QuantumCircuit, execute, Aer, IBMQ
+from qiskit.compiler import transpile, assemble
+from qiskit.tools.jupyter import *
+from qiskit.tools.monitor import job_monitor
+from qiskit.visualization import *
+import matplotlib
+
+IBMQ.delete_account()
+IBMQ.save_account('YOUR API KEY')
+# Loading your IBM Q account(s)
+IBMQ.load_account()
+
+num_qubits = 2
+
+# Obtenemos el provider
+provider = IBMQ.get_provider(hub='ibm-q', group='open', project='main')
+
+# Obtenemos un system backend
+backend = provider.get_backend('ibmq_santiago')
+
+# Crear un circuito cuántico actuando sobre el registro q, para este caso solo emplearemos 2 QuantumRegister y 2 ClassicalRegister
+#los cuales se pueden definir solo con QuantumCircuit
+circuit = QuantumCircuit(2, 2)
+
+# Añade una puerta H en el qubit 0
+circuit.h(0)
+
+# Añade una puerta CX (CNOT) en el qubit de control
+# qubit 0 y objetivo qubit 1
+circuit.cx(0, 1)
+
+# Asignar la medición cuántica a los bits clásicos
+circuit.measure([0,1], [0,1])
+
+# Ejecutar el circuito en un trabajo
+job = execute(circuit, backend=backend)
+
+# Obtenemos el estado del trabajo
+job.status()
+
+# Monitorizamos el job
+job_monitor(job)
+
+# Obtenemos el resultado
+result = job.result()
+
+# Dibuja el circuito
+print(circuit)
+
+# Devuelve los recuentos
+plot_histogram(result.get_counts(circuit))
+```
+
+En trabajo se encolará como se ve a continuación desde el dashboard de IBMQ
+
+<a href="/assets/images/project-programacion-cuantica/queued.png"><img src="/assets/images/project-programacion-cuantica/queued.png" alt="queued"></a>
+
+<a href="/assets/images/project-programacion-cuantica/job.png"><img src="/assets/images/project-programacion-cuantica/job.png" alt="job"></a>
+
+Y para mi caso se obtuvieron estos resultados:
+
+<a href="/assets/images/project-programacion-cuantica/results.png"><img src="/assets/images/project-programacion-cuantica/results.png" alt="results"></a>
+
+<a href="/assets/images/project-programacion-cuantica/platform_results.png"><img src="/assets/images/project-programacion-cuantica/platform_results.png" alt="output1"></a>
 
 # [Link to the Github repository](https://github.com/jmlgomez73/Computacion-Cuantica)
