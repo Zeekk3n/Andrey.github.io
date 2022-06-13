@@ -93,8 +93,6 @@ provider = IBMQ.load_account()
 
 # Creación de un circuito cuántico que obtenga las probabilidades de que se obtenga 00 o 11
 
-**Consultar Notebook**
-
 Este código pone un qubit en superposición en un dispositivo real de computación cuántica.
 Para ello y por orden:
 - Creamos un circuito cuántico que actúe sobre el registro
