@@ -39,6 +39,8 @@ layout: whoami
 
 #### Ethical Hacking/Pentesting
 
+* CRTP *Certified Red Team Professional*
+* eMAPT *eLearnSecurity Mobile Application Penetration Tester*
 * eWPTXv2 *eLearnSecurity Web Application Penetration Tester eXtreme v2*
 * eCPPTv2 *eLearnSecurity Certified Profesional Penetration Tester v2*
 * eJPT *eLearnSecurity Junior Penetration Tester*
