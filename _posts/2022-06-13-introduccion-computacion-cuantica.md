@@ -12,9 +12,6 @@ tags:
   - python
   - script
 show_time: true
-toc: true
-toc_label: "Content"
-toc_sticky: true
 ---
 
 # ¿Qué es un Qubit?
