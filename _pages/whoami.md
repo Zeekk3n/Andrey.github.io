@@ -27,10 +27,10 @@ layout: whoami
 
 | Pentesting | Sysadmin | Devops |  Programming |
 |-------|--------|---------|---------|
-| Web Applications | Linux | Ansible | Python |
-| Networks | Virtualization | Docker | Shell Scripting |
-| Active Directory | Automation | Kubernetes | Java |
-| Pivoting | MySQL | AWS | C/C++/C# |
+| Web Applications / API | Linux | Ansible | Python |
+| Internal Intrusions | Virtualization | Docker | Shell Scripting |
+| External Intrusions | Automation | Kubernetes | Java |
+| Active Directory | MySQL | AWS | C/C++/C# |
 | Wireless Hacking | Nginx |  |  |
 | Mobile Hacking | Apache |  |  |
 | Social Engineering |  |  |  |
