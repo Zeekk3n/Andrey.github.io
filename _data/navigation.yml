@@ -9,7 +9,7 @@ main:
         url:  /hackthebox
       - title: Try Hack Me
         url:  /tryhackme
-  - title: "Categories and Tvgs"
+  - title: "Categories and Tags"
     url: /categories_tags
   - title: "Projects"
     url: /projects

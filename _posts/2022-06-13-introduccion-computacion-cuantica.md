@@ -1,10 +1,11 @@
 ---
 layout: single
-title: '<span class="projects">Introducción a la computación cuántica - Project</span>'
+title: '<span class="post">Introducción a la computación cuántica</span>'
 excerpt: "Introducción developer-friendly a la computación cuántica con Qiskit en dispositivos reales de computación cuántica proporcionados por IBM Quantum. Diseño de un circuito básico."
 date: 2022-06-13
 categories:
-  - projects
+  - article
+  - post
 tags:  
   - quantum
   - programming
