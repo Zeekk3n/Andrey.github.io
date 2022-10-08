@@ -24,23 +24,25 @@ Remember this is made to work for my specific user so if you want to use it for 
 ## [Link to the Github repository](https://github.com/jmlgomez73/Shockz-MKE)
 
 ## Tested on the following Linux distributions:
+- Kali Linux 2022.3
+- Kali Linux 2022.1
 - Kali Linux 2021.2
 - Kali Linux 2020.4
 
 ### Features I use in my Kali VM's
 
 * **CPU**
-    * 2 Cores and 2 Threads/core
+    * 2 Cores y 8 Threads
 * **RAM**
-    * 6GB
+    * 12GB
 * **VHD**
-    * 80 GB
-* **Partitions** * **Partitions
-    * Primary
+    * 90 GB
+* **Partitions**
+    * Primaria
       * / = 50 GB
-    * Logical
-      /home = 20 GB
-      /var = 5 GB
+    * Lógica
+      * /home = 20 GB
+      * /var = 15 GB
       * /swap = 5 GB
 
 ## Installation:
@@ -63,6 +65,10 @@ git clone https://github.com/jmlgomez73/Shockz-MKE && cd Shockz-MKE && chmod +x 
 
 <a href="/assets/images/project-shockz-mke/1.png">
     <img src="/assets/images/project-shockz-mke/1.png" alt="shockz mke">
+</a>
+
+<a href="/assets/images/project-shockz-mke/2.png">
+    <img src="/assets/images/project-shockz-mke/2.png" alt="shockz mke 1">
 </a>
 
 ## Utilities:
