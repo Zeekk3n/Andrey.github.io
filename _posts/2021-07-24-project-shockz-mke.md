@@ -21,7 +21,7 @@ Feel free to take advantage of my scripts or configuration files.
 
 Remember this is made to work for my specific user so if you want to use it for yourself you will have to edit a lot of files.
 
-## [Link to the Github repository](https://github.com/jmlgomez73/Shockz-MKE)
+## [Link to the Github repository](https://github.com/shockz-offsec/Shockz-MKE)
 
 ## Tested on the following Linux distributions:
 - Kali Linux 2022.3
@@ -56,7 +56,7 @@ sudo su
 **2)** Clone the repository, give execute permissions to the install.sh file and run it.
 
 ```bash
-git clone https://github.com/jmlgomez73/Shockz-MKE && cd Shockz-MKE && chmod +x install.sh && ./install.sh
+git clone https://github.com/shockz-offsec/Shockz-MKE && cd Shockz-MKE && chmod +x install.sh && ./install.sh
 ```
 **3)** Reboot and select as launcher bspwm
 

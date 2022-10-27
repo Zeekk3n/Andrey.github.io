@@ -25,7 +25,7 @@ Reactions is an application with which you can test your reflexes and get in mil
 
 This framework powered by Google allows applications created in Flutter to be taken to Android, iOS, Windows, Mac, Linux and the web, without the need to make changes to the code.
 
-## [Link to the Github repository](https://github.com/jmlgomez73/Reactions)
+## [Link to the Github repository](https://github.com/shockz-offsec/Reactions)
 
 ## Design
 

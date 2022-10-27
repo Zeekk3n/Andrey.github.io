@@ -17,7 +17,7 @@ show_time: true
 
 This script allows to obtain the geolocation of the stranger in a video chat on the Omegle platform in real time through the capture of the public IP, thanks to the Peer-to-Peer communication with WebRTC that follows the web.
 
-## [Link to the Github repository](https://github.com/jmlgomez73/IPGeo-Grabber-Omegle)
+## [Link to the Github repository](https://github.com/shockz-offsec/IPGeo-Grabber-Omegle)
 
 # **LEGAL NOTICE AND DISCLAIMER**.
 IPGeo Grabber Omegle is a script for the sole purpose of educational and research purposes for developers or end users, and may help create countermeasures for current threats.

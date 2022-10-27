@@ -16,7 +16,7 @@ WallDown is a mobile application that allows you to view wallpapers based on a c
 
 PD: This is my first Android App
 
-## [Link to the Github repository](https://github.com/jmlgomez73/WallDown)
+## [Link to the Github repository](https://github.com/shockz-offsec/WallDown)
 
 <a href="/assets/images/project-walldown/1.gif">
     <img src="/assets/images/project-walldown/1.gif" alt="Walldown">

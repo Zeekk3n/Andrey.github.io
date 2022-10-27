@@ -13,7 +13,7 @@ show_time: true
 
 The Hill cipher was proposed by Lester S. Hill in 1929, which is a polygraph substitution cryptosystem that uses the product of matrices to perform operations based on using a matrix as a key to encrypt a plaintext and its inverse to decrypt the corresponding cryptogram.
 
-## [Link to the Github repository](https://github.com/jmlgomez73/Cifrado-de-Hill)
+## [Link to the Github repository](https://github.com/shockz-offsec/Cifrado-de-Hill)
 
 ## Operation
 

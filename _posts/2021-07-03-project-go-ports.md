@@ -15,7 +15,7 @@ show_time: true
 
 A fast, concurrent and multithread TCP port scanner.
 
-## [Link to the Github repository](https://github.com/jmlgomez73/GoPorts)
+## [Link to the Github repository](https://github.com/shockz-offsec/GoPorts)
 
 ## Installation
 
@@ -30,7 +30,7 @@ A fast, concurrent and multithread TCP port scanner.
 * Clone the repository into your machine
 
   ```bash
-  git clone https://github.com/jmlgomez73/GoPorts
+  git clone https://github.com/shockz-offsec/GoPorts
   ```
 
 * Move to the GoPorts directory

@@ -8,9 +8,9 @@ title                    : "Shockz | Cybersecurity, CTF's/Pentesting and Ethical
 title_separator          : "|"
 name                     : "Shockz | Posts about Cybersecurity, CTF's and Ethical Hacking"
 description              : "Posts about Cybersecurity, Pentesting/CTF's, Ethical Hacking and other tech projects"
-url                      : "https://jmlgomez73.github.io" # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
+url                      : "https://shockz-offsec.github.io" # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
 baseurl                  :  # the subpath of your site, e.g. "/blog"
-repository               : "jmlgomez73/jmlgomez73.github.io" # GitHub username/repo-name e.g. "mmistakes/minimal-mistakes"
+repository               : "shockz-offsec/shockz-offsec.github.io" # GitHub username/repo-name e.g. "mmistakes/minimal-mistakes"
 logo                     : 
 teaser                   : "/assets/images/avatar_black.jpg" # path of fallback teaser image, e.g. "/assets/images/500x300.png"
 breadcrumbs              : true # true, false (default)
@@ -102,7 +102,7 @@ author:
   flickr           :
   facebook         : 
   foursquare       :
-  github           : "jmlgomez73"
+  github           : "shockz-offsec"
   gitlab           :
   google_plus      :
   keybase          : 

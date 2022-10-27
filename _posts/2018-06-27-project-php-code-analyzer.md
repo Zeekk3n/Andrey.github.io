@@ -13,7 +13,7 @@ show_time: true
 
 This program analyzes several files (programmed in PHP) that are specified in the "directories" file under the MVC model (Model, View, Controller), then it will analyze the codes and it will detect errors in comments, loops, control structures, variables, missing files, etc... It will also indicate where the failure is.
 
-## [Link to the Github repository](https://github.com/jmlgomez73/Analizador-de-Codigo-PHP)
+## [Link to the Github repository](https://github.com/shockz-offsec/Analizador-de-Codigo-PHP)
 
 <a href="/assets/images/project-php-code-analyzer/1.png">
     <img src="/assets/images/project-php-code-analyzer/1.png"  alt="php code analyzer">

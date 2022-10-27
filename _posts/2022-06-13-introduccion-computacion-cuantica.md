@@ -220,4 +220,4 @@ Y para mi caso se obtuvieron estos resultados:
 
 <a href="/assets/images/project-programacion-cuantica/platform_results.png"><img src="/assets/images/project-programacion-cuantica/platform_results.png" alt="output1"></a>
 
-# [Link to the Github repository](https://github.com/jmlgomez73/Computacion-Cuantica)
+# [Link to the Github repository](https://github.com/shockz-offsec/Computacion-Cuantica)

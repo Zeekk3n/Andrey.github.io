@@ -18,11 +18,11 @@ show_time: true
 
 A script to automate the process of downloading Markdown and CSV backups of Notion. In addition, the data is processed to remove the AWS identifier present in the files.
 
-## [Link to the Github repository](https://github.com/jmlgomez73/Automatic-Notion-Backup)
+## [Link to the Github repository](https://github.com/shockz-offsec/Automatic-Notion-Backup)
 
 # Instalation
 ```
-git clone https://github.com/jmlgomez73/Automatic-Notion-Backup.git
+git clone https://github.com/shockz-offsec/Automatic-Notion-Backup.git
 cd Automatic-Notion-Backup
 ```
 

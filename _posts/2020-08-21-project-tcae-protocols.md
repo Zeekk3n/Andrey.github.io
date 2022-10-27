@@ -14,7 +14,7 @@ show_time: true
 
 T.C.A.E Protocols is an Android application that displays the various nursing assistant protocols, also allows saving in favorites and quick search.
 
-## [Link to the Github repository](https://github.com/jmlgomez73/ProtocolosTCAE)
+## [Link to the Github repository](https://github.com/shockz-offsec/ProtocolosTCAE)
 
 <a href="/assets/images/project-tcae-protocols/1.gif">
     <img src="/assets/images/project-tcae-protocols/1.gif" alt="tcae protocols">

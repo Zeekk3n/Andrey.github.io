@@ -14,7 +14,7 @@ This script shows you how long it has taken you to watch a series or all your fa
 
 A series.txt file is required in the root directory of the application with the list of series to be processed. These will dump the results in an xlsx file, also the incompatibility errors when searching for the series will be dumped in the errors.txt file.
 
-## [Link to the Github repository](https://github.com/jmlgomez73/TVTime)
+## [Link to the Github repository](https://github.com/shockz-offsec/TVTime)
 
 ## Design
 

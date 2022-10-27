@@ -20,7 +20,7 @@ This client-server project allows the client to recompile all the information fr
 
 Then the server allows decrypting all files, including passwords, cookies, etc ...
 
-## [Link to the Github repository](https://github.com/jmlgomez73/Browser-Data-Trojan-Windows)
+## [Link to the Github repository](https://github.com/shockz-offsec/Browser-Data-Trojan-Windows)
 
 <h1>**LEGAL NOTICE AND DISCLAIMER**.</h1>
 This project was made for the sole purpose of education and research for developers or end users, and that can help create countermeasures for current threats.

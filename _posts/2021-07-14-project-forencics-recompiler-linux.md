@@ -13,7 +13,7 @@ show_time: true
 
 This script will recompile most of the information that is usually obtained from a Linux system before an expert or forensic analysis. In addition all the information will be signed with SHA256.
 
-## [Link to the Github repository](https://github.com/jmlgomez73/GoPorts)
+## [Link to the Github repository](https://github.com/shockz-offsec/GoPorts)
 
 Preview
 
