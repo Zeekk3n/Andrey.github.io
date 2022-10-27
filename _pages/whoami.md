@@ -15,7 +15,6 @@ layout: whoami
         "Age": 24,
         "Education": "Software Engineering",
         "Position": "Offensive Security Engineer",
-        "Email": "am1sZ29tZXo3M0BnbWFpbC5jb20=",
         "Interests":[
             "Cybersecurity, DevSecOps, Ethical Hacking, Red Teaming"
         ]
