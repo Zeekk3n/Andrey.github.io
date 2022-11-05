@@ -39,6 +39,7 @@ layout: whoami
 #### Ethical Hacking/Pentesting
 
 * OSCP *Offensive Security Certified Professional*
+* HTB RastaLabs
 * CRTP *Certified Red Team Professional*
 * eMAPT *eLearnSecurity Mobile Application Penetration Tester*
 * eWPTXv2 *eLearnSecurity Web Application Penetration Tester eXtreme v2*
