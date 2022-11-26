@@ -24,20 +24,21 @@ layout: whoami
 
 ## Skills
 
-| Pentesting | Sysadmin | Devops |  Programming |
+| Pentesting/Red Team | Sysadmin | Devops |  Programming |
 |-------|--------|---------|---------|
 | Web Applications / API | Linux | Ansible | Python |
-| Internal Intrusions | Virtualization | Docker | Shell Scripting |
+| Internal Intrusions (AD) | Virtualization | Docker | Shell Scripting |
 | External Intrusions | Automation | Kubernetes | Java |
-| Active Directory | MySQL | AWS | C/C++/C# |
-| Wireless Hacking | Nginx |  |  |
-| Mobile Hacking | Apache |  |  |
+| Wireless Hacking | Network Systems | AWS | C/C++/C# |
+| Mobile Hacking |  |  |  |
+| Thick Client |  |  |  |
 | Social Engineering |  |  |  |
 
 ## Certifications
 
 #### Ethical Hacking/Pentesting
 
+* CRTO *Certified Red Team Operator*
 * OSCP *Offensive Security Certified Professional*
 * HTB RastaLabs
 * CRTP *Certified Red Team Professional*
