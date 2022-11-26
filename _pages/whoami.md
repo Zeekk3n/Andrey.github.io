@@ -24,7 +24,7 @@ layout: whoami
 
 ## Skills
 
-| Pentesting/Red Team | Sysadmin | Devops |  Programming |
+| Pentesting ---Red Team | Sysadmin | Devops |  Programming |
 |-------|--------|---------|---------|
 | Web Applications / API | Linux | Ansible | Python |
 | Internal Intrusions (AD) | Virtualization | Docker | Shell Scripting |
