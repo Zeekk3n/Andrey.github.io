@@ -27,10 +27,11 @@ layout: whoami
 | Pentesting ---Red Team | Sysadmin | Devops |  Programming |
 |-------|--------|---------|---------|
 | Web Applications / API | Linux | Ansible | Python |
-| Internal Intrusions (AD) | Virtualization | Docker | Shell Scripting |
-| External Intrusions | Automation | Kubernetes | Java |
-| Wireless Hacking | Network Systems | AWS | C/C++/C# |
-| Mobile Hacking |  |  |  |
+| Internal Penetration Testing (AD) | Virtualization | Docker | Shell Scripting |
+| External Penetration Testing | Automation | Kubernetes | Java |
+| Wireless Network Assessment | Server Administration | AWS | C/C++/C# |
+| Infrastructure Asssessments |  |  |  |
+| Mobile App Security Assessment |  |  |  |
 | Thick Client |  |  |  |
 | Social Engineering |  |  |  |
 
