@@ -42,6 +42,8 @@ layout: whoami
 * CRTO *Certified Red Team Operator*
 * OSCP *Offensive Security Certified Professional*
 * HTB RastaLabs
+* HTB Offshore
+* BSCP *Burp Suite Certified Practitioner*
 * CRTP *Certified Red Team Professional*
 * eMAPT *eLearnSecurity Mobile Application Penetration Tester*
 * eWPTXv2 *eLearnSecurity Web Application Penetration Tester eXtreme v2*
