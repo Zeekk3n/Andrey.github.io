@@ -10,6 +10,10 @@
 
   <body class="layout--{{ page.layout | default: layout.layout }}{% if page.classes or layout.classes %}{{ page.classes | default: layout.classes | join: ' ' | prepend: ' ' }}{% endif %}" id="{% if page.layout == "whoami"%}clear{% endif %}">
 
+    <div id="particles-js">
+      <canvas class="particles-js-canvas-el"></canvas>
+    </div>
+
     {% include_cached browser-upgrade.html %}
     {% include_cached masthead.html %}    
 

@@ -111,27 +111,15 @@
             color: orange; 
             font-size:1.2em;
         }
-        #particles-js canvas{
-            position:fixed;
-            top:0;
-            left:0;
-            width:100%;
-            height:100%;
-            z-index:-100;
-            background-color:#04101f;
-            background-image:url("");
-            background-size:cover;
-            background-position:50% 50%;
-            background-repeat:no-repeat
-        }
+        
     </style>
   </head>
   <body>
     <iframe id="contentFrame" frameBorder="0" allowfullscreen></iframe>
+    <div id="particles-js">
+        <canvas class="particles-js-canvas-el" ></canvas>
+    </div>
     <div id="dialogWrap">
-        <div id="particles-js">
-            <canvas class="particles-js-canvas-el" width="1158" height="939" style="width: 100%; height: 100%"></canvas>
-        </div>
         <div id="dialogWrapCell">
             <div id="mainDialog">
                 <div id="dialogText">This page is password protected.</div>
@@ -163,7 +151,7 @@
             </div>
         </div>
     </div>
-    <script src="{{ "/assets/js/particles.min.js" | prepend: site.baseurl }}"></script>
+    <script src="{{ '/assets/js/particles.min.js' | prepend: site.baseurl }}"></script>
     <script src="{{ "/assets/js/app.js" | prepend: site.baseurl }}"></script>
 </body>
 </html>
