@@ -48,6 +48,7 @@ layout: whoami
 * eMAPT *eLearnSecurity Mobile Application Penetration Tester*
 * eWPTXv2 *eLearnSecurity Web Application Penetration Tester eXtreme v2*
 * eCPPTv2 *eLearnSecurity Certified Profesional Penetration Tester v2*
+* CAP *Certified AppSec Practitioner*
 * eJPT *eLearnSecurity Junior Penetration Tester*
 
 #### Vulnerability Management
