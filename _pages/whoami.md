@@ -1,7 +1,7 @@
 ---
 title: "Whoami"
 permalink: /whoami
-date: 2021-09-19
+date: 2021-03-01
 layout: whoami
 ---
 
@@ -12,11 +12,11 @@ layout: whoami
     "Personal_Info":{
         "Name": "Jorge",
         "Alias": "Shockz",
-        "Age": 24,
+        "Age": 25,
         "Education": "Software Engineering",
         "Position": "Offensive Security Engineer",
         "Interests":[
-            "Cybersecurity, DevSecOps, Ethical Hacking, Red Teaming"
+            "Cybersecurity, DevSecOps, Ethical Hacking, Red Teaming, Cloud"
         ]
     }
 }
@@ -24,7 +24,7 @@ layout: whoami
 
 ## Skills
 
-| Pentesting ---Red Team | Sysadmin | Devops |  Programming |
+| Pentesting ---Red Team | Sysadmin | Devops |  Development |
 |-------|--------|---------|---------|
 | Web Applications / API | Linux | Ansible | Python |
 | Internal Penetration Testing (AD) | Virtualization | Docker | Shell Scripting |
