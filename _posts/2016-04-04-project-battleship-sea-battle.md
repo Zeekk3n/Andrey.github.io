@@ -15,7 +15,7 @@ Battleship Sea Battle is a popular guessing, board game for two players. The loc
 
 This was my first project, so maybe the code is a mess.
 
-## [Link to the Github repository](https://github.com/shockz-offsec/Hundir-la-flota)
+## [Link to the Github repository](https://github.com/shockz-offsec/Personal-Dummy-Proyects/tree/main/Hundir-la-flota)
 
 Initial menu
 

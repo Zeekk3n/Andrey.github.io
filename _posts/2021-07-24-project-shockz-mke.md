@@ -36,13 +36,13 @@ Remember this is made to work for my specific user so if you want to use it for 
 * **RAM**
     * 12GB
 * **VHD**
-    * 90 GB
+    * 110 GB
 * **Partitions**
     * Primaria
       * / = 50 GB
     * Lógica
-      * /home = 20 GB
-      * /var = 15 GB
+      * /home = 30 GB
+      * /var = 25 GB
       * /swap = 5 GB
 
 ## Installation:
@@ -80,69 +80,69 @@ git clone https://github.com/shockz-offsec/Shockz-MKE && cd Shockz-MKE && chmod 
 - **polybar-themes**: Themes for polybar. Author: [VaughnValle](https://github.com/VaughnValle)
 - picom**: Composer for X11. Author: [yshui](https://github.com/yshui)
 - profi**: Window selector and application launcher.
-- **feh**: Visor de imágenes ligero, configurable y versátil.
-- **Hack Nerd Font**: Fuente.
-- **fzf**: Buscador difuso de línea de comandos de propósito general. Autor: [junegunn](https://github.com/junegunn)
+- **feh**: Lightweight, configurable and versatile image viewer.
+- **Hack Nerd Font**: Font.
+- **fzf**: General purpose fuzzy command line search engine. Author: [junegunn](https://github.com/junegunn)
 
-## Shortcuts (atajos de teclado)
+## Shortcuts (keyboard shortcuts)
 
-```Windows + Enter``` : Abrir la consola (gnome-terminal).
+```Windows + Enter``` : Open the console (gnome-terminal).
 
-```Windows + W``` : Cerrar la ventana actual.
+```Windows + W``` : Close the current window.
 
-```Windows + Alt + R``` : Reiniciar la configuración del bspwm.  
+```Windows + Alt + R``` : Reset bspwm configuration.  
 
-```Windows + Alt + Q``` : Cerrar sesión.  
+```Windows + Alt + Q``` : Log out.  
 
-```Windows + (⬆⬅⬇➡)``` : Moverse por las ventanas en la workspace actual.  
+```Windows + (⬆⬅⬇➡)``` : Move through the windows in the current workspace.  
 
-```Windows + D``` : Abrir el Rofi. Esc para salir.
+```Windows + D``` : Open Rofi. Esc to exit.
 
-```Windows + D + escribir ```thunar```:  Abrir explorador de archivos.
+```Windows + D + type ```thunar``` : Open file explorer.
 
-```Windows + (1,2,3,4,5,6,7,8,9,0)``` : Cambiar el workspace.
+```Windows + (1,2,3,4,5,6,7,8,9,0)``` : Change workspace.
 
-```Windows + T``` : Cambiar la ventana actual a modo "terminal" (normal). Nos sirve cuando la ventana está en modo pantalla completa o flotante.  
+```Windows + T``` : Switch the current window to "terminal" (normal) mode. It is useful when the window is in full screen or floating mode.  
 
-```Windows + M``` : Cambiar la ventana actual a modo "completo" (no ocupa la polybar). Presione la mismas teclas para volver a modo "terminal" (normal).  
+```Windows + M``` : Switch the current window to "full" mode (does not occupy the polybar). Press the same keys to return to "terminal" (normal) mode.  
 
-```Windows + F``` : Cambiar la ventana actual a modo pantalla completa (ocupa todo incluyendo la polybar). 
+```Windows + F``` : Switch the current window to full screen mode (occupies everything including the polybar). 
 
-```Windows + S``` : Cambiar la ventana actual a modo "flotante".  
+```Windows + S``` : Switch the current window to "floating" mode.  
 
-```Windows + Alt + (1,2,3,4,5,6,7,8,9,0)``` : Mover la ventana actual a otro workspace.  
+```Windows + Alt + (1,2,3,4,5,6,7,8,9,0)``` : Move the current window to another workspace.  
 
-```Windows + Alt + (⬆⬅⬇➡)``` : Cambiar el tamaño de la ventana actual (solo funciona si está en modo terminal o flotante).  
+```Windows + Alt + (⬆⬅⬇⬇➡)``` : Resize the current window (only works if in terminal or floating mode).  
 
-```Windows + Ctrl + (⬆⬅⬇➡)``` : Cambiar la posición de la ventana actual (solo funciona en modo flotante). 
+```Windows + Ctrl + (⬆⬅⬇⬇➡)``` : Change the position of the current window (only works in floating mode). 
 
-```Windows + Shift + G``` : Abrir Google Chrome (es necesario instalarlo primero).  
+```Windows + Shift + G``` : Open Google Chrome (needs to be installed first).  
 
-```Windows + Ctrl + Alt + (⬆⬅⬇➡)``` : Mostrar una preselección para luego abrir una ventana (una terminal, Google Chrome, un archivo, etc.). 
+```Windows + Ctrl + Alt + (⬆⬅⬇⬇➡)``` : Show a preset to then open a window (a terminal, Google Chrome, a file, etc.). 
 
-```Windows + Ctrl + Space``` para deshacer la preselección.  
+```Windows + Ctrl + Space``` to undo the preset.  
 
-#### Atajos zsh
+#### zsh shortcuts
 
-```Ctrl + A``` : Principio de línea
+```Ctrl + A``` : Beginning of line.
 
-```Ctrl + E``` : final de línea
+```Ctrl + E``` : End of line
 
-```Ctrl + L``` : Limpiar consola
+```Ctrl + L``` : Clear Console
 
-```Alt + Q``` : Borra toda la línea
+```Alt + Q``` : Delete all line
 
-```Alt + Backspace``` : Elimina la palabra anterior al cursor
+```Alt + Backspace``` : Delete word before cursor
 
-```Alt + D``` : Elimina la palabra posterior al cursor
+```Alt + D``` : Delete the word after the cursor
 
-```Ctrl + K``` : Elimina todo lo que hay detrás del cursor
+```Ctrl + K``` : Deletes everything after the cursor
 
-```Ctrl + D``` : Funciona igual que la tecla suprimir
+```Ctrl + D``` : Works like the delete key
 
-```Ctrl + U``` : Elimina la línea entera y la guarda en el framebuffer
+```Ctrl + U``` : Deletes the entire line and saves it in the framebuffer
 
-```Ctrl + Y``` : Pega el frambuffer
+```Ctrl + Y``` : Pastes the framebuffer
 
 ## Funcionalidades y Atajos
 
