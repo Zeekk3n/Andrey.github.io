@@ -3,6 +3,10 @@ layout: single
 title: '<span class="projects">Grepz - Project</span>'
 excerpt: "Grepz is a versatile command-line tool for searching and highlighting specific terms or regex in a text file. Its customizable color options and ability to display lines before and after a match provide context, and it also offers a special reporting mode that highlights matches with a box."
 date: 2023-03-13
+header:
+  teaser: /assets/images/grepz/grepz_trans.png
+  teaser_home_page: true
+  image_description: grepz
 categories:
   - projects
 tags:  
