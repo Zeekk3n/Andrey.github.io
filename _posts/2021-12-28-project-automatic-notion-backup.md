@@ -20,7 +20,7 @@ This script automates the backup process of Notion data into Markdown and CSV fo
 
 ## [Link to the Github repository](https://github.com/shockz-offsec/Automatic-Notion-Backup)
 
-## Requirements & Instalation
+## Requirements & Installation
 To use this tool, you need to have the Selenium module installed. You can install it by running the following command in your terminal:
 
 ```bash
@@ -89,7 +89,7 @@ The script uses the Firefox webdriver (geckodriver), which is automatically inst
 - Right-click anywhere on the page and select "Inspect Element".
   - 1º click on the "Network" tab, refresh the page (you can press F5).
   - 2º Search for "getPublicSpaceData" and select one occurrence.
-  - 3º Your space ID is the first value associated with the first "id" field.
+  - 3º Your space ID is the first value associated with the first "id" field in the "response" tab.
   - 4º Copy and paste that ID into the *config.json* file under the "NOTION_SPACE_ID" field.
   
 ![STEPS](https://user-images.githubusercontent.com/67438760/230782980-9794d5d9-1045-4f2a-923b-396b0725f255.png)
