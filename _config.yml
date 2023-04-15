@@ -4,11 +4,11 @@ minimal_mistakes_skin    : "haxor" # "air", "aqua", "contrast", "dark", "dirt", 
 
 # Site Settings
 locale                   : "en-US"
-title                    : "Shockz | Cybersecurity, CTF's/Pentesting and Ethical Hacking"
+title                    : "Andrey | Cybersecurity, CTF's/Pentesting and Ethical Hacking"
 title_separator          : "|"
-name                     : "Shockz | Posts about Cybersecurity, CTF's and Ethical Hacking"
+name                     : "Andrey | Posts about Cybersecurity, CTF's and Ethical Hacking"
 description              : "Posts about Cybersecurity, Pentesting/CTF's, Ethical Hacking and other tech projects"
-url                      : "https://shockz-offsec.github.io" # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
+url                      : "https://zeekk3n.github.io/andrey.github.io/" # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
 baseurl                  :  # the subpath of your site, e.g. "/blog"
 repository               : "shockz-offsec/shockz-offsec.github.io" # GitHub username/repo-name e.g. "mmistakes/minimal-mistakes"
 logo                     : 
@@ -89,9 +89,9 @@ analytics:
 
 # Site Author
 author:
-  name             : "Shockz"
-  avatar           : "/assets/images/avatar.png"
-  bio              : "Offensive Security Engineer | Developer | Ethical Hacker | HTB & THM Player"
+  name             : "Andrey"
+#  avatar           : 
+  bio              : "Offensive Security Engineer | Developer | Ethical Hacker | HTB Player"
   location         : "Somewhere"
   email            : 
   uri              :
@@ -102,7 +102,7 @@ author:
   flickr           :
   facebook         : 
   foursquare       :
-  github           : "shockz-offsec"
+#  github           : 
   gitlab           :
   google_plus      :
   keybase          : 
@@ -114,14 +114,13 @@ author:
   stackoverflow    : # "123456/username" (the last part of your profile url, e.g. https://stackoverflow.com/users/123456/username)
   steam            : # "steamId" (the last part of your profile url, e.g. https://steamcommunity.com/id/steamId/)
   tumblr           :
-  twitter          : "ShockzPY"
+  twitter          : "zeekk3n"
   vine             :
   weibo            :
   xing             : 
   youtube          : # "https://youtube.com/c/MichaelRoseDesign"
-  hackthebox       :  "616242"
-  tryhackme        :  "Shockz"
-
+  hackthebox       :  "883541"
+#  tryhackme       : 
 
 # Reading Files
 include:
