@@ -1,11 +1,11 @@
 ---
 title: "Whoami"
 permalink: /whoami
-date: 2021-03-01
+date: 2023-01-01
 layout: whoami
 ---
 
-## Shockz.json
+## Andrey.json
 
 ```json
 {
@@ -29,7 +29,7 @@ layout: whoami
 | Web Applications / API | Linux | VCS veritas | Python |
 | Internal Penetration Testing (AD) | Virtualization | Docker | Shell Scripting |
 | External Penetration Testing | Automation | Kubernetes |  |
-| Wireless Network Assessment | Server Administration | AWS |  |
+| Wireless Network Assessment | Server Administration |  |  |
 | Infrastructure Asssessments |  |  |  |
 | Mobile App Security Assessment |  |  |  |
 | Thick Client |  |  |  |
