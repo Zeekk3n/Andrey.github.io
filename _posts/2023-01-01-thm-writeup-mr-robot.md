@@ -30,9 +30,6 @@ toc_sticky: true
 show_time: true
 ---
 
-<a href="/assets/images/thm-writeup-mr-robot/wall.jpg">
-    <img src="/assets/images/thm-writeup-mr-robot/wall.jpg" alt="Mr.Robot CTF" alt="mr robot thm writeup">
-</a>
 
 Mr. Robot CTF is a machine from Try Hack Me platform (Also available on VulnHub). I highly recommend you do this CTF not only because of the theme of the TV show but because it's a good practice machine and it is an OSCP Like machine. On this machine we will have to brute force, exploit a Wordpress CMS which will be shown several ways to do so valid for the machine, perform more brute force and finally perform a privilege escalation via suid explotation.
 
