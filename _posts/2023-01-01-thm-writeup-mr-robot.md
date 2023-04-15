@@ -10,7 +10,7 @@ header:
   icon: /assets/images/tryhackme.png
   icon_description: tryhackme
 categories:
-  - tryhackme
+
   - vulnhub
   - machine
 tags:  
