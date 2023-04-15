@@ -1,14 +1,14 @@
 ---
 layout: single
-title: '<span class="vulnhub"> vulnhub - /VulnHub</span>'
+title: '<span class="vulnhub"> Synfonos 1 y 2 - /VulnHub</span>'
 excerpt: "Synfonos 1&2 are a machines from VulnHub. I highly recommend you do this CTF because it is an eCpptv2 Like machine. On this machine we will have to brute force, exploit a Wordpress which will be shown several ways to do so valid for the machine, perform more brute force and finally perform a privilege escalation via suid explotation."
 date: 2021-09-05
 header:
-  teaser: /assets/images/thm-writeup-mr-robot/icon.jpeg
+
   teaser_home_page: true
-  image_description: mr-robot
-  icon: /assets/images/tryhackme.png
-  icon_description: tryhackme
+
+
+
 categories:
 
   - vulnhub
