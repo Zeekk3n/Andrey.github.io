@@ -10,13 +10,13 @@ layout: whoami
 ```json
 {
     "Personal_Info":{
-        "Name": "Jorge",
-        "Alias": "Shockz",
-        "Age": 25,
-        "Education": "Software Engineering",
+        "Name": "Andrey",
+        "Alias": "zeekk3n",
+        "Age": 23,
+        "Education": "Sysadmin Engineering",
         "Position": "Offensive Security Engineer",
         "Interests":[
-            "Cybersecurity, DevSecOps, Ethical Hacking, Red Teaming, Cloud"
+            "Cybersecurity, sysadmin, Ethical Hacking, Red Teaming,"
         ]
     }
 }
@@ -26,60 +26,23 @@ layout: whoami
 
 | Pentesting ---Red Team | Sysadmin | Devops |  Development |
 |-------|--------|---------|---------|
-| Web Applications / API | Linux | Ansible | Python |
+| Web Applications / API | Linux | VCS veritas | Python |
 | Internal Penetration Testing (AD) | Virtualization | Docker | Shell Scripting |
-| External Penetration Testing | Automation | Kubernetes | Java |
-| Wireless Network Assessment | Server Administration | AWS | C/C++/C# |
+| External Penetration Testing | Automation | Kubernetes |  |
+| Wireless Network Assessment | Server Administration | AWS |  |
 | Infrastructure Asssessments |  |  |  |
 | Mobile App Security Assessment |  |  |  |
 | Thick Client |  |  |  |
 | Social Engineering |  |  |  |
 
-## Certifications
-
-#### Ethical Hacking/Pentesting
-
-* CRTO *Certified Red Team Operator*
-* OSCP *Offensive Security Certified Professional*
-* HTB RastaLabs
-* HTB Offshore
-* BSCP *Burp Suite Certified Practitioner*
-* CRTP *Certified Red Team Professional*
-* eMAPT *eLearnSecurity Mobile Application Penetration Tester*
-* eWPTXv2 *eLearnSecurity Web Application Penetration Tester eXtreme v2*
-* eCPPTv2 *eLearnSecurity Certified Profesional Penetration Tester v2*
-* CAP *Certified AppSec Practitioner*
-* eJPT *eLearnSecurity Junior Penetration Tester*
-
-#### Vulnerability Management
-
-* *Qualys - Vulnerability Management*
-* *Qualys - Vulnerability Management Detection & Response*
-* *Qualys - Cybersecurity Asset Management*
-* *Qualys - Patch Management*
-* *Qualys - Scanning Strategies and Best Practices*
-* *Qualys - Reporting Strategies and Best Practices*
-* *Qualys - Web Application Scanning*
-* *Qualys - Qualys API Fundamentals*
-* *Qualys - Cloud Agent*
-
-* *Rapid7 - InsightVM Certified Administrator*
-* *Rapid7 - InsightIDR Certified Specialist*
-* *Rapid7 - InsightAppSec Certified Specialist*
-
-## Exploit Database Publications
-
-* [Google Haking Database Publications](https://www.exploit-db.com/google-hacking-database?author=11434)
 
 ## CTF Profiles
 
-* Try Hack Me
-    <script src="https://tryhackme.com/badge/438303"></script>
 
 * Hack The Box
     <div class="doubleimg">
-        <a href="https://app.hackthebox.eu/profile/616242">
-            <img src="https://www.hackthebox.eu/badge/image/616242" alt="HackTheBox Shockz Profile">
+        <a href="https://app.hackthebox.eu/profile/883541">
+            <img src="https://www.hackthebox.eu/badge/image/883541" alt="HackTheBox ZekkenBOT Profile">
         </a>
     </div>
 
