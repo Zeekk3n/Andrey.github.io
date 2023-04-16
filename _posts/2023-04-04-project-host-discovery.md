@@ -1,7 +1,7 @@
 ---
 layout: single
 title: '<span class="projects">HostDiscovery - Project</span>'
-excerpt: "A fast, concurrent and multithread TCP port scanner."
+excerpt: "A fast, IP scanner."
 date: 2023-04-04
 categories:
   - projects
