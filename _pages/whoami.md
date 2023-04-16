@@ -13,8 +13,8 @@ layout: whoami
         "Name": "Andrey",
         "Alias": "zeekk3n",
         "Age": 23,
-        "Education": "Sysadmin Engineering",
-        "Position": "Offensive Security Engineer",
+        "Education": "Sysadmin Engineering | Offensive Security Engineer ",
+        "Position": "System Administrator Engineer",
         "Interests":[
             "Cybersecurity, sysadmin, Ethical Hacking, Red Teaming,"
         ]
