@@ -2,7 +2,7 @@
 layout: single
 title: '<span class="projects">HostDiscovery - Project</span>'
 excerpt: "A fast, concurrent and multithread TCP port scanner."
-date: 2021-07-03
+date: 2023-04-04
 categories:
   - projects
 tags:  
