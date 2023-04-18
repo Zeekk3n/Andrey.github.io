@@ -25,7 +25,7 @@ toc_sticky: true
 show_time: true
 ---
 
-Synfonos3, hadesPC, is a machine from Vulnhub platform. I recommend you do these CTF because for the eCCptv2 it will be something like these cluster, another very strong point to mention is that works well doings these machine as pivoting machines
+Synfonos3, is a machine from Vulnhub platform. I recommend you do these CTF because for the eCCptv2 it will be something like these cluster, another very strong point to mention is that works well doings these machine as pivoting machines
 
 
 **We will see all this from the perspective and methodology of a penetration test.**
@@ -218,7 +218,7 @@ seems that we found another one let's find what's inside of these routes.
  10:24:25 up  2:04,  0 users,  load average: 0.02, 1.15, 1.22
  ```
  
- ## Explotation
+ ## Exploitation
  
 
 let's take an advantage of ```shellShock```, using echo + the vulnerability,because something does not work without echo.
