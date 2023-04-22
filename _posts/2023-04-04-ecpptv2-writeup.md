@@ -5,7 +5,6 @@ excerpt: "Synfonos3, is a machine from Vulnhub platform. I recommend you do thes
 date: 2023-04-05
 categories:
   - vulnhub
-  - machine
   -certification
 tags:  
   - wordpress
