@@ -4,8 +4,7 @@ title: '<span class="vulnhub">eCCptV2 Simulation- /VulnHub</span>'
 excerpt: "Synfonos3, is a machine from Vulnhub platform. I recommend you do these CTF because for the eCCptv2 it will be something like this."
 date: 2023-04-05
 categories:
-  - vulnhub
-  -certification
+  - certification
 tags:  
   - wordpress
   - bruteforce
