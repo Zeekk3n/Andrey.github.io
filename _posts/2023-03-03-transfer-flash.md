@@ -1,7 +1,7 @@
 ---
 layout: single
 title: '<span class="Articles"> Transfering data W|L - /Articles</span>'
-excerpt: "while you are trying to privilage escalating you might need to know how to transfer archives or binarie "
+excerpt: "while you are trying to privilage escalating you might need to know how to transfer archives or binaries "
 date: 2023-04-26
 header:
 
