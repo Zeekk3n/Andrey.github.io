@@ -2,7 +2,7 @@
 layout: single
 title: '<span class="Articles"> Interview for Offensive Security Assessor - /Articles</span>'
 excerpt: "Possible Questions during an interview of Offensive Security Assessor "
-date: 2023-04-26
+date: 2023-04-27
 header:
 
   teaser_home_page: true
@@ -16,6 +16,7 @@ categories:
   - Internal Penetration Testing (AD)
   - Wireless Network Assessment
   - RH
+  - Articles
 tags:  
   - wordpress
   - Oraclein
