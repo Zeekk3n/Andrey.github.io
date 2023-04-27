@@ -1,8 +1,8 @@
 ---
 layout: single
-title: '<span class="Articles"> SQLINJECTIONS - /Articles</span>'
+title: '<span class="Articles"> Solaris Admin - /Articles</span>'
 excerpt: "System Solaris Administrator Engineer "
-date: 2023-04-26
+date: 2023-04-29
 header:
 
   teaser_home_page: true
@@ -12,19 +12,9 @@ header:
 categories:
 
   - article
-  - machine
-  - Web Applications / API
 tags:  
-  - wordpress
-  - Oraclein
-  - SQLin
-  - privilege-escalation
-  - web
-  - php
-  - reverse-shell
-  - wpscan
-  - windows
   - linux
+  - Solaris
 toc: true
 toc_label: "Content"
 toc_sticky: true
@@ -32,7 +22,8 @@ show_time: true
 ---
 
 
-SQLinjections  are important if you want to try your lucky in Bugbounty or pentesting Web Labs, I highly recommend you to always try them in pages that you are searching for vulnerabilities 
+You must know that almost every single company makes filters in order to discard non-potential candidates from potential ones, almost every single interview starts with the RH interview after it, the second filter will be  with the Tech lead and the last one if you pass all filters will be with your manager othat will be on charge of you, the Teach lead, and the Supervisor.
+
 
 **We will see all this from the perspective and methodology of a penetration test.**
 
