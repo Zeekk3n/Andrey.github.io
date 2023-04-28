@@ -10,7 +10,7 @@ header:
 
 
 categories:
-  - RH
+  - Hr
   - Articles
   - interview
   
@@ -27,7 +27,7 @@ You must know that almost every single company makes filters in order to discard
 
 
 
-## RH questions 
+## Hr questions 
 
 Tell me something about yourself.
 
@@ -47,27 +47,27 @@ Why should we hire you?
 
 What is your greatest accomplishment?
 
-What are your salary requirements?
+What is your salary expectation?
 
 Do you have any questions for us?
 
-What are you looking for from a new position?
-
 Are you considering other positions in other companies?
 
-What is the professional achievement you’re most proud of?
+What is the professional achievement you’re the most proud of?
 
 What kind of working environment do you work best in?
 
 Where do you see yourself in 5 years?
 
-Difficult situations
 
-Do you have experience in Linux environments
 
-have you ever work with tickets 
+- Difficult situations during the interview
 
-how you handle  SLA's in your current/previous job 
+Do you have experience on Linux environments?
+
+have you ever work with tickets and accomplished a difficult SLA?
+
+how do you handle  SLA's in your current/previous job ?
 
 
 
