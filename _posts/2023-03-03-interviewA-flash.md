@@ -25,7 +25,6 @@ show_time: true
 You must know that almost every single company makes filters in order to discard non-potential candidates from potential ones, almost every single interview starts with the RH interview after it, the second filter will be  with the Tech lead and the last one if you pass all filters will be with your manager othat will be on charge of you, the Teach lead, and the Supervisor.
 
 
-**We will see all this from the perspective and methodology of a penetration test.**
 
 # RH
 
