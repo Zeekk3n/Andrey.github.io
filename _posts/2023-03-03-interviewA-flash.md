@@ -2,7 +2,7 @@
 layout: single
 title: '<span class="Articles"> Solaris Admin - /Articles</span>'
 excerpt: "System Solaris Administrator Engineer "
-date: 2023-04-29
+date: 2023-04-27
 header:
 
   teaser_home_page: true
