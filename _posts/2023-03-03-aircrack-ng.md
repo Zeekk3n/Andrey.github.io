@@ -29,7 +29,6 @@ show_time: true
 
 Learn how to use the monitor mode is important if you want to learn about Hacking hardware because is low cost and anyone can do it because is easy try them in under control enviroments.
 
-**We will see all this from the perspective and methodology of a penetration test.**
 
 First you have to buy a TL-WN722N  150Mbps High Gain Wireless USB Adapter | is the cheapest but there's a lot of wireless usb adapters to enter in Monitor mode. 
 Make sure that the one that you buy supports monitor mode. or just buy the one that i chosed for the example [TL-WN722N](https://www.amazon.com/-/es/Tp-Link-TL-WN722N-IEEE-802-11n-borrador/dp/9800359850)
