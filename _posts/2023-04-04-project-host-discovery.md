@@ -1,17 +1,21 @@
 ---
 layout: single
-title: '<span class="projects">HostDiscovery - Project</span>'
-excerpt: "A fast, IP scanner."
-date: 2023-04-04
+title: '<span class="projects">Global Deauthentication Attack (Broadcast MAC Address) - Project</span>'
+excerpt: "Deauthentication Attack, Via  Wifi."
+date: 2024-04-04
 categories:
   - projects
 tags:  
   - scanner
   - reconnaissance
+  - spectrum
+  - wifi
+  - hacking hardware
+  - hardware
 show_time: true
 ---
 
-A fast, concurrent and multithread TCP port scanner for machines that actually don't have binaries such as netcat or ss
+Learn how to use the monitor mode is important if you want to learn about Hacking hardware because is low cost and anyone can do it because is easy try them in under control enviroments.
 
 ## Installation
 
