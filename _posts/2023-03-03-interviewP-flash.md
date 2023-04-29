@@ -15,7 +15,7 @@ categories:
   - Web Applications / API
   - Internal Penetration Testing (AD)
   - Wireless Network Assessment
-  - RH
+  - HR
   - Articles
 tags:  
   - wordpress
@@ -38,7 +38,7 @@ You must know that almost every single company makes filters in order to discard
 
 
 
-## RH questions 
+## HR questions 
 
 What is your approach to assessing the security of an application or system?
 
@@ -80,7 +80,7 @@ How do you ensure that your security assessments are comprehensive and cover all
 
 Can you walk us through your process for testing web applications, including both automated and manual testing techniques?
 
-## Teach Questions
+## Tech Questions
 
 # Web Applications:
 
