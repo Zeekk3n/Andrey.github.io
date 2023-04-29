@@ -186,7 +186,37 @@ sudo airodump-ng wlx28ee520d56f1
 This command starts the airodump-ng tool, which is used for capturing wireless network traffic.
 
 ## usage
+
+
 now how you are capturing wireless network traffic, you can execute every single attack you want
+
+examples
+
+
+
+[Global Deauthentication Attack (Broadcast MAC Address)](https://zeekk3n.github.io/andrey.github.io/.hacking-notes)
+
+[Fake Authentication Attack](https://zeekk3n.github.io/andrey.github.io/.hacking-notes)
+
+[Beacon Flood Mode Attack](https://zeekk3n.github.io/andrey.github.io/.hacking-notes)
+
+[Disassociation Amok Mode Attack](https://zeekk3n.github.io/andrey.github.io/.hacking-notes)
+
+[Michael Shutdown Exploitation Attack](https://zeekk3n.github.io/andrey.github.io/.hacking-notes)
+
+[Passive Exploitation Techniques](https://zeekk3n.github.io/andrey.github.io/.hacking-notes)
+
+[Installation, Compilation, and Validation of HandShake with Pyrit](https://zeekk3n.github.io/andrey.github.io/.hacking-notes)
+
+[Analysis of Probe Request packets](https://zeekk3n.github.io/andrey.github.io/.hacking-notes)
+
+[Analysis of Probe Response packets](https://zeekk3n.github.io/andrey.github.io/.hacking-notes)
+
+[Analysis of Association Request packets](https://zeekk3n.github.io/andrey.github.io/.hacking-notes)
+
+[Analysis of Association Response packets](https://zeekk3n.github.io/andrey.github.io/.hacking-notes)
+
+
 
 Happy hacking !!
 
