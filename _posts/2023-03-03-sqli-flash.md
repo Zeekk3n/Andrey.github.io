@@ -1,6 +1,6 @@
 ---
 layout: single
-title: '<span class="Articles"> SQLINJECTIONS - /Articles</span>'
+title: '<span class="Articles"> SQLINJECTIONS fast notes - /Articles</span>'
 excerpt: "SQLinjections  are important if you want to try your lucky in Bugbounty or pentesting Web Labs, I highly recommend you to always try them in pages that you are searching for vulnerabilities "
 date: 2023-04-26
 header:
