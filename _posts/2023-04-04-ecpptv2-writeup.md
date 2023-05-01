@@ -1688,13 +1688,6 @@ snape@Nagini:/home/hermoine/bin$ ./su_cp /tmp/authorized_keys /home/hermoine/.ss
 hermione@Nagini:~$ whoami
 hermione
 ```
-a
-```bash
-❯ ./install.sh
-```
-a
-```bash
-❯ ./install.sh
-```
+
 
 Happy hacking !
