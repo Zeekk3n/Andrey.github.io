@@ -1,8 +1,8 @@
 ---
 layout: single
 title: '<span class="projects">Host Discovery- Project</span>'
-excerpt: "Usefull tool to check if t Usefull tool to check if there's more interfaces in our net here's more interfaces in our net."
-date: 2024-04-04
+excerpt: "A fast, Host Discovery scanner for machines that actually don't have binaries such as nc, nmap"
+date: 2023-04-04
 categories:
   - projects
 tags:  
@@ -13,7 +13,7 @@ tags:
 show_time: true
 ---
 
-Usefull tool to check if t Usefull tool to check if there's more interfaces in our net here's more interfaces in our net
+A fast, Host Discovery scanner for machines that actually don't have binaries such as nc, nmap
 
 ## Installation
 
@@ -40,7 +40,7 @@ tput cnorm
 ```
 
   
-
+give it execution permissions 
 
 
   ```bash
