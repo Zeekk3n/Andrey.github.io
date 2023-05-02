@@ -1,21 +1,19 @@
 ---
 layout: single
-title: '<span class="projects">Global Deauthentication Attack (Broadcast MAC Address) - Project</span>'
-excerpt: "Deauthentication Attack, Via  Wifi."
+title: '<span class="projects">Host Discovery- Project</span>'
+excerpt: "Usefull tool to check if t Usefull tool to check if there's more interfaces in our net here's more interfaces in our net."
 date: 2024-04-04
 categories:
   - projects
 tags:  
   - scanner
   - reconnaissance
-  - spectrum
-  - wifi
-  - hacking hardware
-  - hardware
+
+
 show_time: true
 ---
 
-Learn how to use the monitor mode is important if you want to learn about Hacking hardware because is low cost and anyone can do it because is easy try them in under control enviroments.
+Usefull tool to check if t Usefull tool to check if there's more interfaces in our net here's more interfaces in our net
 
 ## Installation
 
