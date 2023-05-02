@@ -46,6 +46,13 @@ tput cnorm
   
 ```
 
+give it execution permissions 
+
+
+  ```bash
+  chmod +x hostdiscovery.sh
+  ```
+
 * take under consideration the variable "ip" in my case i will search 65535 open ports for ip 10.10.0.128 in your case will be different the variable ip so make sure you change it according your preferences  !!
   ```bash
   output
