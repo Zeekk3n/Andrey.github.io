@@ -194,7 +194,7 @@ The first thing we will do when you know the IP and when you know that the machi
 To do this we will make use of nmap and use a series of parameters that will make our scan faster.:
 
 ```bash
-nmap -p- --open -sS -Pn --min-rate 5000 -vvv -n 192.100.61
+nmap -p- --open -sS -Pn --min-rate 5000 -vvv -n 192.100.52
 ```
 the meaning of each parameter is.:
 - ```-p-``` : We indicate that the scan will be done for all ports.
@@ -235,7 +235,7 @@ At this point we know that there are 3 open ports: 80 (HTTP) and 22 (SSH), 21 (F
  once we know which ports are open we must perform the scan to those ports by running a series of scripts in order to obtain more information: server version, technology, possible vulnerabilities, etc...
 
 ```bash
-nmap -sV -sC -p 80,22,21 -Pn -n -min-rate 5000 10.10.198.171 -oN targeted
+nmap -sV -sC -p 80,22,21 192.168.100.52 -oN targeted
 ```
 
 
