@@ -105,6 +105,9 @@ The output should be represented in binary, and since it is a 32-bit binary, the
 ❯ echo $(echo "obase=2; 192" | bc).$(echo "obase=2; 168" | bc).$(echo "obase=2;100" | bc).$(echo "obase=2; 52" | bc)
 11000000.10101000.1100100.110100
 ```
+"obase" is an option used in the "bc" command to set the output number base. In this case, the base is being set to 2, which represents the binary system.
+
+The entire command is converting each octet of the IP address (192.168.100.52) into its binary representation. To do this, the "obase=2" option is used in each of the four "echo" commands, which sets the output of "bc" to binary. Then, the concatenation operator "." is used to join the results of each octet into a single 32-bit string
 
 In other words, the size of the IP would be:
 
