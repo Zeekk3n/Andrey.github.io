@@ -1,7 +1,7 @@
 ---
 layout: single
 title: '<span class="vulnhub">machines synfonos3 - /VulnHub</span>'
-excerpt: "imf, is a machine from Vulnhub platform. I recommend you do these CTF because the las machine for the eCCptv2 it will be something like this."
+excerpt: "imf, is a machine from Vulnhub platform. I recommend you do these CTF because the last machine for the eCCptv2 it will be something like this."
 date: 2023-05-03
 categories:
   - vulnhub
@@ -9,7 +9,7 @@ categories:
 tags:  
   - wordpress
   - bruteforce
-  - suid
+  - Buffer over flow
   - privilege-escalation
   - web
   - php
@@ -25,7 +25,7 @@ toc_sticky: true
 show_time: true
 ---
 
-Synfonos3, is a machine from Vulnhub platform. I recommend you do these CTF because for the eCCptv2 it will be something like theis machine 
+imf, is a machine from Vulnhub platform. I recommend you do these CTF because for the eCCptv2 it will be something like theis machine 
 
 
 **We will see all this from the perspective and methodology of a penetration test.**
@@ -35,6 +35,9 @@ Synfonos3, is a machine from Vulnhub platform. I recommend you do these CTF beca
 - The IP of the machine in my case will be: 192.168.100.61 (You will have a different ip so change it for all steps)
 
 Let's get them!
+## 
+
+
 
 ## Enumeration
 
@@ -60,10 +63,70 @@ Starting arp-scan 1.9.7 with 256 hosts (https://github.com/royhills/arp-scan)
 192.168.100.61	00:0c:29:71:6f:76	VMware, Inc.
 192.168.100.51	06:1f:61:f8:6e:4f	(Unknown: locally administered)
 ```
+
+where: /explanation of the output 
+
+MAC 
+
+
+now that we have the IP let me introduce you to IPv4 and IPv6
+
+
+
+
+```192.168.100.61``` la IP es basicamente una etiqueta numerica que identifica de manera logica y gerarquica a una interfaz en la red de un dispositivo que utilice el protocolo de internet 
+
+esta IP es lo mismo que bits  en conclucion 
+
+porque digo que son bits ? porque a simple vista me doy cuenta que son 4 pares de octetos 
+
+is basically a numeric tag that identifies in a logic way an gerarchic  
+dircciones IPv4 
+
+direcciones IPv6
+
+
+
+```24:18:c6:dc:bd:cd```
+
+
+
 now we know the ip for the machine that we can reach, now we have to enumerate to figure out what kind of machine is based on the TTL which is time to life.
 ```bash
 ping -c3 192.168.100.61
 ```
+in this case seems that does not work, so we might need an external binyre i will use tcping becase was writte in go,and the progrramming languague works  very well with sockets and conecctions 
+
+installation 
+```bash
+
+
+```
+usage 
+
+```bash 
+❯ ./tcping 192.168.100.52
+Ping tcp://192.168.100.52:80(192.168.100.52:80) connected - time=653.9µs dns=0s
+Ping tcp://192.168.100.52:80(192.168.100.52:80) connected - time=868.1µs dns=0s
+Ping tcp://192.168.100.52:80(192.168.100.52:80) connected - time=608.5µs dns=0s
+Ping tcp://192.168.100.52:80(192.168.100.52:80) connected - time=513.8µs dns=0s
+
+Ping statistics tcp://192.168.100.52:80
+	4 probes sent.
+	4 successful, 0 failed.
+Approximate trip times:
+	Minimum = 513.8µs, Maximum = 868.1µs, Average = 661.075µs#      
+
+```
+output 
+
+```bash 
+
+```
+
+where 
+
+
 output:
 ```php
 PING 192.168.100.61 (192.168.100.61) 56(84) bytes of data.
