@@ -73,8 +73,7 @@ explanation of the output
 MAC 00:0c:29:d2:5a:2b how arp-scan knows that is vmware ? it's because the kind of OUI  ```00:0c:29``` use macchanger + l + | grep + "00:0c:29" they would tell us that it's vmware for the OUI which is organizationally unique identifier and the rest of the number belongs to he NIC d2:5a:2b nic means Network interface controller and actually the company made the NIC.
 
 
-now that we have the IP let me introduce you to IPv4
-IPv4 
+now that we have the IP let me introduce you to IPv4 and IPv6
 
 because of the output we can notice that the IP that we will find vulnerabilities is IPv4, but how i know it?
 
