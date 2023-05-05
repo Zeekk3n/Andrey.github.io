@@ -87,7 +87,6 @@ Why do I say they are bits? Because at a glance, I can see that there are 4 pair
 
 We know that by doing an ```echo``` of ```192.168.100.52```  it will show up in the console, so it will print it.
 
-pero si yo lo quiero dividir ahora en 4 bytes  recuerda que 1 byte son 8 bites de forma que yo quiero quiero  tratar de representar un total de 32 bytes
 But if I want to divide it into 4 bytes, remember that 1 byte is 8 bits, so I want to represent a total of 32 bytes. We could represent the same example but with changes:
 
 ```bash 
