@@ -1569,4 +1569,4 @@ it says that is a gif because of the magic numbers, if you want to check more da
 let's try to upload 
 
 
-
+I am learning how to obfuscate code. The answer will come soon.
