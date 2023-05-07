@@ -924,18 +924,34 @@ We are going to store the response in r so that it shows us the response at all 
                     break
 
 ```
-Here we are telling that when if ```Welcome to the IMF Administration.``` is true, then it means that the character we fuzzed is correct, and the response is coming from the server side.
+if "Welcome to the IMF Administration." in r.text: Here we are telling that when if ```Welcome to the IMF Administration.``` is true, then it means that the character we fuzzed is correct, and the response is coming from the server side.
 
 
 19
+where
+
+```database += character```
+
+So, for example, when you detect ```"Welcome to the IMF Administration"``` and it is in the response from the server, what you have to think is that if the character is correct, then the database variable, which was not explained above, but basically is to store the databases and their names at all times, will be += to the characters, that is, to the database corresponding to the variable we wrote above or to the one that is not worth anything more than the character. So, if it is valid for the first position, which it will be because we are representing the variable ```"Welcome to the IMF Administration"```, when the character is valid, add that character to the variable that we did not specify above so that you can print it on the screen and adjust it based on what you are finding.
+
+p2.status(database)
+
+Now we are going to play with this progress bar so that it shows you the corresponding database at all times, in order to structure it in real time the values of the database.
+
+
+break
+This means "We need to make a break so it doesn't keep searching for the word we are currently fuzzing".
+
+
+20
 
 ```python
 database += ","   
 ```
 
+Once database finds the database, basically with this we are going to add a comma
 
 
-20
 ```python
 if __name__ == '__main__':
 ```
@@ -948,6 +964,5 @@ Now we are going to define a function called "make_request".
  makeRequest()
 ```
 
+output
 
-
-exp
