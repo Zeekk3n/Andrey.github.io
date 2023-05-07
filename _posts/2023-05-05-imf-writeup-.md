@@ -25,7 +25,7 @@ toc_sticky: true
 show_time: true
 ---
 
-imf, is a machine from Vulnhub platform. I recommend you do these CTF because for the certfication called eCCptv2 the last machine will be something like this 
+imf, is a machine from Vulnhub platform. I recommend you do these CTF because for the certification called eCCptv2 the last machine will be something like this 
 
 
 **We will see all this from the perspective and methodology of a penetration test.**
@@ -116,7 +116,7 @@ In other words, the size of the IP would be:
 4294967296
 ```
 
-output
+
 
 
 
@@ -273,7 +273,7 @@ http://192.168.100.52 [200 OK] Apache[2.4.18], Bootstrap, Country[RESERVED][ZZ],
 
 seems that does not give us a lot of information.
 
-So let's visit the web the port 
+So let's visit the web port 
 
 
 After testing each of the attacks SSRF,SQLI,PATHtraversal I did not find anything relevant, on the other hand we are able to search for possible routes using gobuster for example
@@ -301,7 +301,7 @@ Chief of Staff
 ```
 
 
-, we will proceed to do *Fuzzing*, which consists of making requests to the server of several routes extracted from a dictionary with the objective of obtaining routes that exist. For this we will use *Wfuzz* although another powerful tool is *Ffuf* or gobuster.
+We will proceed to do *Fuzzing*, which consists of making requests to the server of several routes extracted from a dictionary with the objective of obtaining routes that exist. For this we will use *Wfuzz* although another powerful tool is *Ffuf* or gobuster.
 
 - With wfuzz would be:
 
