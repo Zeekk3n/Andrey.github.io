@@ -2073,12 +2073,14 @@ A graphical representation would be
 | aaaabaaacaaadaaaeaaafaaagaaahaaaia |\x61\x61\x62\x74\x61\|\x71\x61\x61\x62| 
 +------------------------------------+---------------------+----+-----+-----+
 ```
-donde $eip vale 0x62616171 ("qaab"?) que en hexadecimal seria \x71\x61\x61\x62  y el esp vale todo esto $esp   : 0xffffd3f0  →  "saabtaabuaabvaabwaabxaabyaabzaacbaaccaacdaaceaacfa[...]" que en hexadecimal seria \x61\x61\x62\x74\x61\...
+where $eip is equal to 0x62616171 ("qaab"?) which in hexadecimal would be \x71\x61\x61\x62
+
+And the ESP holds all of this: $esp: 0xffffd3f0 -> "saabtaabuaabvaabwaabxaabyaabzaacbaaccaacdaaceaacfa[...]", which in hexadecimal would be \x61\x61\x62\x74\x61\....
 
 
-entonces la idea ahora es preguntarle a gef cuantos caracteres se necesitan para alcanzar eip 
+So the idea now is to ask gef how many characters are needed to reach the eip.
 
-esto lo haremos con pattern offset  ejm
+We'll do this with pattern offset. For example:
 
 ```bash
 gef➤  pattern offset $eip
@@ -2098,7 +2100,8 @@ then we will tell it to multiply 168 because those are the ones we need to reach
 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 ```
 
-ahora la idea es correr el programa nuevamente o sea tendriamos que hacer un quit a gdb y correrlo de nuevo para meter nuestro pattern offset creado con python
+Now the idea is to run the program again, so we would have to quit gdb and run it again to input our pattern offset created with python
+
 ```bash 
 gef➤  quit
 ```
@@ -2136,13 +2139,12 @@ $cs: 0x23 $ss: 0x2b $ds: 0x2b $es: 0x2b $fs: 0x00 $gs: 0x63
 gef➤  
 ```
 
-entonces como vemos si esta bien , es mas vamos a representarlo graficamente para que entiendas mejor 
-la idea es que eax vale nuestras A's y C ahora vale la pila el ESP ya sabemos donde esta cada cosa 
+So, as we can see it's correct, and we can even represent it graphically to make it clearer. The idea is that eax contains our A's and C now holds the stack, we already know where everything is located.
 
 
 $eax   : 0xffffd344  →  "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA[...]"
 
-ahora eip vale BBBB
+eip equals BBBB
 
 $eip   : 0x42424242 ("BBBB"?)
 
@@ -2156,7 +2158,18 @@ $esp   : 0xffffd3f0  →  "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC[..
 | AAAAAAA|CCCCCCCCCCCCCCCCCCCCCCCCCCCCC|\x41\x41\x41\x41\x41\|\x41\x41\x41| 
 +--------+-----------------------------+---------------------+------+-----+
 ```
-entonces la idea ahora es como anteriormente hablamos de la aletorizacion debido al proc 
+The idea now is to deal with the randomization aspect due to the ASLR (Address Space Layout Randomization) feature.
+
+ASLR explanation 
+
+When ASLR is enabled, the memory layout of a program is randomized each time it is executed, so that the addresses of key areas of memory, such as the stack, heap, and libraries, will be different each time. This means that the address of a particular function or variable in memory will not be the same across multiple runs of the program.
+
+This presents a challenge for attackers, because they must now find the location of key areas of memory through trial and error, rather than simply exploiting a predictable memory layout. However, ASLR is not foolproof, and there are still techniques that attackers can use to bypass it, such as brute-force attacks or information leaks.
+
+Overall, ASLR is an important security feature that helps make it more difficult for attackers to exploit vulnerabilities in a program. nevertheless here in this example we will destroy it and instead of making us difficult to explote ASLR we will take advantage if it 
+
+le't me explain you how 
+
 
 
 asd
