@@ -1722,7 +1722,25 @@ www-data@imf:/usr/local/bin$
 ```
 let's do the BufferOverFlow precheck
 
-before to do it let's check the proc ----------------------------------------------------asd-----------------------------------------------------
+before to do it let's check the proc 
+before to do it let's check the ```proc/sys/randomize_va_space```
+
+```
+We need to look for randomize_va_space in proc because here all the system processes are running. In fact, if we run top, we can see the main processes, but to see, for example, the swap that is virtual memory, we would not be able to see it in top. We have to go to proc and then do an ls. We will see that there are directories with names, and those directories with numbers are processes. So, if we want to see only the processes, we have to filter with "ls -d d" of directory and filter by numbers, which would be [1-9]*. At this point, we only see the system processes. To see the actual process, we have to open the smaps file. Here, we can find the characteristics of the process. If we simply view it, we will see an output with everything this process executes.
+
+Therefore, if we do cat /proc/pid/smaps, where pid refers to one of the previously seen processes, let's say process 1, for example, it would be "cat /proc/1/smaps". Now, if we view all the output that was previously mentioned and filter with grep for the word "Swap," we can see how much swap this process is consuming.
+```
+This is just an example to explain that this can be done, and it is not necessary to view it. It's just to show that all the processes are in proc. So, as we said, we need to verify the proc/sys/kernel/randomize_va_space We need to check it to see if randomization is applied. if in the output appears 2 is because the randomization is applying, but if the output is 0 it's because the randomization is not applying 
+
+```bash
+www-data@imf /proc/sys/kernel/randomize_va_space
+───────┬────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+       │ File: /proc/sys/kernel/randomize_va_space
+───────┼─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+```
+look the output it's 2 this is a measure to prevent buffer overflow attacks, but it can be bypassed when we will be analyzing the program. I'll explain it to you
+
+from our personal desktop let's analyze the binare using a ltrace tool
 
 ```bash 
 ❯ ltrace ./agent
@@ -1859,18 +1877,18 @@ zsh: segmentation fault  ./agent
 ```
 
 
-seems that it has the vulnerability BOF because the output appeard ```zsh: segmentation fault  ./agent```
+seems that it has the vulnerability BOF because the according with the output ```zsh: segmentation fault  ./agent```
 
 but how i know it ? 
 
 
 let me explain you or let me introduce you to BOF
 
-primero que todo debemos conocer un poco de como funcionan los programas, esto con la finalidad de comprender como es que se acontece el BOF
+First of all, we need to understand a little bit about how programs work in order to comprehend how BOF occurs.
 
-primero usando el mismo escenario de el binario agent, nosotros metimos tantas A's que hicieron que apareciera segmentation fault verdad ? 
+Using the same scenario as with the binary agent, we inserted so many A's that it caused a segmentation fault, right?
 
-pero esto pasa porque por ejemplo nosotros metimos A's donde nos dejaba que seria aqui 
+But this happened because we inserted A's where it allowed us to, like here."
 
 ```3. Submit Report
 0. Exit
