@@ -117,7 +117,7 @@ nc $victimip 55555 < file
 
 ----------------------
 
-## God to know Linux|Solaris:
+## Good to know Linux Solaris:
 
 ```To send the executable file to your machine```:
 
