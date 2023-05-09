@@ -295,7 +295,7 @@ http://192.168.100.65/blog/wp-content/plugins/wp-file-manager/lib/php/../files/p
 ```
  
  
- ## Exploitation
+ ## Gaining Access
  
 
 let's take an advantage of ```RCE```, using the RCE that we seted before.
@@ -644,7 +644,7 @@ bash-5.0#
 
 
 
-## Enumeration | Pivoting 10.10.0.?
+## Enumeration 10.10.0.?
 
 -using my tool [HostDiscovery](https://zeekk3n.github.io/andrey.github.io/project-host-discovery/#) we will search for more IP/interfaces
 
@@ -1571,7 +1571,7 @@ and it worked
 
 let's explote joomla 
 
-## Gaining Access | 10.10.0.137
+## Gaining Access 10.10.0.137
 
 when you are in a joomla panel the gaining access if easy because if you go at extensions >> templates>> select propostar template >> and you edit the error.php
 
@@ -1864,7 +1864,7 @@ Here is your third hocrux: horcrux_{NTogRGlhZGVtIG9mIFJhdmVuY2xhdyBkZXN0cm95ZWQg
 
 root@Nagini:~# 
 ```
-# Reconnaissance 192.168.100.?
+# Enumeration 192.168.100.?
 
 now let's find another machines because if we are able to watch another interface it's because theres other machines in to this environment.
 
@@ -1874,7 +1874,7 @@ root@Nagini:~# hostname -I
 ```
 
 
-## Enumeration | Pivoting 192.168.100.?
+## Enumeration  192.168.100.?
 
 -using my tool [HostDiscovery](https://zeekk3n.github.io/andrey.github.io/project-host-discovery/#) we will search for more IP/interfaces
 
@@ -2269,7 +2269,7 @@ output from the program
 ❯ ./server_hogwarts
 Error from clientzsh: segmentation fault  ./server_hogwarts
 ```
-# BOF trying to corrupt the program
+BOF trying to corrupt the program
 explanaition 
 we verify before the AAA's to make sure that we could exceed the size of the buffer assign it by the programmer when if you exceed the buffer assign it by the programmer you start to write on EBP - RET which is the EIP  the instrction pointer and we can take adventage of it 
 
@@ -2694,7 +2694,7 @@ in the script will be
 ```
 Now, since I have control over the EIP, I need to find an address to which I can apply a jump to the ESP. This way, when this instruction is loaded, the program's flow will go to the stack, or in other words, the ESP. As the ESP contains this after_eip = ```b"\x90"*32``` so that it doesn't start directly with the shellcode, which might cause conflicts, we give it a small space after_eip = b"\x90"*32 to fall into an intermediate point of the nops. Once this happens, we will be sent to the shellcode.
 
-# JMP instrucction BOF
+JMP instrucction BOF
 
 
 now our objective is to find where this instruction apply it in the jmp ESP
