@@ -30,7 +30,7 @@ i recommend you to execute ```which``` before you try the following binaries in 
 
 examples
 
-## Solaris | Linux
+## Solaris and Linux
 
 # Rsync
 
