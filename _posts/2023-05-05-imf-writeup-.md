@@ -2,7 +2,7 @@
 layout: single
 title: '<span class="vulnhub">IMF machine - /VulnHub</span>'
 excerpt: "imf, is a machine from Vulnhub platform. I recommend you do these CTF because the last machine for the eCCptv2 it will be something like this."
-date: 2023-05-03
+date: 2024-05-03
 categories:
   - vulnhub
   - machine
