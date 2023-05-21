@@ -4,10 +4,10 @@ minimal_mistakes_skin    : "haxor" # "air", "aqua", "contrast", "dark", "dirt", 
 
 # Site Settings
 locale                   : "en-US"
-title                    : "Andrey | Cybersecurity, CTF's/Pentesting and Ethical Hacking"
+title                    : "Andrey | Cybersecurity, CTF's/Pentesting and Sysadmin Solaris/Linux"
 title_separator          : "|"
-name                     : "Andrey | Posts about Cybersecurity, CTF's and Ethical Hacking"
-description              : "Posts about Cybersecurity, Pentesting/CTF's, Ethical Hacking and other tech projects"
+name                     : "Andrey | Posts about Pentesting Methods, CTF's and Sysadmin"
+description              : "Posts about Pentesting Methods, CTF's and Sysadmin"
 url                      : "https://zeekk3n.github.io/andrey.github.io/" # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
 baseurl                  :  # the subpath of your site, e.g. "/blog"
 repository               : "shockz-offsec/shockz-offsec.github.io" # GitHub username/repo-name e.g. "mmistakes/minimal-mistakes"
