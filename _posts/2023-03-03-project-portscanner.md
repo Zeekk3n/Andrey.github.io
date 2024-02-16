@@ -30,8 +30,9 @@ A fast, TCP port scanner for machines that actually don't have binaries such as 
 #!/bin/bash
 
 function ctrl_c(){
-     echo -e "\n\n[!] getting out that here...\n"
-     tput cnorm; exit 1
+     tput cnorm # Desactivar el cursor antes de salir
+     echo -e "\n\n[!] Salida del script...\n"
+     exit 1
 }
 # Ctrl + c
 trap ctrl_c INT 
@@ -39,10 +40,11 @@ trap ctrl_c INT
 tput civis
 
 for port in $(seq 1 65535); do 
-         timeout 1 bash -c "echo '' > /dev/tcp/10.10.0.128/$port" 2>/dev/null && echo "[+] Port $port - is OPEN" & 
+         timeout 1 bash -c "echo '' > /dev/tcp/10.10.0.128/$port" 2>/dev/null && echo "[+] Puerto $port - está ABIERTO" & 
 done; wait 
 
 tput cnorm
+
   
 ```
 
